@@ -1,0 +1,4 @@
+gantt:
+    resource: "@GanttBundle/Controller/"
+    type:     annotation
+    prefix:   /

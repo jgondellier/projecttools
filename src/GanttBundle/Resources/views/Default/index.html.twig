@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gantt {% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/gantt/css/dhtmlxgantt.css') }}" />
+{% endblock %}
+
+{% block body %}
+    <div id="gantt_here" style='width:1000px; height:400px;'></div>
+    <script type="text/javascript">
+        window.onload = function(e){
+            $(document).ready(function() {
+                gantt.init("gantt_here");
+            });
+        };
+    </script>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/gantt/js/dhtmlxgantt.js') }}"></script>
+{% endblock %}
