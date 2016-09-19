@@ -4,10 +4,19 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('bundles/gantt/css/dhtmlxgantt.css') }}" />
+    <style type="text/css" media="screen">
+        html, body{
+            margin:0px;
+            padding:0px;
+            height:100%;
+            overflow:hidden;
+        }
+
+    </style>
 {% endblock %}
 
 {% block body %}
-    <div id="gantt_here" style='width:1000px; height:400px;'></div>
+    <div id="gantt_here"></div>
     <script type="text/javascript">
         window.onload = function(e){
             $(document).ready(function() {
