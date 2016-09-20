@@ -3,29 +3,36 @@
 {% block title %}Gantt {% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('bundles/gantt/css/dhtmlxgantt.css') }}" />
-    <style type="text/css" media="screen">
-        html, body{
-            margin:0px;
-            padding:0px;
-            height:100%;
-            overflow:hidden;
-        }
-
-    </style>
+    <link rel=stylesheet href="{{ asset('bundles/gantt/css/platform.css') }}" type="text/css">
+    <link rel=stylesheet href="{{ asset('bundles/gantt/css/libs/dateField/jquery.dateField.css') }}" type="text/css">
+    <link rel=stylesheet href="{{ asset('bundles/gantt/css/gantt.css') }}" type="text/css">
 {% endblock %}
 
 {% block body %}
-    <div id="gantt_here"></div>
+    <div id="workSpace" style="padding:0; overflow-y:auto; overflow-x:hidden; border:1px solid #e5e5e5; position:relative; margin:0 5px; width:1024px; height:800px;"></div>
     <script type="text/javascript">
         window.onload = function(e){
             $(document).ready(function() {
-                gantt.init("gantt_here");
+                var ge = new GanttMaster();
+                ge.init($("#workSpace"));
             });
         };
     </script>
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('bundles/gantt/js/dhtmlxgantt.js') }}"></script>
+    <script src="{{ asset('bundles/gantt/js/libs/jquery.1.8.js') }}"></script>
+    <script src="{{ asset('bundles/gantt/js/libs/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('bundles/gantt/js/libsjquery.livequery.min.js') }}"></script>
+    <script src="{{ asset('bundles/gantt/js/libsjquery.timers.js') }}"></script>
+    <script src="{{ asset('bundles/gantt/js/libsplatform.js') }}"></script>
+    <script src="{{ asset('bundles/gantt/js/libsdate.js') }}"></script>
+    <script src="{{ asset('bundles/gantt/js/libsi18nJs.js') }}"></script>
+    <script src="{{ asset('bundles/gantt/js/libsdateField/jquery.dateField.js') }}"></script>
+    <script src="{{ asset('bundles/gantt/js/libsJST/jquery.JST.js') }}"></script>
+    <script src="{{ asset('bundles/gantt/js/ganttUtilities.js') }}"></script>
+    <script src="{{ asset('bundles/gantt/js/ganttTask.js') }}"></script>
+    <script src="{{ asset('bundles/gantt/js/ganttDrawer.js') }}"></script>
+    <script src="{{ asset('bundles/gantt/js/ganttGridEditor.js') }}"></script>
+    <script src="{{ asset('bundles/gantt/js/ganttMaster.js') }}"></script>
 {% endblock %}
