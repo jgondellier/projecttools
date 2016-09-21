@@ -71,3 +71,16 @@ assetic:
     use_controller: '%kernel.debug%'
     filters:
         cssrewrite: ~
+    assets:
+        teamwork-regular-webfont-ttf:
+          inputs: '@GanttBundle/Resources/public/fonts/teamwork-regular-webfont.ttf'
+          output: 'fonts/teamwork-regular-webfont.ttf'
+        teamwork-regular-webfont-otf:
+          inputs: '@GanttBundle/Resources/public/fonts/teamwork-regular-webfont.otf'
+          output: 'fonts/teamwork-regular-webfont.otf'
+        teamwork-regular-webfont-woff:
+          inputs: '@GanttBundle/Resources/public/fonts/teamwork-regular-webfont.woff'
+          output: 'fonts/teamwork-regular-webfont.woff'
+        teamwork-regular-webfont-svg:
+          inputs: '@GanttBundle/Resources/public/fonts/teamwork-regular-webfont.svg'
+          output: 'fonts/teamwork-regular-webfont.svg'

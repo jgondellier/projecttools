@@ -5,10 +5,10 @@ namespace GanttBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Gantt_tasks
+ * Tasks
  *
  * @ORM\Table(name="gantt_tasks")
- * @ORM\Entity(repositoryClass="GanttBundle\Repository\Gantt_tasksRepository")
+ * @ORM\Entity(repositoryClass="GanttBundle\Repository\TasksRepository")
  */
 class Gantt_tasks
 {
@@ -24,44 +24,86 @@ class Gantt_tasks
     /**
      * @var string
      *
-     * @ORM\Column(name="text", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255)
      */
-    private $text;
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="code", type="string", length=100, nullable=true)
+     */
+    private $code;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="level", type="smallint", nullable=true)
+     */
+    private $level;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string", length=255)
+     */
+    private $status;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="start_date", type="datetime")
+     * @ORM\Column(name="start", type="datetime")
      */
-    private $startDate;
+    private $start;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="duration", type="integer")
+     * @ORM\Column(name="duration", type="smallint")
      */
-    private $duration= 0;
+    private $duration;
 
     /**
-     * @var float
+     * @var \DateTime
      *
-     * @ORM\Column(name="progress", type="float")
+     * @ORM\Column(name="end", type="datetime", nullable=true)
      */
-    private $progress= 0;
+    private $end;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="startIsMilestone", type="boolean")
+     */
+    private $startIsMilestone;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="endIsMilestone", type="boolean")
+     */
+    private $endIsMilestone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="depends", type="string", length=255, nullable=true)
+     */
+    private $depends;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     */
+    private $description;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="sortorder", type="integer")
+     * @ORM\Column(name="progress", type="smallint")
      */
-    private $sortorder= 0;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="parent", type="integer")
-     */
-    private $parent;
+    private $progress;
 
 
     /**
@@ -75,56 +117,125 @@ class Gantt_tasks
     }
 
     /**
-     * Set text
+     * Set name
      *
-     * @param string $text
-     * @return Gantt_tasks
+     * @param string $name
+     * @return Tasks
      */
-    public function setText($text)
+    public function setName($name)
     {
-        $this->text = $text;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Get text
+     * Get name
      *
      * @return string 
      */
-    public function getText()
+    public function getName()
     {
-        return $this->text;
+        return $this->name;
     }
 
     /**
-     * Set startDate
+     * Set code
      *
-     * @param \DateTime $startDate
-     * @return Gantt_tasks
+     * @param string $code
+     * @return Tasks
      */
-    public function setStartDate($startDate)
+    public function setCode($code)
     {
-        $this->startDate = $startDate;
+        $this->code = $code;
 
         return $this;
     }
 
     /**
-     * Get startDate
+     * Get code
+     *
+     * @return string 
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Set level
+     *
+     * @param integer $level
+     * @return Tasks
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
+
+        return $this;
+    }
+
+    /**
+     * Get level
+     *
+     * @return integer 
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     * @return Tasks
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set start
+     *
+     * @param \DateTime $start
+     * @return Tasks
+     */
+    public function setStart($start)
+    {
+        $this->start = $start;
+
+        return $this;
+    }
+
+    /**
+     * Get start
      *
      * @return \DateTime 
      */
-    public function getStartDate()
+    public function getStart()
     {
-        return $this->startDate;
+        return $this->start;
     }
 
     /**
      * Set duration
      *
      * @param integer $duration
-     * @return Gantt_tasks
+     * @return Tasks
      */
     public function setDuration($duration)
     {
@@ -144,10 +255,125 @@ class Gantt_tasks
     }
 
     /**
+     * Set end
+     *
+     * @param \DateTime $end
+     * @return Tasks
+     */
+    public function setEnd($end)
+    {
+        $this->end = $end;
+
+        return $this;
+    }
+
+    /**
+     * Get end
+     *
+     * @return \DateTime 
+     */
+    public function getEnd()
+    {
+        return $this->end;
+    }
+
+    /**
+     * Set startIsMilestone
+     *
+     * @param boolean $startIsMilestone
+     * @return Tasks
+     */
+    public function setStartIsMilestone($startIsMilestone)
+    {
+        $this->startIsMilestone = $startIsMilestone;
+
+        return $this;
+    }
+
+    /**
+     * Get startIsMilestone
+     *
+     * @return boolean 
+     */
+    public function getStartIsMilestone()
+    {
+        return $this->startIsMilestone;
+    }
+
+    /**
+     * Set endIsMilestone
+     *
+     * @param boolean $endIsMilestone
+     * @return Tasks
+     */
+    public function setEndIsMilestone($endIsMilestone)
+    {
+        $this->endIsMilestone = $endIsMilestone;
+
+        return $this;
+    }
+
+    /**
+     * Get endIsMilestone
+     *
+     * @return boolean 
+     */
+    public function getEndIsMilestone()
+    {
+        return $this->endIsMilestone;
+    }
+
+    /**
+     * Set depends
+     *
+     * @param string $depends
+     * @return Tasks
+     */
+    public function setDepends($depends)
+    {
+        $this->depends = $depends;
+
+        return $this;
+    }
+
+    /**
+     * Get depends
+     *
+     * @return string 
+     */
+    public function getDepends()
+    {
+        return $this->depends;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Tasks
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
      * Set progress
      *
-     * @param float $progress
-     * @return Gantt_tasks
+     * @param integer $progress
+     * @return Tasks
      */
     public function setProgress($progress)
     {
@@ -159,56 +385,10 @@ class Gantt_tasks
     /**
      * Get progress
      *
-     * @return float 
+     * @return integer 
      */
     public function getProgress()
     {
         return $this->progress;
-    }
-
-    /**
-     * Set sortorder
-     *
-     * @param integer $sortorder
-     * @return Gantt_tasks
-     */
-    public function setSortorder($sortorder)
-    {
-        $this->sortorder = $sortorder;
-
-        return $this;
-    }
-
-    /**
-     * Get sortorder
-     *
-     * @return integer 
-     */
-    public function getSortorder()
-    {
-        return $this->sortorder;
-    }
-
-    /**
-     * Set parent
-     *
-     * @param integer $parent
-     * @return Gantt_tasks
-     */
-    public function setParent($parent)
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * Get parent
-     *
-     * @return integer 
-     */
-    public function getParent()
-    {
-        return $this->parent;
     }
 }
