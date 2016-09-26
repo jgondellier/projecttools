@@ -105,6 +105,11 @@ class Gantt_tasks
      */
     private $progress;
 
+    /**
+     * @ORM\OneToOne(targetEntity="GanttBundle\Entity\Gantt_assigs")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $Gantt_assigs;
 
     /**
      * Get id
@@ -390,5 +395,28 @@ class Gantt_tasks
     public function getProgress()
     {
         return $this->progress;
+    }
+
+    /**
+     * Set Gantt_assigs
+     *
+     * @param \GanttBundle\Entity\Gantt_assigs $ganttAssigs
+     * @return Gantt_tasks
+     */
+    public function setGanttAssigs(\GanttBundle\Entity\Gantt_assigs $ganttAssigs = null)
+    {
+        $this->Gantt_assigs = $ganttAssigs;
+
+        return $this;
+    }
+
+    /**
+     * Get Gantt_assigs
+     *
+     * @return \GanttBundle\Entity\Gantt_assigs 
+     */
+    public function getGanttAssigs()
+    {
+        return $this->Gantt_assigs;
     }
 }

@@ -1,11 +1,11 @@
 @font-face {
     font-family: 'TeamworkRegular';
-    src: url('../../fonts/teamwork-regular-webfont.eot');
-    src: url('../../fonts/teamwork-regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../fonts/teamwork-regular-webfont.woff') format('woff'),
-         url('../../fonts/teamwork-regular-webfont.ttf') format('truetype'),
-         url('../../fonts/teamwork-regular-webfont.otf') format('opentype'),
-         url('../../fonts/teamwork-regular-webfont.svg#TeamworkRegular') format('svg');
+    src: url('../../../fonts/teamwork-regular-webfont.eot');
+    src: url('../../../fonts/teamwork-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../../fonts/teamwork-regular-webfont.woff') format('woff'),
+         url('../../../fonts/teamwork-regular-webfont.ttf') format('truetype'),
+         url('../../../fonts/teamwork-regular-webfont.otf') format('opentype'),
+         url('../../../fonts/teamwork-regular-webfont.svg#TeamworkRegular') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -324,7 +324,7 @@ select {
   height: 25px;
   mmmargin-left: -20px;
   mmmposition: absolute;
-  background: url("res/alert.gif") no-repeat;
+  background: url(../res/alert.gif) no-repeat;
 }
 
 
