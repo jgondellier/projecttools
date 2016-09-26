@@ -1,0 +1,3 @@
+indicateurs_homepage:
+    path:     /
+    defaults: { _controller: IndicateursBundle:Default:index }
