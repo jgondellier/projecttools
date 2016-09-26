@@ -84,6 +84,19 @@ class Indic_items
      */
     private $priority;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="request_nature", type="smallint", nullable=true)
+     */
+    private $requestNature;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="cadre", type="smallint", nullable=true)
+     */
+    private $cadre;
 
     /**
      * Get id
@@ -99,7 +112,7 @@ class Indic_items
      * Set jtracId
      *
      * @param integer $jtracId
-     * @return Items
+     * @return Indic_items
      */
     public function setJtracId($jtracId)
     {
@@ -122,7 +135,7 @@ class Indic_items
      * Set projectId
      *
      * @param integer $projectId
-     * @return Items
+     * @return Indic_items
      */
     public function setProjectId($projectId)
     {
@@ -145,7 +158,7 @@ class Indic_items
      * Set createdDate
      *
      * @param \DateTime $createdDate
-     * @return Items
+     * @return Indic_items
      */
     public function setCreatedDate($createdDate)
     {
@@ -168,7 +181,7 @@ class Indic_items
      * Set createdBy
      *
      * @param integer $createdBy
-     * @return Items
+     * @return Indic_items
      */
     public function setCreatedBy($createdBy)
     {
@@ -191,7 +204,7 @@ class Indic_items
      * Set title
      *
      * @param string $title
-     * @return Items
+     * @return Indic_items
      */
     public function setTitle($title)
     {
@@ -214,7 +227,7 @@ class Indic_items
      * Set description
      *
      * @param string $description
-     * @return Items
+     * @return Indic_items
      */
     public function setDescription($description)
     {
@@ -237,7 +250,7 @@ class Indic_items
      * Set status
      *
      * @param integer $status
-     * @return Items
+     * @return Indic_items
      */
     public function setStatus($status)
     {
@@ -260,7 +273,7 @@ class Indic_items
      * Set severity
      *
      * @param integer $severity
-     * @return Items
+     * @return Indic_items
      */
     public function setSeverity($severity)
     {
@@ -283,7 +296,7 @@ class Indic_items
      * Set priority
      *
      * @param integer $priority
-     * @return Items
+     * @return Indic_items
      */
     public function setPriority($priority)
     {
@@ -300,5 +313,51 @@ class Indic_items
     public function getPriority()
     {
         return $this->priority;
+    }
+
+    /**
+     * Set requestNature
+     *
+     * @param integer $requestNature
+     * @return Indic_items
+     */
+    public function setRequestNature($requestNature)
+    {
+        $this->requestNature = $requestNature;
+
+        return $this;
+    }
+
+    /**
+     * Get requestNature
+     *
+     * @return integer 
+     */
+    public function getRequestNature()
+    {
+        return $this->requestNature;
+    }
+
+    /**
+     * Set cadre
+     *
+     * @param integer $cadre
+     * @return Indic_items
+     */
+    public function setCadre($cadre)
+    {
+        $this->cadre = $cadre;
+
+        return $this;
+    }
+
+    /**
+     * Get cadre
+     *
+     * @return integer 
+     */
+    public function getCadre()
+    {
+        return $this->cadre;
     }
 }

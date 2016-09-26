@@ -2,12 +2,13 @@
 
 namespace IndicateursBundle\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
+use IndicateursBundle\Model\ImportJtrac;
 
-class ImportJtracCommand extends Command
+class ImportJtracCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -30,6 +31,9 @@ class ImportJtracCommand extends Command
             '============',
             '',
         ]);
+        $t_jtrac  = $this->getContainer()->get('indicateurs.importjtrac')->getValue($itemsFile,$historyFile);
+
+        var_dump($t_jtrac);exit;
 
         $output->writeln([
             'Ouverture du fichier items',

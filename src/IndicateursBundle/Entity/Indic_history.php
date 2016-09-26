@@ -22,13 +22,6 @@ class Indic_history
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="jtrac_id", type="integer")
-     */
-    private $jtracId;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_date", type="datetime")
@@ -50,12 +43,17 @@ class Indic_history
     private $assignedTo;
 
     /**
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="request_nature", type="smallint", nullable=true)
      */
     private $requestNature;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="IndicateursBundle\Entity\Indic_items")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $Indic_items;
 
     /**
      * Get id
@@ -68,33 +66,10 @@ class Indic_history
     }
 
     /**
-     * Set jtracId
-     *
-     * @param integer $jtracId
-     * @return History
-     */
-    public function setJtracId($jtracId)
-    {
-        $this->jtracId = $jtracId;
-
-        return $this;
-    }
-
-    /**
-     * Get jtracId
-     *
-     * @return integer 
-     */
-    public function getJtracId()
-    {
-        return $this->jtracId;
-    }
-
-    /**
      * Set createdDate
      *
      * @param \DateTime $createdDate
-     * @return History
+     * @return Indic_history
      */
     public function setCreatedDate($createdDate)
     {
@@ -117,7 +92,7 @@ class Indic_history
      * Set createdBy
      *
      * @param integer $createdBy
-     * @return History
+     * @return Indic_history
      */
     public function setCreatedBy($createdBy)
     {
@@ -140,7 +115,7 @@ class Indic_history
      * Set assignedTo
      *
      * @param integer $assignedTo
-     * @return History
+     * @return Indic_history
      */
     public function setAssignedTo($assignedTo)
     {
@@ -162,8 +137,8 @@ class Indic_history
     /**
      * Set requestNature
      *
-     * @param string $requestNature
-     * @return History
+     * @param integer $requestNature
+     * @return Indic_history
      */
     public function setRequestNature($requestNature)
     {
@@ -175,10 +150,33 @@ class Indic_history
     /**
      * Get requestNature
      *
-     * @return string 
+     * @return integer 
      */
     public function getRequestNature()
     {
         return $this->requestNature;
+    }
+
+    /**
+     * Set Indic_items
+     *
+     * @param \IndicateursBundle\Entity\Indic_items $indicItems
+     * @return Indic_history
+     */
+    public function setIndicItems(\IndicateursBundle\Entity\Indic_items $indicItems)
+    {
+        $this->Indic_items = $indicItems;
+
+        return $this;
+    }
+
+    /**
+     * Get Indic_items
+     *
+     * @return \IndicateursBundle\Entity\Indic_items 
+     */
+    public function getIndicItems()
+    {
+        return $this->Indic_items;
     }
 }
