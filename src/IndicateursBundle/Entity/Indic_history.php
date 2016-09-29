@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * History
  *
  * @ORM\Table(name="Indic_history")
- * @ORM\Entity(repositoryClass="IndicateursBundle\Repository\HistoryRepository")
+ * @ORM\Entity(repositoryClass="IndicateursBundle\Repository\Indic_historyRepository")
  */
 class Indic_history
 {
@@ -20,6 +20,13 @@ class Indic_history
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="history_id", type="integer")
+     */
+    private $historyId;
 
     /**
      * @var \DateTime
@@ -63,6 +70,29 @@ class Indic_history
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set historyId
+     *
+     * @param integer $historyId
+     * @return Indic_history
+     */
+    public function setHistoryId($historyId)
+    {
+        $this->historyId = $historyId;
+
+        return $this;
+    }
+
+    /**
+     * Get historyId
+     *
+     * @return integer
+     */
+    public function getHistoryId()
+    {
+        return $this->historyId;
     }
 
     /**

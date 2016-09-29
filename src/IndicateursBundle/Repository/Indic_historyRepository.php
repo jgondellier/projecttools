@@ -12,4 +12,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class Indic_historyRepository extends EntityRepository
 {
+    /**
+     * Recherche un Item avec son JtracId
+     *
+     * @param $historyId
+     * @return mixed
+     */
+    public function getHistoryByHistoryId($historyId)
+    {
+        $query = $this->createQueryBuilder('h');
+        $query->select('h.historyId')
+            ->where('h.historyId = :historyId')
+            ->setParameter('historyId', $historyId);
+
+        return $query->getQuery()->getOneOrNullResult();
+    }
 }

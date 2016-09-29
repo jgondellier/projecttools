@@ -12,4 +12,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class Indic_itemsRepository extends EntityRepository
 {
+    /**
+     * Recherche un Item avec son JtracId
+     *
+     * @param $itemId
+     * @return mixed
+     */
+    public function getItemByItemId($itemId)
+    {
+        $query = $this->createQueryBuilder('i');
+        //$query->select('i.itemId');
+        $query->where('i.itemId = :itemId')
+            ->setParameter('itemId', $itemId);
+
+        return $query->getQuery()->getOneOrNullResult();
+    }
+
 }

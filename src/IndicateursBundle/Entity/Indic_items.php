@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Items
  *
  * @ORM\Table(name="Indic_items")
- * @ORM\Entity(repositoryClass="IndicateursBundle\Repository\ItemsRepository")
+ * @ORM\Entity(repositoryClass="IndicateursBundle\Repository\Indic_itemsRepository")
  */
 class Indic_items
 {
@@ -20,6 +20,13 @@ class Indic_items
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="item_id", type="integer")
+     */
+    private $itemId;
 
     /**
      * @var int
@@ -106,6 +113,29 @@ class Indic_items
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set itemId
+     *
+     * @param integer $itemId
+     * @return Indic_items
+     */
+    public function setItemId($itemId)
+    {
+        $this->itemId = $itemId;
+
+        return $this;
+    }
+
+    /**
+     * Get itemId
+     *
+     * @return integer
+     */
+    public function getItemId()
+    {
+        return $this->itemId;
     }
 
     /**
