@@ -3,7 +3,7 @@
 {% block title %}Gantt {% endblock %}
 
 {% block stylesheets %}
-    {% stylesheets output='css/compiled/main.gantt.css'
+    {% stylesheets output='css/compiled/main.gantt.css' filter='cssrewrite'
     '@GanttBundle/Resources/public/css/platform.css'
     '@GanttBundle/Resources/public/js/libs/dateField/jquery.dateField.css'
     '@GanttBundle/Resources/public/css/gantt.css'
@@ -11,14 +11,15 @@
     <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
     {% endstylesheets %}
     {% stylesheets output='css/compiled/main.print.css'
-        '@GanttBundle/Resources/public/css/ganttPrint.css'
+        '@GanttBundle/Resources/public/css/ganttPrint.css'%}
+    <link rel="stylesheet" href="{{ asset_url }}" type="text/css" media="print"/>
     {% endstylesheets %}
 {% endblock %}
 
 {% block body %}
     <div id="workSpace" style="padding:0; overflow-y:auto; overflow-x:hidden; border:1px solid #e5e5e5; position:relative; margin:0 5px; width:1024px; height:800px;"></div>
     <script type="text/javascript">
-        window.onload = function(e){
+        window.onload = function(){
             $(document).ready(function() {
                 var ge = new GanttMaster();
                 var workSpace = $("#workSpace");
@@ -71,6 +72,27 @@
                 });
             });
         };
+        function loadGanttFromServer(taskId, callback) {
+            var taskId = $("#taskSelector").val();
+            var prof = new Profiler("loadServerSide");
+            prof.reset();
+
+            $.getJSON("ganttAjaxController.jsp", {CM:"LOADPROJECT",taskId:taskId}, function(response) {
+                //console.debug(response);
+                if (response.ok) {
+                    prof.stop();
+
+                    ge.loadProject(response.project);
+                    ge.checkpoint(); //empty the undo stack
+
+                    if (typeof(callback)=="function") {
+                        callback(response);
+                    }
+                } else {
+                    jsonErrorHandling(response);
+                }
+            });
+        }
     </script>
     <div id="gantEditorTemplates" style="display:none;">
         <div class="__template__" type="GANTBUTTONS"><!--
