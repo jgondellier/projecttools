@@ -36,6 +36,13 @@ class Indic_history
     private $createdDate;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="qualified_date", type="datetime", nullable=true)
+     */
+    private $qualifiedDate;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="created_by", type="integer")
@@ -116,6 +123,29 @@ class Indic_history
     public function getCreatedDate()
     {
         return $this->createdDate;
+    }
+
+    /**
+     * Set qualifiedDate
+     *
+     * @param \DateTime $qualifiedDate
+     * @return Indic_history
+     */
+    public function setQualifiedDate($qualifiedDate)
+    {
+        $this->qualifiedDate = $qualifiedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get qualifiedDate
+     *
+     * @return \DateTime
+     */
+    public function getQualifiedDate()
+    {
+        return $this->qualifiedDate;
     }
 
     /**

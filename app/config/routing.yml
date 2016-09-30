@@ -1,4 +1,8 @@
 gantt:
     resource: "@GanttBundle/Controller/"
     type:     annotation
-    prefix:   /
+    prefix:   /gantt
+
+indicateurs:
+    resource: "@IndicateursBundle/Resources/config/routing.yml"
+    prefix:   /indic

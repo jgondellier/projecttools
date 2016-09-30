@@ -9,7 +9,7 @@ use GanttBundle\Models\JSONGanttConnector;
 class DataController extends Controller
 {
     /**
-     * @Route("/gantt/getdata")
+     * @Route("/getdata")
      */
     public function indexAction()
     {

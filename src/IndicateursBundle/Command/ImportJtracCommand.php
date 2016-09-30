@@ -44,6 +44,7 @@ class ImportJtracCommand extends ContainerAwareCommand
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
 
         $output->writeln([
+            '',
             'Mise en base des items',
             '',
         ]);
@@ -95,6 +96,7 @@ class ImportJtracCommand extends ContainerAwareCommand
         }
 
         $output->writeln([
+            '',
             'Mise en base des history',
             '',
         ]);
@@ -114,11 +116,14 @@ class ImportJtracCommand extends ContainerAwareCommand
                     //On ne peut créer une history que si celle ci est rattachée a un item
                     //On recherche l'item auquel est rattaché l'history
                     $entity_item = $entityManager->getRepository('IndicateursBundle:Indic_Items')->getItemByItemId($history['item_id']);
-                    if($entity_item != null){
+                    if($entity_item != null) {
                         //L'item n'existe pas on le créé
                         $entity_history = new Indic_history();
                         $entity_history->setHistoryId($history['id']);
-                        $entity_history->setCreatedDate(\DateTime::createFromFormat('m/d/y H:i',$history['created_date']));
+                        $entity_history->setCreatedDate(\DateTime::createFromFormat('m/d/y H:i', $history['created_date']));
+                        if($history['date_qualified']){
+                            $entity_history->setQualifiedDate(\DateTime::createFromFormat('m/d/y H:i', $history['date_qualified']));
+                        }
                         $entity_history->setCreatedBy($history['created_by']);
                         if($history['request_nature']){
                             $entity_history->setRequestNature($history['request_nature']);
@@ -145,8 +150,9 @@ class ImportJtracCommand extends ContainerAwareCommand
         }
 
         $output->writeln([
+            '',
             'Import terminé',
-            '============',
+            '========================',
             '',
         ]);
     }

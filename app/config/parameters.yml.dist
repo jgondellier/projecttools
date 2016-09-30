@@ -17,3 +17,24 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+    list_project:
+        60: HIPARK
+        93: iREIM
+        123: REIMIT
+        114: Studelites
+        91: CFO
+        55: Logement
+        58: Webzine
+    delai_priorite:
+        support:
+            1: 4
+            2: 24
+            3: 72
+        anomalie:
+            1: 4
+            2: 24
+            3: 72
+        evolution:
+            1: 48
+            2: 120
+            3: 240
