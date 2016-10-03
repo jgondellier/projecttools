@@ -28,6 +28,7 @@ class ImportJtracCommand extends ContainerAwareCommand
     {
         $itemsFile      = $input->getArgument('fileItems');
         $historyFile    = $input->getArgument('fileHistory');
+        $dateFormat     = 'Y-m-d H:i:s';
 
         $output->writeln([
             'Début de l\'import',
@@ -39,7 +40,7 @@ class ImportJtracCommand extends ContainerAwareCommand
             '',
         ]);
 
-        $t_jtrac  = $this->getContainer()->get('indicateurs.importjtrac')->getValue($itemsFile,$historyFile);
+        $t_jtrac  = $this->getContainer()->get('indicateurs.importjtrac')->getXMLValue($itemsFile,$historyFile);
 
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
 
@@ -60,26 +61,26 @@ class ImportJtracCommand extends ContainerAwareCommand
                 //Vérification si le contenu n'existe pas déjà
                 $entity_item = $entityManager->getRepository('IndicateursBundle:Indic_items')->getItemByItemId($itemId);
                 if($entity_item == Null){
-                    //L'item n'eciste pas on le créé
+                    //L'item n'existe pas on le créé
                     $entity_item = new Indic_items();
                     $entity_item->setItemId($item['id']);
                     $entity_item->setJtracId($item['jtrac_id']);
                     $entity_item->setProjectId($item['project_id']);
-                    $entity_item->setCreatedDate(\DateTime::createFromFormat('m/d/y H:i',$item['created_date']));
+                    $entity_item->setCreatedDate($item['created_date']);
                     $entity_item->setCreatedBy($item['created_by']);
                     $entity_item->setTitle($item['title']);
                     $entity_item->setDescription($item['description']);
                     $entity_item->setStatus($item['status']);
-                    if($item['severity']){
+                    if(isset($item['severity'])){
                         $entity_item->setSeverity($item['severity']);
                     }
-                    if($item['priority']){
+                    if(isset($item['priority'])){
                         $entity_item->setPriority($item['priority']);
                     }
-                    if($item['request_nature']){
+                    if(isset($item['request_nature'])){
                         $entity_item->setRequestNature($item['request_nature']);
                     }
-                    if($item['cadre']){
+                    if(isset($item['cadre'])){
                         $entity_item->setCadre($item['cadre']);
                     }
                     $entityManager->persist($entity_item);
@@ -110,33 +111,34 @@ class ImportJtracCommand extends ContainerAwareCommand
         if (count($t_history)>0){
             foreach($t_history as $history){
                 $historyId = $history['id'];
-                //Vérification si le contenu n'existe pas déjà
-                $entity_history = $entityManager->getRepository('IndicateursBundle:Indic_history')->getHistoryByHistoryId($historyId);
-                if($entity_history == Null){
-                    //On ne peut créer une history que si celle ci est rattachée a un item
-                    //On recherche l'item auquel est rattaché l'history
-                    $entity_item = $entityManager->getRepository('IndicateursBundle:Indic_Items')->getItemByItemId($history['item_id']);
-                    if($entity_item != null) {
+                //On ne peut créer une history que si celle ci est rattachée a un item
+                //On recherche l'item auquel est rattaché l'history
+                $entity_item = $entityManager->getRepository('IndicateursBundle:Indic_Items')->getItemByItemId($history['item_id']);
+                if($entity_item != null) {
+                    //Vérification si le contenu n'existe pas déjà
+                    $entity_history = $entityManager->getRepository('IndicateursBundle:Indic_history')->getHistoryByHistoryId($historyId);
+                    if($entity_history == Null){
                         //L'item n'existe pas on le créé
                         $entity_history = new Indic_history();
                         $entity_history->setHistoryId($history['id']);
-                        $entity_history->setCreatedDate(\DateTime::createFromFormat('m/d/y H:i', $history['created_date']));
-                        if($history['date_qualified']){
-                            $entity_history->setQualifiedDate(\DateTime::createFromFormat('m/d/y H:i', $history['date_qualified']));
+                        $entity_history->setCreatedDate($history['created_date']);
+                        if(isset($history['date_qualified']) && $history['date_qualified'] != ""){
+                            $entity_history->setQualifiedDate($history['date_qualified']);
                         }
                         $entity_history->setCreatedBy($history['created_by']);
-                        if($history['request_nature']){
+                        if(isset($history['request_nature']) && $history['request_nature'] != ""){
                             $entity_history->setRequestNature($history['request_nature']);
                         }
-                        if($history['assigned_to']){
+                        if(isset($history['assigned_to']) && $history['assigned_to'] != ""){
                             $entity_history->setAssignedTo($history['assigned_to']);
                         }
                         $entity_history->setIndicItems($entity_item);
                     }else{
-                        //History sans item
+                        //History existe dejà
                     }
-
                     $entityManager->persist($entity_history);
+                }else{
+                    //History sans item
                 }
                 //La progressbar avance
                 $progress->advance();
