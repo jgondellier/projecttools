@@ -67,10 +67,6 @@ class Indic_itemsRepository extends EntityRepository
 
         }
 
-        //var_dump($query->getQuery()->getArrayResult());
-        var_dump($t_indic);
-        exit;
-
-        return $query->getQuery()->getArrayResult();
+        return $t_indic;
     }
 }

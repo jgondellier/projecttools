@@ -59,6 +59,13 @@ class Indic_history
     /**
      * @var int
      *
+     * @ORM\Column(name="status", type="smallint", nullable=true)
+     */
+    private $status;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="request_nature", type="smallint", nullable=true)
      */
     private $requestNature;
@@ -192,6 +199,29 @@ class Indic_history
     public function getAssignedTo()
     {
         return $this->assignedTo;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * @return Indic_history
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**

@@ -106,6 +106,13 @@ class Indic_items
     private $cadre;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="trsb", type="boolean", nullable=true)
+     */
+    private $trsb;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -389,5 +396,28 @@ class Indic_items
     public function getCadre()
     {
         return $this->cadre;
+    }
+
+    /**
+     * Set trsb
+     *
+     * @param boolean $trsb
+     * @return Indic_items
+     */
+    public function setTrsb($trsb)
+    {
+        $this->trsb = $trsb;
+
+        return $this;
+    }
+
+    /**
+     * Get trsb
+     *
+     * @return boolean
+     */
+    public function getTrsb()
+    {
+        return $this->trsb;
     }
 }

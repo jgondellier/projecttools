@@ -19,6 +19,13 @@ class ImportJtrac
         $this->list_project = $list_project;
     }
 
+    /**
+     * Fonction Permettant de récuperer les données de l'export jtrac au format xml.
+     *
+     * @param $itemsFile
+     * @param $historyFile
+     * @return array
+     */
     public function getXMLValue($itemsFile,$historyFile){
         $t_item               = array();
         $t_history            = array();
@@ -75,21 +82,34 @@ class ImportJtrac
             echo 'Fichier '.$historyFile.' introuvable !';
             exit();
         }
+
         //traitements des historys
         foreach($simplexmlHistoryFile->dbo_history as $dbo_history){
             $dateCreation = \DateTime::createFromFormat('Y-m-d H:i:s', str_replace('T',' ',strval($dbo_history->time_stamp)));
             if ($dateCreation > $dateMin) {
-                $t_history[strval($dbo_history->id)]['id'] = strval($dbo_history->id);
-                $t_history[strval($dbo_history->id)]['item_id'] = strval($dbo_history->item_id);
-                $t_history[strval($dbo_history->id)]['created_date'] = $dateCreation;
-                $t_history[strval($dbo_history->id)]['created_by'] = strval($dbo_history->logged_by);
-                $t_history[strval($dbo_history->id)]['assigned_to'] = strval($dbo_history->assigned_to);
-                if(isset($dbo_history->cus_int_01)){
-                    $t_history[strval($dbo_history->id)]['request_nature'] = strval($dbo_history->cus_int_01);
-                }
-                if(isset($dbo_history->cus_tim_01)){
-                    $dateQualified = \DateTime::createFromFormat('Y-m-d H:i:s', str_replace('T',' ',strval($dbo_history->cus_tim_01)));
-                    $t_history[strval($dbo_history->id)]['date_qualified'] = $dateQualified;
+                //On ne prend que les historys qui ont un item
+                if(isset($t_item[strval($dbo_history->item_id)])){
+                    $t_history[strval($dbo_history->id)]['id'] = strval($dbo_history->id);
+                    $t_history[strval($dbo_history->id)]['item_id'] = strval($dbo_history->item_id);
+                    $t_history[strval($dbo_history->id)]['created_date'] = $dateCreation;
+                    $t_history[strval($dbo_history->id)]['created_by'] = strval($dbo_history->logged_by);
+                    $t_history[strval($dbo_history->id)]['assigned_to'] = strval($dbo_history->assigned_to);
+                    $t_history[strval($dbo_history->id)]['status'] = strval($dbo_history->status);
+                    if(isset($dbo_history->cus_int_01)){
+                        $t_history[strval($dbo_history->id)]['request_nature'] = strval($dbo_history->cus_int_01);
+                    }
+
+                    if($t_item[strval($dbo_history->item_id)]['jtrac_id'] == 55 || $t_item[strval($dbo_history->item_id)]['jtrac_id'] ==93){
+                        if(isset($dbo_history->cus_tim_01)) {
+                            $dateQualified = \DateTime::createFromFormat('Y-m-d H:i:s', str_replace('T',' ',strval($dbo_history->cus_tim_01)));
+                            $t_history[strval($dbo_history->id)]['date_qualified'] = $dateQualified;
+                        }
+                    }else{
+                        if(isset($dbo_history->cus_tim_02)) {
+                            $dateQualified = \DateTime::createFromFormat('Y-m-d H:i:s', str_replace('T',' ',strval($dbo_history->cus_tim_02)));
+                            $t_history[strval($dbo_history->id)]['date_qualified'] = $dateQualified;
+                        }
+                    }
                 }
             }
         }

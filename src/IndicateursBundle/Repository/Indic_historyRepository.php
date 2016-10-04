@@ -21,7 +21,7 @@ class Indic_historyRepository extends EntityRepository
     public function getHistoryByHistoryId($historyId)
     {
         $query = $this->createQueryBuilder('h');
-        $query->select('h.historyId')
+        $query->select('h')
             ->where('h.historyId = :historyId')
             ->setParameter('historyId', $historyId);
 

@@ -117,25 +117,27 @@ class ImportJtracCommand extends ContainerAwareCommand
                 if($entity_item != null) {
                     //Vérification si le contenu n'existe pas déjà
                     $entity_history = $entityManager->getRepository('IndicateursBundle:Indic_history')->getHistoryByHistoryId($historyId);
-                    if($entity_history == Null){
+                    if($entity_history == Null) {
                         //L'item n'existe pas on le créé
                         $entity_history = new Indic_history();
-                        $entity_history->setHistoryId($history['id']);
-                        $entity_history->setCreatedDate($history['created_date']);
-                        if(isset($history['date_qualified']) && $history['date_qualified'] != ""){
-                            $entity_history->setQualifiedDate($history['date_qualified']);
-                        }
-                        $entity_history->setCreatedBy($history['created_by']);
-                        if(isset($history['request_nature']) && $history['request_nature'] != ""){
-                            $entity_history->setRequestNature($history['request_nature']);
-                        }
-                        if(isset($history['assigned_to']) && $history['assigned_to'] != ""){
-                            $entity_history->setAssignedTo($history['assigned_to']);
-                        }
-                        $entity_history->setIndicItems($entity_item);
-                    }else{
-                        //History existe dejà
                     }
+                    $entity_history->setHistoryId($history['id']);
+                    $entity_history->setCreatedDate($history['created_date']);
+                    if(isset($history['date_qualified']) && $history['date_qualified'] != ""){
+                        $entity_history->setQualifiedDate($history['date_qualified']);
+                    }
+                    $entity_history->setCreatedBy($history['created_by']);
+                    if(isset($history['request_nature']) && $history['request_nature'] != ""){
+                        $entity_history->setRequestNature($history['request_nature']);
+                    }
+                    if(isset($history['assigned_to']) && $history['assigned_to'] != ""){
+                        $entity_history->setAssignedTo($history['assigned_to']);
+                    }
+                    if(isset($history['status']) && $history['status'] != ""){
+                        $entity_history->setStatus($history['status']);
+                    }
+                    $entity_history->setIndicItems($entity_item);
+
                     $entityManager->persist($entity_history);
                 }else{
                     //History sans item

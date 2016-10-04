@@ -25,6 +25,21 @@ parameters:
         91: CFO
         55: Logement
         58: Webzine
+    list_trsb_user:
+        601: Stephane Richard
+        618: Fabienne Guriec
+        705: Batiste Herisson
+        707: Matthieu Rambaud
+        745: Jonathan Gondellier
+    status:
+        corrected:
+            60: 4
+            93: 5
+            123: REIMIT
+            114: 5
+            91: 5
+            55: 4
+            58: 4
     delai_priorite:
         support:
             1: 4
