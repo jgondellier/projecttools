@@ -2,6 +2,7 @@
 
 namespace IndicateursBundle\Command;
 
+use IndicateursBundle\Entity\Indic_TRSB;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,7 +18,7 @@ class UpdateJtracCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('update:jtrac')
+            ->setName('update:jtrac:TRSB')
             ->setDescription('Update des tickets jtrac.')
             ->setHelp("Commande permettant de mettre à jour les tickets jtracs avec les données de stats.");
     }
@@ -46,28 +47,62 @@ class UpdateJtracCommand extends ContainerAwareCommand
         $progress = new ProgressBar($output, count($entity_item));
         $progress->start();
         foreach($entity_item as $item){
-            $update = False;
-            if(array_key_exists($item->getCreatedBy(),$listTRSBUser)){
-                $item->setTrsb(True);
-                $item->setTRSBDate($item->getCreatedDate());
+            $findKnowledge      = False;
+            $findCorrected      = False;
+            $findAnswer         = False;
+            $refused            = 0;
+
+            //On regarde si une entrée TRSB n'existe pas déjà
+            /* @var \IndicateursBundle\Entity\Indic_TRSB $entity_trsb */
+            $entity_trsb = $entityManager->getRepository('IndicateursBundle:Indic_TRSB')->getTRSBByItemId($item->getId());
+
+            /*if(array_key_exists($item->getCreatedBy(),$listTRSBUser)){
+                //C'est TRSB qui a créé le ticket
+                $entity_trsb = $this->setTRSBDate($item,$entity_trsb,$item->getCreatedDate());
                 $update = True;
-            }else{
-                //on parcourt les history pour voir
-                $entity_history = $entityManager->getRepository('IndicateursBundle:Indic_history')->getAllHistoryByItemId($item->getId());
-                foreach ($entity_history as $history){
-                    if(array_key_exists($history->getCreatedBy(),$listTRSBUser) || array_key_exists($history->getAssignedTo(),$listTRSBUser)){
-                        //On ne prend pas si trsb est present que pour la fermeture
-                        if ($history->getStatus() != $t_status['corrected'][$item->getProjectId()]){
-                            $item->setTrsb(True);
-                            $item->setTRSBDate($history->getCreatedDate());
-                            $update = True;
-                            break;
-                        }
+            }else{*/
+            //on parcourt les history pour voir
+            $entity_history = $entityManager->getRepository('IndicateursBundle:Indic_history')->getAllHistoryByItemId($item->getId());
+            foreach ($entity_history as $pos => $history){
+                /* @var \IndicateursBundle\Entity\Indic_history $history */
+
+                //On regarde a quel moment TRSB est informé, présent dans le workflow
+                if(!$findKnowledge && (array_key_exists($history->getCreatedBy(),$listTRSBUser) || array_key_exists($history->getAssignedTo(),$listTRSBUser))){
+                    //On ne prend pas si trsb est present que pour la fermeture
+                    if ($history->getStatus() != $t_status['closed'][$item->getProjectId()]){
+                        $entity_trsb = $this->setTRSBDate($item,$entity_trsb,$history->getCreatedDate(),'knowledge');
+                        $findKnowledge = True;
                     }
                 }
+                //On regarde a quel moment TRSB à fait sa première réponse
+                if(!$findAnswer && (array_key_exists($history->getCreatedBy(),$listTRSBUser) && $pos != 0)){
+                    //On ne prend pas si trsb est present que pour la fermeture
+                    if ($history->getStatus() != $t_status['closed'][$item->getProjectId()]){
+                        $entity_trsb = $this->setTRSBDate($item,$entity_trsb,$history->getCreatedDate(),'answer');
+                        $findAnswer = True;
+                    }
+                }
+                //On regarde quand le statut du ticket passe à corrigé pour la dernière fois
+                if(array_key_exists($history->getCreatedBy(),$listTRSBUser) && ($history->getStatus() == $t_status['corrected'][$item->getProjectId()])){
+                    if(!$findCorrected){
+                        //Date de la première correction
+                        $entity_trsb = $this->setTRSBDate($item,$entity_trsb,$history->getCreatedDate(),'firstcorrected');
+                    }
+                    //On garde la date de la correction définitive
+                    $entity_trsb = $this->setTRSBDate($item,$entity_trsb,$history->getCreatedDate(),'corrected');
+                    $findCorrected = True;
+                }
+                //On calcul le nombre de réouverture en fait le nombre de refuse
+                if($history->getStatus() == $t_status['refused'][$item->getProjectId()]){
+                    $refused++;
+                }
             }
-            if($update){
-                $entityManager->persist($item);
+            //}
+            if($refused!=0){
+                $entity_trsb->setRefusedCount($refused);
+            }
+            if($findKnowledge || $findAnswer || $findCorrected){
+                $entityManager->persist($entity_trsb);
             }
             //La progressbar avance
             $progress->advance();
@@ -82,5 +117,29 @@ class UpdateJtracCommand extends ContainerAwareCommand
             '==============================',
             '',
         ]);
+    }
+
+    private function setTRSBDate($item,$entity_trsb,$date,$type){
+        //On regarde si on entrée TRSB n'existe pas déjà
+        /* @var \IndicateursBundle\Entity\Indic_TRSB $entity_trsb */
+        if(!$entity_trsb){
+            $entity_trsb = new Indic_TRSB();
+        }
+        $entity_trsb->setIndicItems($item);
+        switch ($type){
+            case 'knowledge':
+                $entity_trsb->setKnowledgeDate($date);
+                break;
+            case 'answer':
+                $entity_trsb->setAnswerDate($date);
+                break;
+            case 'corrected':
+                $entity_trsb->setCorrectedDate($date);
+                break;
+            case 'firstcorrected':
+                $entity_trsb->setFirstCorrectedDate($date);
+                break;
+        }
+        return $entity_trsb;
     }
 }

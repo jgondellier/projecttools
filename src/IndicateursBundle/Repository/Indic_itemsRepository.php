@@ -35,7 +35,7 @@ class Indic_itemsRepository extends EntityRepository
         $query = $this->createQueryBuilder('i');
         $query->where('i.requestNature = :requestNature')
             ->setParameter('requestNature', $requestNature)
-            ->orderBy('i.createdDate', 'DESC');
+            ->orderBy('i.createdDate', 'ASC');
 
         /*SELECT * FROM `indic_items` i left join `indic_history` h ON i.item_id = h.indic_items_id WHERE i.request_nature = 1*/
 
@@ -47,7 +47,7 @@ class Indic_itemsRepository extends EntityRepository
         $query = $this->createQueryBuilder('i');
         $query->select('i.id,i.jtracId,i.projectId,i.createdDate,i.createdBy,i.status,i.severity,i.priority,i.requestNature,i.cadre,h')
             ->innerJoin('IndicateursBundle:Indic_history', 'h', 'WITH', 'i.id = h.Indic_items')
-            ->orderBy('i.createdDate', 'DESC');
+            ->orderBy('i.createdDate', 'ASC');
 
         $t_result = $query->getQuery()->getArrayResult();
 

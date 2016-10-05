@@ -26,7 +26,6 @@ class UpdateDelaiCommand extends ContainerAwareCommand
     {
         $container          = $this->getContainer();
         $entityManager      = $container->get('doctrine')->getManager();
-        $listTRSBUser       = $container->getParameter('list_trsb_user');
         $t_status           = $container->getParameter('status');
         $list_project       = $container->getParameter('list_project');
 
@@ -47,14 +46,16 @@ class UpdateDelaiCommand extends ContainerAwareCommand
         $progress = new ProgressBar($output, count($entity_item));
         $progress->start();
         foreach($entity_item as $item){
-            $TRSB = $item->getTrsb();
-            if($TRSB) {
-                $jtracType = $item->getRequestNature();
-                $projectid = $item->getProjectId();
-                $entity_history = $entityManager->getRepository('IndicateursBundle:Indic_history')->getAllHistoryByItemId($item->getId());
-                $TRSBDate = $item->getTRSBDate();
-                $dateCorrected = Null;
-                $delai = 0;
+            /* @var \IndicateursBundle\Entity\Indic_TRSB $entity_trsb */
+            $entity_trsb = $entityManager->getRepository('IndicateursBundle:Indic_TRSB')->getTRSBByItemId($item->getId());
+
+            if($entity_trsb) {
+                $jtracType          = $item->getRequestNature();
+                $projectid          = $item->getProjectId();
+                $entity_history     = $entityManager->getRepository('IndicateursBundle:Indic_history')->getAllHistoryByItemId($item->getId());
+                $TRSBDate           = $item->getTRSBDate();
+                $dateCorrected      = Null;
+                $delai              = 0;
 
                 foreach ($entity_history as $history){
                     //on recupere les dates des différents état
@@ -85,8 +86,6 @@ class UpdateDelaiCommand extends ContainerAwareCommand
                         }
                         break;
                 }
-                var_dump($delai);
-
                 if($delai!=0){
                     $item->setDelai($delai);
                     $entityManager->persist($item);

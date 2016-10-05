@@ -106,27 +106,6 @@ class Indic_items
     private $cadre;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="trsb", type="boolean", nullable=true)
-     */
-    private $trsb;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="trsb_date", type="datetime", nullable=true)
-     */
-    private $TRSBDate;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="delai", type="float", nullable=true)
-     */
-    private $delai;
-
-    /**
      * Get id
      *
      * @return integer 
@@ -410,74 +389,5 @@ class Indic_items
     public function getCadre()
     {
         return $this->cadre;
-    }
-
-    /**
-     * Set trsb
-     *
-     * @param boolean $trsb
-     * @return Indic_items
-     */
-    public function setTrsb($trsb)
-    {
-        $this->trsb = $trsb;
-
-        return $this;
-    }
-
-    /**
-     * Get trsb
-     *
-     * @return boolean
-     */
-    public function getTrsb()
-    {
-        return $this->trsb;
-    }
-
-    /**
-     * Set TRSBDate
-     *
-     * @param \DateTime $tRSBDate
-     * @return Indic_items
-     */
-    public function setTRSBDate($tRSBDate)
-    {
-        $this->TRSBDate = $tRSBDate;
-
-        return $this;
-    }
-
-    /**
-     * Get TRSBDate
-     *
-     * @return \DateTime 
-     */
-    public function getTRSBDate()
-    {
-        return $this->TRSBDate;
-    }
-
-    /**
-     * Set delai
-     *
-     * @param integer $delai
-     * @return Indic_items
-     */
-    public function setDelai($delai)
-    {
-        $this->delai = $delai;
-
-        return $this;
-    }
-
-    /**
-     * Get delai
-     *
-     * @return integer 
-     */
-    public function getDelai()
-    {
-        return $this->delai;
     }
 }

@@ -40,7 +40,7 @@ class Indic_historyRepository extends EntityRepository
         $query->select('h')
             ->where('h.Indic_items = :itemId')
             ->setParameter('itemId', $itemId)
-            ->orderBy('h.createdDate', 'DESC');
+            ->orderBy('h.createdDate', 'ASC');
 
         return $query->getQuery()->getResult();
     }
