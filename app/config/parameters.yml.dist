@@ -17,39 +17,89 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
-    list_project:
-        60: HIPARK
-        93: iREIM
-        123: REIMIT
-        114: Studelites
-        91: CFO
-        55: Logement
-        58: Webzine
-    list_trsb_user:
-        601: Stephane Richard
-        618: Fabienne Guriec
-        705: Batiste Herisson
-        707: Matthieu Rambaud
-        745: Jonathan Gondellier
-    status:
-        corrected:
-            60: 4
-            93: 5
-            123: REIMIT
-            114: 5
-            91: 5
-            55: 4
-            58: 4
-    delai_priorite:
-        support:
-            1: 4
-            2: 24
-            3: 72
-        anomalie:
-            1: 4
-            2: 24
-            3: 72
-        evolution:
-            1: 48
-            2: 120
-            3: 240
+        list_project:
+            60:
+                name: HIPARK
+                type:
+                    1: bug
+                    2: evolution mineur
+                    3: support
+                    5: evolution majeur
+            93:
+                name: iREIM
+                type:
+                    1: bug
+                    3: evolution mineur
+                    4: support
+                    5: evolution majeur
+            123:
+                name: REIMIT
+                type:
+                    1: bug
+                    3: evolution mineur
+                    4: support
+                    5: evolution majeur
+            114:
+                name: Studelites
+                type:
+                    1: bug
+                    2: evolution mineur
+                    3: support
+                    5: evolution majeur
+            91:
+                name: CFO
+                type:
+                    1: bug
+                    2: evolution mineur
+                    3: support
+                    5: evolution majeur
+            55:
+                name: Logement
+                type:
+                    1: bug
+                    2: evolution mineur
+                    3: support
+                    5: evolution majeur
+            58:
+                name: Webzine
+                type:
+                    1: bug
+                    2: evolution mineur
+                    3: support
+                    5: evolution majeur
+        list_trsb_user:
+            601: Stephane Richard
+            618: Fabienne Guriec
+            705: Batiste Herisson
+            707: Matthieu Rambaud
+            745: Jonathan Gondellier
+        status:
+            corrected:
+                60: 4
+                93: 5
+                123: REIMIT
+                114: 5
+                91: 5
+                55: 4
+                58: 4
+            closed:
+                60: 99
+                93: 99
+                123: 99
+                114: 99
+                91: 99
+                55: 99
+                58: 99
+        delai_priorite:
+            support:
+                1: 4
+                2: 24
+                3: 72
+            anomalie:
+                1: 4
+                2: 24
+                3: 72
+            evolution:
+                1: 48
+                2: 120
+                3: 240

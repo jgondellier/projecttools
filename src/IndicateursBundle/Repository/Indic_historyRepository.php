@@ -27,4 +27,21 @@ class Indic_historyRepository extends EntityRepository
 
         return $query->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * Retourne toutes les historys d'un item
+     *
+     * @param $itemId
+     * @return mixed
+     */
+    public function getAllHistoryByItemId($itemId)
+    {
+        $query = $this->createQueryBuilder('h');
+        $query->select('h')
+            ->where('h.Indic_items = :itemId')
+            ->setParameter('itemId', $itemId)
+            ->orderBy('h.createdDate', 'DESC');
+
+        return $query->getQuery()->getResult();
+    }
 }

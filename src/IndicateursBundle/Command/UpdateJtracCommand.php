@@ -17,16 +17,17 @@ class UpdateJtracCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('import:jtrac')
+            ->setName('update:jtrac')
             ->setDescription('Update des tickets jtrac.')
             ->setHelp("Commande permettant de mettre à jour les tickets jtracs avec les données de stats.");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
-        $entityManager      = $this->getContainer()->get('doctrine')->getManager();
-        $listTRSBUser       = $input->getArgument('list_trsb_user');
+        $container          = $this->getContainer();
+        $entityManager      = $container->get('doctrine')->getManager();
+        $listTRSBUser       = $container->getParameter('list_trsb_user');
+        $t_status           = $container->getParameter('status');
 
         $output->writeln([
             'Récupération des items',
@@ -37,35 +38,49 @@ class UpdateJtracCommand extends ContainerAwareCommand
 
         //Renseigne si TRSB a été dans la boucle
         $output->writeln([
-            'Ajout du TAG TRSB',
-            '============',
+            'Ajout du TAG et date TRSB',
+            '==============================',
             '',
         ]);
+        //Pour faire jolie on créé une progress bar
+        $progress = new ProgressBar($output, count($entity_item));
+        $progress->start();
         foreach($entity_item as $item){
             $update = False;
-            if(in_array($item->getCreatedBy(),$listTRSBUser)){
+            if(array_key_exists($item->getCreatedBy(),$listTRSBUser)){
                 $item->setTrsb(True);
+                $item->setTRSBDate($item->getCreatedDate());
                 $update = True;
             }else{
                 //on parcourt les history pour voir
-                $entity_history = $entityManager->getRepository('IndicateursBundle:Indic_history')->findById($item->getId());
+                $entity_history = $entityManager->getRepository('IndicateursBundle:Indic_history')->getAllHistoryByItemId($item->getId());
                 foreach ($entity_history as $history){
-                    if(in_array($entity_history->getCreatedBy(),$listTRSBUser) || in_array($entity_history->getAssignedTo(),$listTRSBUser)){
-                        $item->setTrsb(True);
-                        $update = True;
-                        break;
+                    if(array_key_exists($history->getCreatedBy(),$listTRSBUser) || array_key_exists($history->getAssignedTo(),$listTRSBUser)){
+                        //On ne prend pas si trsb est present que pour la fermeture
+                        if ($history->getStatus() != $t_status['corrected'][$item->getProjectId()]){
+                            $item->setTrsb(True);
+                            $item->setTRSBDate($history->getCreatedDate());
+                            $update = True;
+                            break;
+                        }
                     }
                 }
             }
             if($update){
                 $entityManager->persist($item);
             }
+            //La progressbar avance
+            $progress->advance();
         }
         $entityManager->flush();
+        //Fin de la barre de progression
+        $progress->finish();
 
-
-
-        //Renseigne le temps de traitement des anomalies
-        /*Prendre la date source au moment ou TRSB est assigné*/
+        $output->writeln([
+            '',
+            'FIN du traitement',
+            '==============================',
+            '',
+        ]);
     }
 }

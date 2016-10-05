@@ -34,7 +34,8 @@ class Indic_itemsRepository extends EntityRepository
         $requestNature = 1;
         $query = $this->createQueryBuilder('i');
         $query->where('i.requestNature = :requestNature')
-            ->setParameter('requestNature', $requestNature);
+            ->setParameter('requestNature', $requestNature)
+            ->orderBy('i.createdDate', 'DESC');
 
         /*SELECT * FROM `indic_items` i left join `indic_history` h ON i.item_id = h.indic_items_id WHERE i.request_nature = 1*/
 
