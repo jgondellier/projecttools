@@ -52,43 +52,32 @@ class UpdateDelaiCommand extends ContainerAwareCommand
             if($entity_trsb) {
                 $jtracType          = $item->getRequestNature();
                 $projectid          = $item->getProjectId();
-                $entity_history     = $entityManager->getRepository('IndicateursBundle:Indic_history')->getAllHistoryByItemId($item->getId());
-                $TRSBDate           = $item->getTRSBDate();
-                $dateCorrected      = Null;
-                $delai              = 0;
+                $dateDebut          = $entity_trsb->getKnowledgeDate();
+                $dateCorrected      = $entity_trsb->getCorrectedDate();
+                $dateClosed         = $entity_trsb->getClosedDate();
+                $dateAnswer         = $entity_trsb->getAnswerDate();
 
-                foreach ($entity_history as $history){
-                    //on recupere les dates des différents état
-                    if ($history->getStatus() == $t_status['corrected'][$projectid]){
-                        $dateCorrected = $history->getCreatedDate();
+                //On renseigne le temps de traitement de la demande
+                $delaiTreatment     = 0;
+                if($dateDebut){
+                    if($dateCorrected){
+                        $delaiTreatment = $this->getTimeElapsed($dateDebut,$dateCorrected);
+                    }elseif($dateClosed){
+                        $delaiTreatment = $this->getTimeElapsed($dateDebut,$dateClosed);
                     }
-                }
+                    if($delaiTreatment != 0){
+                        $entity_trsb->setTreatmentTime(round($delaiTreatment,2));
+                    }
+                    //On renseigne le temps de réponse
+                    $delaiResponse = 0;
+                    if($dateAnswer){
+                        $delaiResponse = round($this->getTimeElapsed($dateDebut,$dateAnswer),2);
+                        $entity_trsb->setResponseTime($delaiResponse);
+                    }
 
-                //on renseigne le delai de traitement en fonction dy type de demande
-                switch ($list_project[$projectid]['type'][$jtracType]){
-                    case 'bug':
-                        //date trsb - date corection
-                        if($dateCorrected){
-                            $delai = $this->getTimeElapsed($TRSBDate,$dateCorrected);
-                        }
-                        break;
-                    case 'evolution mineur':
-                    case 'evolution majeur':
-                        //date trsb - date corection
-                        if($dateCorrected){
-                            $delai = $this->getTimeElapsed($TRSBDate,$dateCorrected);
-                        }
-                        break;
-                    case 'support':
-                        //date trsb - date corection
-                        if($dateCorrected){
-                            $delai = $this->getTimeElapsed($TRSBDate,$dateCorrected);
-                        }
-                        break;
-                }
-                if($delai!=0){
-                    $item->setDelai($delai);
-                    $entityManager->persist($item);
+                    if($delaiTreatment != 0 || $delaiResponse){
+                        $entityManager->persist($entity_trsb);
+                    }
                 }
             }
 
@@ -99,9 +88,6 @@ class UpdateDelaiCommand extends ContainerAwareCommand
         //Fin de la barre de progression
         $progress->finish();
 
-
-        //Renseigne le temps de traitement des anomalies
-        /*Prendre la date source au moment ou TRSB est assigné*/
     }
     /**
      * Permet de récupérer le temps passé entre deux dates en prenant en compte
@@ -117,7 +103,7 @@ class UpdateDelaiCommand extends ContainerAwareCommand
      *  h pour sortir le temps passé en heure
      * @return float|int
      */
-    private function getTimeElapsed($date1,$date2,$step='m',$outputFormat='h'){
+    private function getTimeElapsed($date1,$date2,$step='m',$outputFormat='m'){
         //On avance de minute en minute
         if($step == 'm') {
             $dateInterval = new \DateInterval('PT1M');

@@ -3,12 +3,23 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}Welcome!{% endblock %}</title>
+
+        {% stylesheets output='css/compiled/main.css' filter='cssrewrite'
+        'css/bootstrap-theme.min.css'
+        'css/bootstrap.min.css'%}
+        <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+        {% endstylesheets %}
+
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
         {% block body %}{% endblock %}
-        <script src="{{ asset('js/jquery-3.1.0.min.js') }}"></script>
+        {% javascripts output='js/compiled/main.js'
+        'js/jquery-3.1.0.min.js'
+        'js/bootstrap.min.js'%}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>

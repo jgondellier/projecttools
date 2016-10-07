@@ -3,29 +3,149 @@
 {% block title %}Indicateurs - Homepage {% endblock %}
 
 {% block stylesheets %}
-
+        {% stylesheets output='css/compiled/main.indic.css' filter='cssrewrite'
+        '@IndicateursBundle/Resources/public/css/datatables.min.css'
+        '@IndicateursBundle/Resources/public/css/jquery.dataTables.min.css'
+        '@IndicateursBundle/Resources/public/css/dataTables.bootstrap.min.css'%}
+        <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+        {% endstylesheets %}
 {% endblock %}
 
 {% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>Tickets Ouvert / Fermé</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <table id="opencloseTable" class="display compact" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Mois</th>
+                        <th>Projet</th>
+                        <th>Ouvert</th>
+                        <th>Fermé</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Mois</th>
+                        <th>Projet</th>
+                        <th>Ouvert</th>
+                        <th>Fermé</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="chartContainer" style="height: 300px; width: 100%;">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        window.onload = function(){
+            $(document).ready(function() {
+                $('#opencloseTable').DataTable( {
+                    "ajax": "getdata/openclose/2016",
+                    "columns": [
+                        { "data": "Mois" },
+                        { "data": "Projet" },
+                        { "data": "Ouverture" },
+                        { "data": "Fermeture" }
+                    ]
+                } );
+
+                var chart = new CanvasJS.Chart("chartContainer",
+                {
+                    theme: "theme3",
+                    animationEnabled: true,
+                    title:{
+                        text: "Tickets Ouvert Fermé 2016",
+                        fontSize: 30
+                    },
+                    toolTip: {
+                        shared: true
+                    },
+                    axisY: {
+                        title: "Nombre de ticket"
+                    },
+                    axisY2: {
+                        title: "million barrels/day"
+                    },
+                    data: [
+                    {
+                        type: "column",
+                        name: "Proven Oil Reserves (bn)",
+                        legendText: "Proven Oil Reserves",
+                        showInLegend: true,
+                        dataPoints:[
+                        {label: "Saudi", y: 262},
+                        {label: "Venezuela", y: 211},
+                        {label: "Canada", y: 175},
+                        {label: "Iran", y: 137},
+                        {label: "Iraq", y: 115},
+                        {label: "Kuwait", y: 104},
+                        {label: "UAE", y: 97.8},
+                        {label: "Russia", y: 60},
+                        {label: "US", y: 23.3},
+                        {label: "China", y: 20.4}
 
 
+                        ]
+                    },
+                    {
+                        type: "column",
+                        name: "Oil Production (million/day)",
+                        legendText: "Oil Production",
+                        axisYType: "secondary",
+                        showInLegend: true,
+                        dataPoints:[
+                        {label: "Saudi", y: 11.15},
+                        {label: "Venezuela", y: 2.5},
+                        {label: "Canada", y: 3.6},
+                        {label: "Iran", y: 4.2},
+                        {label: "Iraq", y: 2.6},
+                        {label: "Kuwait", y: 2.7},
+                        {label: "UAE", y: 3.1},
+                        {label: "Russia", y: 10.23},
+                        {label: "US", y: 10.3},
+                        {label: "China", y: 4.3}
 
-    Délai de traitement
-        Anomalie
-        Support
-        Evolutions
+
+                        ]
+                    }
+
+                    ],
+                  legend:{
+                    cursor:"pointer",
+                    itemclick: function(e){
+                      if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                        e.dataSeries.visible = false;
+                      }
+                      else {
+                        e.dataSeries.visible = true;
+                      }
+                        chart.render();
+                    }
+                  },
+                });
+
+                chart.render();
 
 
-
-    Incidents :
-
-    Délai de prise en compte :
-
-
-
+            } );
+        };
+    </script>
 {% endblock %}
 
 {% block javascripts %}
-
+    {% javascripts output='js/compiled/main.indic.js'
+    '@IndicateursBundle/Resources/public/js/datatables.min.js'
+    '@IndicateursBundle/Resources/public/js/canvasjs.min.js'%}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
-

@@ -24,6 +24,13 @@ class Indic_TRSB
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="open_date", type="datetime", nullable=true)
+     */
+    private $openDate;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="knowledge_date", type="datetime", nullable=true)
      */
     private $knowledgeDate;
@@ -50,6 +57,13 @@ class Indic_TRSB
     private $correctedDate;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="closed_date", type="datetime", nullable=true)
+     */
+    private $closedDate;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="refused_count", type="smallint", nullable=true)
@@ -57,11 +71,18 @@ class Indic_TRSB
     private $refusedCount;
 
     /**
-     * @var \DateTime
+     * @var float
      *
-     * @ORM\Column(name="treatment_time", type="datetime", nullable=true)
+     * @ORM\Column(name="treatment_time", type="float", nullable=true)
      */
     private $TreatmentTime;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="response_time", type="float", nullable=true)
+     */
+    private $ResponseTime;
 
     /**
      * @ORM\OneToOne(targetEntity="IndicateursBundle\Entity\Indic_items")
@@ -238,5 +259,74 @@ class Indic_TRSB
     public function getFirstCorrectedDate()
     {
         return $this->firstCorrectedDate;
+    }
+
+    /**
+     * Set closedDate
+     *
+     * @param \DateTime $closedDate
+     * @return Indic_TRSB
+     */
+    public function setClosedDate($closedDate)
+    {
+        $this->closedDate = $closedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get closedDate
+     *
+     * @return \DateTime 
+     */
+    public function getClosedDate()
+    {
+        return $this->closedDate;
+    }
+
+    /**
+     * Set ResponseTime
+     *
+     * @param \DateTime $responseTime
+     * @return Indic_TRSB
+     */
+    public function setResponseTime($responseTime)
+    {
+        $this->ResponseTime = $responseTime;
+
+        return $this;
+    }
+
+    /**
+     * Get ResponseTime
+     *
+     * @return \DateTime 
+     */
+    public function getResponseTime()
+    {
+        return $this->ResponseTime;
+    }
+
+    /**
+     * Set openDate
+     *
+     * @param \DateTime $openDate
+     * @return Indic_TRSB
+     */
+    public function setOpenDate($openDate)
+    {
+        $this->openDate = $openDate;
+
+        return $this;
+    }
+
+    /**
+     * Get openDate
+     *
+     * @return \DateTime 
+     */
+    public function getOpenDate()
+    {
+        return $this->openDate;
     }
 }

@@ -56,8 +56,16 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
+        entity_managers:
+          default:
+            auto_mapping: true
+            dql:
+              datetime_functions:
+                MONTH: DoctrineExtensions\Query\Mysql\Month
+                YEAR: DoctrineExtensions\Query\Mysql\Year
+                DAY: DoctrineExtensions\Query\Mysql\Day
+                NOW: DoctrineExtensions\Query\Mysql\Now
+                DATE_FORMAT: DoctrineExtensions\Query\Mysql\DateFormat
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -85,3 +93,9 @@ assetic:
         teamwork-regular-webfont-svg:
           inputs: '@GanttBundle/Resources/public/fonts/teamwork-regular-webfont.svg'
           output: 'fonts/teamwork-regular-webfont.svg'
+        bootstrap-theme-min-css-map:
+          inputs: 'css/bootstrap-theme.min.css.map'
+          output: 'css/compiled/bootstrap-theme.min.css.map'
+        bootstrap-min-css-map:
+          inputs: 'css/bootstrap.min.css.map'
+          output: 'css/compiled/bootstrap.min.css.map'

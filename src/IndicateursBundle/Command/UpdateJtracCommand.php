@@ -56,11 +56,9 @@ class UpdateJtracCommand extends ContainerAwareCommand
             /* @var \IndicateursBundle\Entity\Indic_TRSB $entity_trsb */
             $entity_trsb = $entityManager->getRepository('IndicateursBundle:Indic_TRSB')->getTRSBByItemId($item->getId());
 
-            /*if(array_key_exists($item->getCreatedBy(),$listTRSBUser)){
-                //C'est TRSB qui a créé le ticket
-                $entity_trsb = $this->setTRSBDate($item,$entity_trsb,$item->getCreatedDate());
-                $update = True;
-            }else{*/
+            //Date de creation du ticket
+            $entity_trsb = $this->setTRSBDate($item,$entity_trsb,$item->getCreatedDate(),'open');
+
             //on parcourt les history pour voir
             $entity_history = $entityManager->getRepository('IndicateursBundle:Indic_history')->getAllHistoryByItemId($item->getId());
             foreach ($entity_history as $pos => $history){
@@ -76,8 +74,8 @@ class UpdateJtracCommand extends ContainerAwareCommand
                 }
                 //On regarde a quel moment TRSB à fait sa première réponse
                 if(!$findAnswer && (array_key_exists($history->getCreatedBy(),$listTRSBUser) && $pos != 0)){
-                    //On ne prend pas si trsb est present que pour la fermeture
-                    if ($history->getStatus() != $t_status['closed'][$item->getProjectId()]){
+                    //On ne prend pas si trsb est present que pour la fermeture sans avoir renseigné la date de correction
+                    if (($history->getStatus() != $t_status['closed'][$item->getProjectId()])){
                         $entity_trsb = $this->setTRSBDate($item,$entity_trsb,$history->getCreatedDate(),'answer');
                         $findAnswer = True;
                     }
@@ -92,18 +90,29 @@ class UpdateJtracCommand extends ContainerAwareCommand
                     $entity_trsb = $this->setTRSBDate($item,$entity_trsb,$history->getCreatedDate(),'corrected');
                     $findCorrected = True;
                 }
+                //On renseigne la date de fermeture
+                if($history->getStatus() == $t_status['closed'][$item->getProjectId()]){
+                    $entity_trsb = $this->setTRSBDate($item,$entity_trsb,$history->getCreatedDate(),'closed');
+                    if(!$findCorrected){
+                        //Si on n'a jamais trouvé de statut corrigé mais que le ticket est fermé
+                        $entity_trsb = $this->setTRSBDate($item,$entity_trsb,$history->getCreatedDate(),'firstcorrected');
+                        $entity_trsb = $this->setTRSBDate($item,$entity_trsb,$history->getCreatedDate(),'corrected');
+                    }
+                }
+
                 //On calcul le nombre de réouverture en fait le nombre de refuse
                 if($history->getStatus() == $t_status['refused'][$item->getProjectId()]){
                     $refused++;
                 }
             }
-            //}
             if($refused!=0){
                 $entity_trsb->setRefusedCount($refused);
             }
-            if($findKnowledge || $findAnswer || $findCorrected){
+            //On ne doit créé des entrées que pour les tickets concernés par TRSB
+            if($findKnowledge){
                 $entityManager->persist($entity_trsb);
             }
+
             //La progressbar avance
             $progress->advance();
         }
@@ -127,6 +136,9 @@ class UpdateJtracCommand extends ContainerAwareCommand
         }
         $entity_trsb->setIndicItems($item);
         switch ($type){
+            case 'open':
+                $entity_trsb->setOpenDate($date);
+                break;
             case 'knowledge':
                 $entity_trsb->setKnowledgeDate($date);
                 break;
@@ -138,6 +150,9 @@ class UpdateJtracCommand extends ContainerAwareCommand
                 break;
             case 'firstcorrected':
                 $entity_trsb->setFirstCorrectedDate($date);
+                break;
+            case 'closed':
+                $entity_trsb->setClosedDate($date);
                 break;
         }
         return $entity_trsb;

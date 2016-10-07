@@ -27,4 +27,30 @@ class Indic_TRSBRepository extends EntityRepository
 
         return $query->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * Donne les tickets par mois et par projet en fonction de la date donnée.
+     *
+     * @param $year
+     * @param $field
+     * @return $array
+     */
+    public function getDateByMonthProject($year,$field){
+        /*
+         * SELECT MONTH(t.`open_date`) mo, i.project_id p,count(t.id) FROM `indic_trsb` t left join indic_items i ON t.indic_items_id = i.id GROUP BY mo,p
+         * */
+        $query = $this->createQueryBuilder('t');
+        $query->select('MONTH(t.'.$field.') mois, i.projectId projet,count(t.id) '.$field)
+            ->leftJoin("t.Indic_items",'i')
+            ->groupBy('mois')
+            ->addGroupBy('projet')
+            ->where('YEAR(t.'.$field.') = :year')
+            ->setParameter('year', $year);
+
+        return $query->getQuery()->getArrayResult();
+    }
+
+    public function getAnoByMonthProject($year){
+
+    }
 }

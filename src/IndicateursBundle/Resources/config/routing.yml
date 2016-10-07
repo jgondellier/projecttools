@@ -1,3 +1,9 @@
 indicateurs_homepage:
     path:     /
     defaults: { _controller: IndicateursBundle:Default:index }
+
+indicateurs_getdata_openclose:
+    path:     /getdata/openclose/{year}
+    defaults: { _controller: IndicateursBundle:GetData:OpenClose }
+    requirements:
+        year:  \d+
