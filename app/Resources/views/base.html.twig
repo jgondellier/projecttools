@@ -5,6 +5,7 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
 
         {% stylesheets output='css/compiled/main.css' filter='cssrewrite'
+        'css/global.css'
         'css/bootstrap-theme.min.css'
         'css/bootstrap.min.css'%}
         <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
@@ -14,6 +15,17 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="{% if (activeMenu is defined and activeMenu == 'homepage') %} active{% endif %}"><a href="{{ path('indicateurs_homepage') }}">Homepage <span class="sr-only">(current)</span></a></li>
+                        <li class="{% if (activeMenu is defined and activeMenu == 'openclose') %} active{% endif %}"><a href="{{ path('indicateurs_openclose_homepage') }}">Ouvert/Fermé</a></li>
+                        <li class="{% if (activeMenu is defined and activeMenu == 'reouverture') %} active{% endif %}"><a href="{{ path('indicateurs_reouverture_homepage') }}">Réouvertures</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
         {% block body %}{% endblock %}
         {% javascripts output='js/compiled/main.js'
         'js/jquery-3.1.0.min.js'

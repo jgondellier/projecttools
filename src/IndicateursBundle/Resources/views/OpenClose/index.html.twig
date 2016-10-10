@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Indicateurs - Nombre d'ouverture / Fermeture {% endblock %}
+
+{% block stylesheets %}
+        {% stylesheets output='css/compiled/main.indic.css' filter='cssrewrite'
+        '@IndicateursBundle/Resources/public/css/datatables.min.css'
+        '@IndicateursBundle/Resources/public/css/jquery.dataTables.min.css'
+        '@IndicateursBundle/Resources/public/css/dataTables.bootstrap.min.css'%}
+        <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+        {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>Tickets Ouvert / Fermé</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <table id="opencloseTable" class="display compact" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Mois</th>
+                        <th class="select-filter">Projet</th>
+                        <th>Ouvert</th>
+                        <th>Fermé</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Mois</th>
+                        <th>Projet</th>
+                        <th>Ouvert</th>
+                        <th>Fermé</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="chartContainer" style="height: 300px; width: 100%;">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        window.onload = function(){
+            $(document).ready(function() {
+                $('#opencloseTable').DataTable( {
+                    "ajax": "openclose/table/2016",
+                    "columns": [
+                        { "data": "Mois" },
+                        { "data": "Projet" },
+                        { "data": "Ouverture" },
+                        { "data": "Fermeture" }
+                    ],
+                    "columnDefs": [ {
+                        "targets": 0,
+                        "orderable": false,
+                        }
+                     ],
+                    initComplete: function () {
+                        this.api().columns('.select-filter').every( function () {
+                            var column = this;
+                            var select = $('<select><option value=""></option></select>')
+                                .appendTo( $(column.footer()).empty() )
+                                .on( 'change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+                                    column
+                                        .search( val ? '^'+val+'$' : '', true, false )
+                                        .draw();
+                                    getOpenCloseGraph($(this).val());
+                                } );
+
+                            column.data().unique().sort().each( function ( d, j ) {
+                                select.append( '<option value="'+d+'">'+d+'</option>' )
+                            } );
+                        } );
+                    }
+                } );
+
+                //$.getJSON("graph/openclose/2016/graph",function(result){
+                getOpenCloseGraph();
+            } );
+        };
+        function getOpenCloseGraph(project){
+            if(project){
+                 $.get( "openclose/graph/2016/"+project, function( data ) {
+                  $( "#chartContainer" ).html( data );
+                });
+            }else{
+                $.get( "openclose/graph/2016", function( data ) {
+                  $( "#chartContainer" ).html( data );
+                });
+            }
+
+        }
+    </script>
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts output='js/compiled/main.indic.js'
+    '@IndicateursBundle/Resources/public/js/datatables.min.js'
+    '@IndicateursBundle/Resources/public/js/highcharts.js'
+    '@IndicateursBundle/Resources/public/js/modules/exporting.js'%}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

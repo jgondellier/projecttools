@@ -2,3 +2,5 @@ services:
     indicateurs.importjtrac:
         class: IndicateursBundle\Model\ImportJtrac
         arguments: [%list_project%]
+    indicateurs.rendertools:
+        class: IndicateursBundle\Model\ToolRender

@@ -2,8 +2,31 @@ indicateurs_homepage:
     path:     /
     defaults: { _controller: IndicateursBundle:Default:index }
 
-indicateurs_getdata_openclose:
-    path:     /getdata/openclose/{year}
-    defaults: { _controller: IndicateursBundle:GetData:OpenClose }
+indicateurs_openclose_homepage:
+    path:     /openclose
+    defaults: { _controller: IndicateursBundle:OpenClose:index }
+
+indicateurs_openclose_graph:
+    path:     /openclose/graph/{year}/{project}
+    defaults: { _controller: IndicateursBundle:OpenClose:Graph,project: -1 }
     requirements:
+        method:  GET
+        year:  \d+
+
+indicateurs_openclose_table:
+    path:     /openclose/table/{year}/{project}
+    defaults: { _controller: IndicateursBundle:OpenClose:Table,project: -1 }
+    requirements:
+        method:  GET
+        year:  \d+
+
+indicateurs_reouverture_homepage:
+    path:   /reopen
+    defaults: { _controller: IndicateursBundle:Reouverture:index }
+
+indicateurs_reouverture_graph:
+    path:   /reopen/graph/{year}
+    defaults: { _controller: IndicateursBundle:Reouverture:Graph,project: -1 }
+    requirements:
+        method:  GET
         year:  \d+

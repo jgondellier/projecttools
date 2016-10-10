@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Indicateurs - Homepage {% endblock %}
+{% block title %}Indicateurs - Nombre d'ouverture / Fermeture {% endblock %}
 
 {% block stylesheets %}
         {% stylesheets output='css/compiled/main.indic.css' filter='cssrewrite'
@@ -15,12 +15,34 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h1>Homepage</h1>
+                <h1>Tickets Réouverts</h1>
             </div>
         </div>
-
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="chartContainer" style="height: 300px; width: 100%;">
+            </div>
+        </div>
     </div>
+    <script type="text/javascript">
+        window.onload = function(){
+            $(document).ready(function() {
+                getOpenCloseGraph();
+            } );
+        };
+        function getOpenCloseGraph(project){
+            if(project){
+                 $.get( "reopen/graph/2016/"+project, function( data ) {
+                  $( "#chartContainer" ).html( data );
+                });
+            }else{
+                $.get( "reopen/graph/2016", function( data ) {
+                  $( "#chartContainer" ).html( data );
+                });
+            }
 
+        }
+    </script>
 {% endblock %}
 
 {% block javascripts %}

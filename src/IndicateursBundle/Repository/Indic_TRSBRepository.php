@@ -35,22 +35,43 @@ class Indic_TRSBRepository extends EntityRepository
      * @param $field
      * @return $array
      */
-    public function getDateByMonthProject($year,$field){
+    public function getDateByMonthProject($year,$project,$field){
         /*
          * SELECT MONTH(t.`open_date`) mo, i.project_id p,count(t.id) FROM `indic_trsb` t left join indic_items i ON t.indic_items_id = i.id GROUP BY mo,p
          * */
         $query = $this->createQueryBuilder('t');
-        $query->select('MONTH(t.'.$field.') mois, i.projectId projet,count(t.id) '.$field)
+        $query->select('MONTH(t.'.$field.') mois, i.projectId projet,count(t.id) somme')
             ->leftJoin("t.Indic_items",'i')
             ->groupBy('mois')
             ->addGroupBy('projet')
             ->where('YEAR(t.'.$field.') = :year')
+            ->orderBy('t.'.$field, 'ASC')
             ->setParameter('year', $year);
+
+        if($project !=-1){
+            $query->andWhere('i.projectId = :project')
+                ->setParameter('project',$project);
+        }
 
         return $query->getQuery()->getArrayResult();
     }
 
-    public function getAnoByMonthProject($year){
+    public function getRefusedCountByMonthProject($year,$project){
+        $query = $this->createQueryBuilder('t');
+        $query->select('MONTH(t.correctedDate) mois, i.projectId projet,count(t.refusedCount) somme')
+            ->leftJoin("t.Indic_items",'i')
+            ->groupBy('mois')
+            ->addGroupBy('projet')
+            ->where('YEAR(t.correctedDate) = :year')
+            ->andWhere('t.refusedCount IS NOT NULL')
+            ->orderBy('t.correctedDate', 'ASC')
+            ->setParameter('year', $year);
 
+        if($project !=-1){
+            $query->andWhere('i.projectId = :project')
+                ->setParameter('project',$project);
+        }
+
+        return $query->getQuery()->getArrayResult();
     }
 }

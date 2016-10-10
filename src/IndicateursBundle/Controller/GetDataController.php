@@ -17,32 +17,31 @@ class GetDataController extends Controller
                 $entityManager  = $this->getDoctrine()->getManager();
                 $list_project   = $this->container->getParameter('list_project');
                 $year           = $request->get('year');
-                $goal           = $request->get('goal');
+                $type           = $request->get('type');
                 $project        = $request->get('project');
                 $response       = new JsonResponse();
 
                 /*Tickets ouverts fermés par moi par projet*/
-                $t_open         = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,'openDate');
-                $t_closed       = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,'closedDate');
+                $t_open         = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$project,'openDate');
+                $t_closed       = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$project,'closedDate');
 
-                switch($goal){
+                switch($type){
                     case 'table':
                         $t_result       = $this->formatForDataTable($t_open,$t_closed);
                         break;
-                    case 'GraphTotal':
-                        $t_result       = $this->sommeDataByMonth($t_open,$t_closed);
-                        break;
-                    case 'GraphProject':
-                        $t_result       = $this->sommeDataByMonth($t_open,$t_closed,$project);
+                    case 'graph':
+                        if($project){
+                            $t_result       = $this->sommeDataByMonth($t_open,$t_closed,$project);
+                            $t_result       = $this->convertToHightcharts($t_result);
+                        }else{
+                            $t_result       = $this->sommeDataByMonth($t_open,$t_closed);
+                            $t_result       = $this->convertToHightcharts($t_result);
+                        }
                         break;
                     default:
                         $t_result       = $this->formatForDataTable($t_open,$t_closed);
                         break;
                 }
-
-
-
-
                 $response->setContent(json_encode($t_result));
                 return $response;
             }
@@ -52,6 +51,31 @@ class GetDataController extends Controller
         return NULL;
     }
 
+    private function convertToHightcharts($t_value){
+        $t_result       = array();
+        foreach($t_value["Ouverture"] as $ouverture){
+            if(isset($t_result['categorie'])){
+                $t_result['categorie'] .= ','.$ouverture['Label'];
+            }else{
+                $t_result['categorie'] = $ouverture['Label'];
+            }
+            $t_result['Ouverture']['series']['name'] = 'Ouverture';
+            if(isset($t_result['Ouverture']['series']['data'])){
+                $t_result['Ouverture']['series']['data'] .= ','.$ouverture['y'];
+            }else{
+                $t_result['Ouverture']['series']['data'] = $ouverture['y'];
+            }
+        }
+        foreach($t_value["Fermeture"] as $fermeture){
+            $t_result['Fermeture']['series']['name'] = 'Fermeture';
+            if(isset($t_result['Fermeture']['series']['data'])){
+                $t_result['Fermeture']['series']['data'] .= ','.$fermeture['y'];
+            }else{
+                $t_result['Fermeture']['series']['data'] = $fermeture['y'];
+            }
+        }
+        return $t_result;
+    }
 
     private function sommeDataByMonth($t_open,$t_closed,$project = Null){
         $t_openClose    = array();
@@ -59,16 +83,16 @@ class GetDataController extends Controller
         //Formalisation de la donnée
         foreach ($t_open as $open){
             if($project && $open['projet'] == $project){
-                $t_openClose[$this->getMonthName($open['mois'])]['Ouverture'] = $open['openDate'];
+                $t_openClose[$this->getMonthName($open['mois'])]['Ouverture'] = $open['somme'];
             }else{
-                $t_openClose[$this->getMonthName($open['mois'])]['Ouverture'] = $open['openDate'];
+                $t_openClose[$this->getMonthName($open['mois'])]['Ouverture'] = $open['somme'];
             }
         }
         foreach ($t_closed as $closed){
             if($project && $closed['projet'] == $project){
-                $t_openClose[$this->getMonthName($closed['mois'])]['Fermeture'] = $closed['closedDate'];
+                $t_openClose[$this->getMonthName($closed['mois'])]['Fermeture'] = $closed['somme'];
             }else{
-                $t_openClose[$this->getMonthName($closed['mois'])]['Fermeture'] = $closed['closedDate'];
+                $t_openClose[$this->getMonthName($closed['mois'])]['Fermeture'] = $closed['somme'];
             }
         }
 
@@ -82,8 +106,8 @@ class GetDataController extends Controller
             if(isset($etat['Fermeture'])){
                 $closeCount = $etat['Fermeture'];
             }
-            $t_result['Ouverture'][]=array('Label'=>$month,'y'=>$openCount);
-            $t_result['Fermeture'][]=array('Label'=>$month,'y'=>$closeCount);
+            $t_result['Ouverture'][]=array('Label'=>$month,'y'=>intval($openCount));
+            $t_result['Fermeture'][]=array('Label'=>$month,'y'=>intval($closeCount));
         }
 
         return $t_result;
@@ -103,10 +127,10 @@ class GetDataController extends Controller
 
         //Formalisation de la donnée
         foreach ($t_open as $open){
-            $t_openClose[$this->getMonthName($open['mois'])][$list_project[$open['projet']]['name']]['Ouverture']=$open['openDate'];
+            $t_openClose[$this->getMonthName($open['mois'])][$list_project[$open['projet']]['name']]['Ouverture']=$open['somme'];
         }
         foreach ($t_closed as $closed){
-            $t_openClose[$this->getMonthName($closed['mois'])][$list_project[$closed['projet']]['name']]['Fermeture']=$closed['closedDate'];
+            $t_openClose[$this->getMonthName($closed['mois'])][$list_project[$closed['projet']]['name']]['Fermeture']=$closed['somme'];
         }
 
         //Init des valeurs null
