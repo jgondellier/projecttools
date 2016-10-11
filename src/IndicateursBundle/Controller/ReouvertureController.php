@@ -21,10 +21,13 @@ class ReouvertureController extends Controller
                 $entityManager  = $this->getDoctrine()->getManager();
                 $year           = $request->get('year');
                 $project        = $request->get('project');
+                $month          = $request->get('month');
+                $nature         = $request->get('nature');
+                $priority       = $request->get('priority');
                 $response       = new JsonResponse();
 
                 /*Tickets réouvert par mois par projet*/
-                $t_reopen         = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getRefusedCountByMonthProject($year,$project);
+                $t_reopen         = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getRefusedCountByMonthProject($year,$month,$project,$nature,$priority);
 
                 $t_result       = $this->formatForDataTable($t_reopen);
                 $response->setContent(json_encode($t_result));
@@ -42,6 +45,9 @@ class ReouvertureController extends Controller
                 $entityManager  = $this->getDoctrine()->getManager();
                 $year           = $request->get('year');
                 $project        = $request->get('project');
+                $month          = $request->get('month');
+                $nature         = $request->get('nature');
+                $priority       = $request->get('priority');
                 $list_project   = $this->container->getParameter('list_project');
                 $toolrender     = $this->get('indicateurs.rendertools');
 
@@ -51,7 +57,7 @@ class ReouvertureController extends Controller
                         $project = $idPro;
                     }
                 }
-                $t_reopen         = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getRefusedCountByMonthProject($year,$project);
+                $t_reopen         = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getRefusedCountByMonthProject($year,$month,$project,$nature,$priority);
                 $monthInterval    = $toolrender->getMonthInterval($t_reopen);
                 $t_reopen         = $toolrender->formatData($t_reopen,$monthInterval);
 
@@ -96,7 +102,7 @@ class ReouvertureController extends Controller
 
         //Formalisation de la donnée
         foreach ($t_data as $data){
-            $listData['data'][] = array('Mois'=>$toolrender->getMonthName($data['mois']),'Projet'=>$list_project[$data['projet']]['name'],'Reouverture'=>$data['somme']);
+            $listData['data'][] = array('Mois'=>$toolrender->getMonthName($data['mois']),'Projet'=>$list_project[$data['projet']]['name'],'Nature'=>$data['nature'],'Priorite'=>$data['priority'],'Reouverture'=>$data['somme']);
         }
 
         return $listData;

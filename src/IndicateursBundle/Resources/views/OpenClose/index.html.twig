@@ -13,26 +13,30 @@
 
 {% block body %}
     <div class="container">
-        <div class="row">
+        {#<div class="row">
             <div class="col-sm-12">
                 <h1>Tickets Ouvert / Fermé</h1>
             </div>
-        </div>
+        </div>#}
         <div class="row">
             <div class="col-sm-12">
                 <table id="opencloseTable" class="display compact" cellspacing="0" width="100%">
                     <thead>
                     <tr>
-                        <th>Mois</th>
+                        <th class="select-filter">Mois</th>
                         <th class="select-filter">Projet</th>
-                        <th>Ouvert</th>
-                        <th>Fermé</th>
+                        <th class="select-filter">Nature</th>
+                        <th class="select-filter">Priorité</th>
+                        <th class="sum">Ouvert</th>
+                        <th class="sum">Fermé</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
                         <th>Mois</th>
                         <th>Projet</th>
+                        <th>Nature</th>
+                        <th>Priorité</th>
                         <th>Ouvert</th>
                         <th>Fermé</th>
                     </tr>
@@ -49,19 +53,20 @@
     <script type="text/javascript">
         window.onload = function(){
             $(document).ready(function() {
+                $.fn.dataTable.moment( 'MMMM','fr' );
                 $('#opencloseTable').DataTable( {
                     "ajax": "openclose/table/2016",
                     "columns": [
                         { "data": "Mois" },
                         { "data": "Projet" },
+                        { "data": "Nature" },
+                        { "data": "Priorite" },
                         { "data": "Ouverture" },
                         { "data": "Fermeture" }
                     ],
-                    "columnDefs": [ {
-                        "targets": 0,
-                        "orderable": false,
-                        }
-                     ],
+                    "scrollY":        "350px",
+                    "scrollCollapse": true,
+                    "paging":         false,
                     initComplete: function () {
                         this.api().columns('.select-filter').every( function () {
                             var column = this;
@@ -83,8 +88,6 @@
                         } );
                     }
                 } );
-
-                //$.getJSON("graph/openclose/2016/graph",function(result){
                 getOpenCloseGraph();
             } );
         };
@@ -107,6 +110,10 @@
     {% javascripts output='js/compiled/main.indic.js'
     '@IndicateursBundle/Resources/public/js/datatables.min.js'
     '@IndicateursBundle/Resources/public/js/highcharts.js'
+    '@IndicateursBundle/Resources/public/js/moment.min.js'
+    '@IndicateursBundle/Resources/public/js/moment-with-locales.min.js'
+    '@IndicateursBundle/Resources/public/js/datetime-moment.js'
+    '@IndicateursBundle/Resources/public/js/dataTables.sum.js'
     '@IndicateursBundle/Resources/public/js/modules/exporting.js'%}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

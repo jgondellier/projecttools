@@ -22,12 +22,15 @@ class OpenCloseController extends Controller
             if ($request->getMethod() === 'GET') {
                 $entityManager  = $this->getDoctrine()->getManager();
                 $year           = $request->get('year');
+                $month          = $request->get('month');
                 $project        = $request->get('project');
+                $nature         = $request->get('nature');
+                $priority       = $request->get('priority');
                 $response       = new JsonResponse();
 
                 /*Tickets ouverts fermés par mois par projet*/
-                $t_open         = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$project,'openDate');
-                $t_closed       = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$project,'closedDate');
+                $t_open         = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$month,$project,$nature,$priority,'openDate');
+                $t_closed       = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$month,$project,$nature,$priority,'closedDate');
 
                 $t_result       = $this->formatForDataTable($t_open,$t_closed);
                 $response->setContent(json_encode($t_result));
@@ -44,7 +47,10 @@ class OpenCloseController extends Controller
             if ($request->getMethod() === 'GET') {
                 $entityManager  = $this->getDoctrine()->getManager();
                 $year           = $request->get('year');
+                $month          = $request->get('month');
                 $project        = $request->get('project');
+                $nature         = $request->get('nature');
+                $priority       = $request->get('priority');
                 $list_project   = $this->container->getParameter('list_project');
                 $toolrender     = $this->get('indicateurs.rendertools');
 
@@ -56,8 +62,8 @@ class OpenCloseController extends Controller
                 }
 
                 //Recuperation des données
-                $t_open         = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$project,'openDate');
-                $t_close        = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$project,'closedDate');
+                $t_open         = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$month,$project,$nature,$priority,'openDate');
+                $t_close        = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$month,$project,$nature,$priority,'closedDate');
 
                 $monthInterval  = $toolrender->getMonthInterval($t_open,$t_close);
 
@@ -113,24 +119,28 @@ class OpenCloseController extends Controller
 
         //Formalisation de la donnée
         foreach ($t_open as $open){
-            $t_openClose[$toolrender->getMonthName($open['mois'])][$list_project[$open['projet']]['name']]['Ouverture']=$open['somme'];
+            $t_openClose[$toolrender->getMonthName($open['mois'])][$list_project[$open['projet']]['name']][$open['nature']][$open['priority']]['Ouverture']=$open['somme'];
         }
         foreach ($t_closed as $closed){
-            $t_openClose[$toolrender->getMonthName($closed['mois'])][$list_project[$closed['projet']]['name']]['Fermeture']=$closed['somme'];
+            $t_openClose[$toolrender->getMonthName($closed['mois'])][$list_project[$closed['projet']]['name']][$open['nature']][$open['priority']]['Fermeture']=$closed['somme'];
         }
 
         //Init des valeurs null
         foreach($t_openClose as $month=>$listProjet){
-            foreach($listProjet as $project=>$openClose){
-                $openCount = 0;
-                $closeCount = 0;
-                if(isset($openClose['Ouverture'])){
-                    $openCount = $openClose['Ouverture'];
+            foreach($listProjet as $project=>$listNature){
+                foreach($listNature as $nature=>$listPriority){
+                    foreach($listPriority as $priority=>$openClose){
+                        $openCount = 0;
+                        $closeCount = 0;
+                        if(isset($openClose['Ouverture'])){
+                            $openCount = $openClose['Ouverture'];
+                        }
+                        if(isset($openClose['Fermeture'])){
+                            $closeCount = $openClose['Fermeture'];
+                        }
+                        $t_result['data'][] = array('Mois'=>$month,'Projet'=>$project,'Nature'=>$nature,'Priorite'=>$priority,'Ouverture'=>$openCount,'Fermeture'=>$closeCount);
+                    }
                 }
-                if(isset($openClose['Fermeture'])){
-                    $closeCount = $openClose['Fermeture'];
-                }
-                $t_result['data'][] = array('Mois'=>$month,'Projet'=>$project,'Ouverture'=>$openCount,'Fermeture'=>$closeCount);
             }
         }
         return $t_result;

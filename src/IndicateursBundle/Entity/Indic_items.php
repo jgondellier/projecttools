@@ -92,9 +92,9 @@ class Indic_items
     private $priority;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="request_nature", type="smallint", nullable=true)
+     * @ORM\Column(name="request_nature", type="string", length=255, nullable=true)
      */
     private $requestNature;
 

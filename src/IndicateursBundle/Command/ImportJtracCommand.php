@@ -26,8 +26,10 @@ class ImportJtracCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $container      = $this->getContainer();
         $itemsFile      = $input->getArgument('fileItems');
         $historyFile    = $input->getArgument('fileHistory');
+        $list_project   = $container->getParameter('list_project');
         $dateFormat     = 'Y-m-d H:i:s';
 
         $output->writeln([
@@ -40,7 +42,7 @@ class ImportJtracCommand extends ContainerAwareCommand
             '',
         ]);
 
-        $t_jtrac  = $this->getContainer()->get('indicateurs.importjtrac')->getXMLValue($itemsFile,$historyFile);
+        $t_jtrac  = $container->get('indicateurs.importjtrac')->getXMLValue($itemsFile,$historyFile);
 
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
 
@@ -60,31 +62,32 @@ class ImportJtracCommand extends ContainerAwareCommand
                 $itemId = $item['id'];
                 //Vérification si le contenu n'existe pas déjà
                 $entity_item = $entityManager->getRepository('IndicateursBundle:Indic_items')->getItemByItemId($itemId);
-                if($entity_item == Null){
+                if($entity_item == Null) {
                     //L'item n'existe pas on le créé
                     $entity_item = new Indic_items();
-                    $entity_item->setItemId($item['id']);
-                    $entity_item->setJtracId($item['jtrac_id']);
-                    $entity_item->setProjectId($item['project_id']);
-                    $entity_item->setCreatedDate($item['created_date']);
-                    $entity_item->setCreatedBy($item['created_by']);
-                    $entity_item->setTitle($item['title']);
-                    $entity_item->setDescription($item['description']);
-                    $entity_item->setStatus($item['status']);
-                    if(isset($item['severity'])){
-                        $entity_item->setSeverity($item['severity']);
-                    }
-                    if(isset($item['priority'])){
-                        $entity_item->setPriority($item['priority']);
-                    }
-                    if(isset($item['request_nature'])){
-                        $entity_item->setRequestNature($item['request_nature']);
-                    }
-                    if(isset($item['cadre'])){
-                        $entity_item->setCadre($item['cadre']);
-                    }
-                    $entityManager->persist($entity_item);
                 }
+                $entity_item->setItemId($item['id']);
+                $entity_item->setJtracId($item['jtrac_id']);
+                $entity_item->setProjectId($item['project_id']);
+                $entity_item->setCreatedDate($item['created_date']);
+                $entity_item->setCreatedBy($item['created_by']);
+                $entity_item->setTitle($item['title']);
+                $entity_item->setDescription($item['description']);
+                $entity_item->setStatus($item['status']);
+                if(isset($item['severity'])){
+                    $entity_item->setSeverity($item['severity']);
+                }
+                if(isset($item['priority'])){
+                    $entity_item->setPriority($item['priority']);
+                }
+                if(isset($item['request_nature'])){
+                    //On uniformise la request nature
+                    $entity_item->setRequestNature($list_project[$item['project_id']]['type'][$item['request_nature']]);
+                }
+                if(isset($item['cadre'])){
+                    $entity_item->setCadre($item['cadre']);
+                }
+                $entityManager->persist($entity_item);
                 //La progressbar avance
                 $progress->advance();
             }

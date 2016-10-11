@@ -7,15 +7,15 @@ indicateurs_openclose_homepage:
     defaults: { _controller: IndicateursBundle:OpenClose:index }
 
 indicateurs_openclose_graph:
-    path:     /openclose/graph/{year}/{project}
-    defaults: { _controller: IndicateursBundle:OpenClose:Graph,project: -1 }
+    path:     /openclose/graph/{year}/{month}/{project}/{nature}/{priority}
+    defaults: { _controller: IndicateursBundle:OpenClose:Graph,project: -1,month: -1,nature: -1, priority: -1 }
     requirements:
         method:  GET
         year:  \d+
 
 indicateurs_openclose_table:
-    path:     /openclose/table/{year}/{project}
-    defaults: { _controller: IndicateursBundle:OpenClose:Table,project: -1 }
+    path:     /openclose/table/{year}/{month}/{project}/{nature}/{priority}
+    defaults: { _controller: IndicateursBundle:OpenClose:Table,project: -1,month: -1,nature: -1, priority: -1 }
     requirements:
         method:  GET
         year:  \d+
@@ -25,15 +25,15 @@ indicateurs_reouverture_homepage:
     defaults: { _controller: IndicateursBundle:Reouverture:index }
 
 indicateurs_reouverture_table:
-    path:   /reopen/table/{year}/{project}
-    defaults: { _controller: IndicateursBundle:Reouverture:Table,project: -1 }
+    path:   /reopen/table/{year}/{month}/{project}/{nature}/{priority}
+    defaults: { _controller: IndicateursBundle:Reouverture:Table,project: -1,month: -1,nature: -1, priority: -1 }
     requirements:
         method:  GET
         year:  \d+
 
 indicateurs_reouverture_graph:
-    path:   /reopen/graph/{year}/{project}
-    defaults: { _controller: IndicateursBundle:Reouverture:Graph,project: -1 }
+    path:   /reopen/graph/{year}/{month}/{project}/{nature}/{priority}
+    defaults: { _controller: IndicateursBundle:Reouverture:Graph,project: -1,month: -1,nature: -1,priority: -1 }
     requirements:
         method:  GET
         year:  \d+

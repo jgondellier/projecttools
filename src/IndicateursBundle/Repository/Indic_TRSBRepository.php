@@ -32,15 +32,19 @@ class Indic_TRSBRepository extends EntityRepository
      * Donne les tickets par mois et par projet en fonction de la date donnée.
      *
      * @param $year
+     * @param int $month
+     * @param int $project
+     * @param int $requestNature
+     * @param int $priority
      * @param $field
-     * @return $array
+     * @return array
      */
-    public function getDateByMonthProject($year,$project,$field){
+    public function getDateByMonthProject($year,$month=-1,$project=-1,$requestNature =-1,$priority=-1,$field){
         /*
          * SELECT MONTH(t.`open_date`) mo, i.project_id p,count(t.id) FROM `indic_trsb` t left join indic_items i ON t.indic_items_id = i.id GROUP BY mo,p
          * */
         $query = $this->createQueryBuilder('t');
-        $query->select('MONTH(t.'.$field.') mois, i.projectId projet,count(t.id) somme')
+        $query->select('MONTH(t.'.$field.') mois, i.projectId projet,i.priority priority, i.requestNature nature,count(t.id) somme')
             ->leftJoin("t.Indic_items",'i')
             ->groupBy('mois')
             ->addGroupBy('projet')
@@ -48,28 +52,64 @@ class Indic_TRSBRepository extends EntityRepository
             ->orderBy('t.'.$field, 'ASC')
             ->setParameter('year', $year);
 
-        if($project !=-1){
+        if($project !=-1 && $project != 'all' && $project != Null){
             $query->andWhere('i.projectId = :project')
                 ->setParameter('project',$project);
+        }
+        if($month !=-1 && $month != 'all' && $month != Null){
+            $query->andWhere('MONTH(t.correctedDate) = :month')
+                ->setParameter('month',$month);
+        }
+        if($requestNature !=-1 && $requestNature != 'all' && $requestNature != Null){
+            $query->andWhere('i.requestNature = :requestNature')
+                ->setParameter('requestNature',$requestNature);
+        }
+        if($priority !=-1 && $priority != 'all' && $priority != Null){
+            $query->andWhere('i.priority = :priority')
+                ->setParameter('priority',$priority);
         }
 
         return $query->getQuery()->getArrayResult();
     }
 
-    public function getRefusedCountByMonthProject($year,$project){
+    /**
+     * Nombre de réouvertures sur des Tickets sur une période.
+     * Réouvert ce n'est que les tickets qui ont été refusé dans leur history.
+     *
+     * @param $year
+     * @param int $month
+     * @param int $project
+     * @param int $requestNature
+     * @param int $priority
+     * @return array
+     */
+    public function getRefusedCountByMonthProject($year,$month=-1,$project=-1,$requestNature =-1,$priority=-1){
         $query = $this->createQueryBuilder('t');
-        $query->select('MONTH(t.correctedDate) mois, i.projectId projet,count(t.refusedCount) somme')
+        $query->select('MONTH(t.correctedDate) mois, i.projectId projet, i.priority priority, i.requestNature nature,count(t.refusedCount) somme')
             ->leftJoin("t.Indic_items",'i')
             ->groupBy('mois')
             ->addGroupBy('projet')
+            ->addGroupBy('priority')
             ->where('YEAR(t.correctedDate) = :year')
             ->andWhere('t.refusedCount IS NOT NULL')
             ->orderBy('t.correctedDate', 'ASC')
             ->setParameter('year', $year);
 
-        if($project !=-1){
+        if($project !=-1 && $project != 'all' && $project != Null){
             $query->andWhere('i.projectId = :project')
                 ->setParameter('project',$project);
+        }
+        if($month !=-1 && $month != 'all' && $month != Null){
+            $query->andWhere('MONTH(t.correctedDate) = :month')
+                ->setParameter('month',$month);
+        }
+        if($requestNature !=-1 && $requestNature != 'all' && $requestNature != Null){
+            $query->andWhere('i.requestNature = :requestNature')
+                ->setParameter('requestNature',$requestNature);
+        }
+        if($priority !=-1 && $priority != 'all' && $priority != Null){
+            $query->andWhere('i.priority = :priority')
+                ->setParameter('priority',$priority);
         }
 
         return $query->getQuery()->getArrayResult();

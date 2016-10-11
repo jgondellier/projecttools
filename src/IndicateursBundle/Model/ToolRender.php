@@ -88,7 +88,7 @@ class ToolRender{
             case '1':
                 return 'Janvier';
             case '2':
-                return 'Fevrier';
+                return 'Février';
             case '3':
                 return 'Mars';
             case '4':
@@ -100,7 +100,7 @@ class ToolRender{
             case '7':
                 return 'Juillet';
             case '8':
-                return 'Aout';
+                return 'Août';
             case '9':
                 return 'Septembre';
             case '10':
