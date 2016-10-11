@@ -4,7 +4,6 @@ namespace IndicateursBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use IndicateursBundle\Repository\Indic_itemsRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Ob\HighchartsBundle\Highcharts\Highchart;
@@ -26,7 +25,7 @@ class OpenCloseController extends Controller
                 $project        = $request->get('project');
                 $response       = new JsonResponse();
 
-                /*Tickets ouverts fermés par moi par projet*/
+                /*Tickets ouverts fermés par mois par projet*/
                 $t_open         = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$project,'openDate');
                 $t_closed       = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$project,'closedDate');
 
@@ -69,19 +68,19 @@ class OpenCloseController extends Controller
                 $data = array(
                     array(
                         'type' => 'column',
-                        "name" => "Nombre de Tickets ouvert.",
+                        "name" => "Tickets ouverts.",
                         "data" => $t_open
                     ),
                     array(
                         'type' => 'column',
-                        "name" => "Nombre de Tickets fermé.",
+                        "name" => "Tickets fermés.",
                         "data" => $t_close
                     )
                 );
 
                 $ob = new Highchart();
                 $ob->chart->renderTo('chartContainer');
-                $ob->title->text('Nombre de Tickets Ouvert/Fermé pour '.$year);
+                $ob->title->text('Nombre de Tickets Ouverts/Fermés pour '.$year);
                 //$ob->chart->type('column');
 
                 $ob->yAxis->title(array('text' => "Nombre de tickets"));
