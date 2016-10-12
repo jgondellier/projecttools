@@ -1,0 +1,30 @@
+{% extends 'IndicateursBundle:Default:Indicateur.html.twig' %}
+
+{% block indic_title %}Nombre de réouverture sur incident {% endblock %}
+
+{% block indic_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-pills">
+                    <li role="presentation" class="active"><a href="#">Réouverture sur incident</a></li>
+                    <li role="presentation"><a href="#">Délai de traitement incident</a></li>
+                    <li role="presentation"><a href="#">Délai de traitement assistance</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="reoincicount"></div>
+            </div>
+        </div>
+        {{ table_incidentReouverture_HTML| raw }}
+    </div>
+    <script type="text/javascript">
+        window.onload = function(){
+            $(document).ready(function() {
+                {{ table_incidentReouverture_JS| raw }}
+            } );
+        };
+    </script>
+{% endblock %}

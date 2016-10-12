@@ -1,33 +1,25 @@
-{% extends 'base.html.twig' %}
+{% extends 'IndicateursBundle:Default:Indicateur.html.twig' %}
 
-{% block title %}Indicateurs - Homepage {% endblock %}
+{% block indic_title %}Dashboard {% endblock %}
 
-{% block stylesheets %}
-        {% stylesheets output='css/compiled/main.indic.css' filter='cssrewrite'
-        '@IndicateursBundle/Resources/public/css/datatables.min.css'
-        '@IndicateursBundle/Resources/public/css/jquery.dataTables.min.css'
-        '@IndicateursBundle/Resources/public/css/dataTables.bootstrap.min.css'%}
-        <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
-        {% endstylesheets %}
-{% endblock %}
-
-{% block body %}
+{% block indic_content %}
     <div class="container">
+        {#{{ render(controller('IndicateursBundle:SupAnoForfait:getCountSupAnoForfait')) }}#}
         <div class="row">
-            <div class="col-sm-12">
-                <h1>Homepage</h1>
-            </div>
+            <div id="supanoforfaitcount"></div>
+            <div id="reouvertureanocount"></div>
         </div>
-
     </div>
-
-{% endblock %}
-
-{% block javascripts %}
-    {% javascripts output='js/compiled/main.indic.js'
-    '@IndicateursBundle/Resources/public/js/datatables.min.js'
-    '@IndicateursBundle/Resources/public/js/highcharts.js'
-    '@IndicateursBundle/Resources/public/js/modules/exporting.js'%}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    <script type="text/javascript">
+        window.onload = function(){
+            $(document).ready(function() {
+                $.get( "supanoforfait/count/2016", function( data ) {
+                    $( "#supanoforfaitcount" ).html( data );
+                });
+                $.get( "contrat/reoinci/count/2016", function( data ) {
+                    $( "#reouvertureanocount" ).html( data );
+                });
+            });
+        };
+    </script>
 {% endblock %}

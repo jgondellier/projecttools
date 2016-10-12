@@ -79,7 +79,7 @@
                                     column
                                         .search( val ? '^'+val+'$' : '', true, false )
                                         .draw();
-                                    getOpenCloseGraph($(this).val());
+                                    getOpenCloseGraph($(title).html(),$(this).val());
                                 } );
 
                             column.data().unique().sort().each( function ( d, j ) {
@@ -91,17 +91,39 @@
                 getOpenCloseGraph();
             } );
         };
-        function getOpenCloseGraph(project){
-            if(project){
-                 $.get( "openclose/graph/2016/"+project, function( data ) {
-                  $( "#chartContainer" ).html( data );
-                });
+        function getOpenCloseGraph(type,id){
+            if(type && id){
+                switch (type){
+                    case "Mois":
+                        $.get( "openclose/graph/2016/"+id, function( data ) {
+                          $( "#chartContainer" ).html( data );
+                        });
+                        break;
+                    case "Projet":
+                        $.get( "openclose/graph/2016/all/"+id, function( data ) {
+                          $( "#chartContainer" ).html( data );
+                        });
+                        break;
+                    case "Nature":
+                        $.get( "openclose/graph/2016/all/all/"+id, function( data ) {
+                          $( "#chartContainer" ).html( data );
+                        });
+                    break;
+                    case "Priorité":
+                        $.get( "openclose/graph/2016/all/all/all/"+id, function( data ) {
+                          $( "#chartContainer" ).html( data );
+                        });
+                        break;
+                    default:
+                        $.get( "openclose/graph/2016", function( data ) {
+                          $( "#chartContainer" ).html( data );
+                        });
+                }
             }else{
                 $.get( "openclose/graph/2016", function( data ) {
                   $( "#chartContainer" ).html( data );
                 });
             }
-
         }
     </script>
 {% endblock %}

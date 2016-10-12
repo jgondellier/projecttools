@@ -1,0 +1,41 @@
+$.fn.dataTable.moment( 'MMMM','fr' );
+$('#{{ table.id }}').DataTable( {
+    "ajax": "{{ table.url }}",
+    "columns": [
+        {% for col in table.cols %}
+        { "data": "{{ col.data }}" },
+        {% endfor %}
+    ],
+    "columnDefs": [ {
+        "targets": 0,
+        "orderable": false,
+    }
+    ],
+    "scrollY":        "350px",
+    "scrollCollapse": true,
+    "paging":         false,
+    dom: 'Bfrtip',
+    buttons: [
+        'excel', 'pdf', 'print'
+    ],
+    initComplete: function () {
+        this.api().columns('.select-filter').every( function () {
+            var column = this;
+            var select = $('<select><option value=""></option></select>')
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                        );
+                        column
+                                .search( val ? '^'+val+'$' : '', true, false )
+                                .draw();
+                        var title = column.header();
+                        getOpenCloseGraph($(title).html(),$(this).val());
+                    } );
+            column.data().unique().sort().each( function ( d, j ) {
+                select.append( '<option value="'+d+'">'+d+'</option>' )
+            } );
+        } );
+    }
+} );

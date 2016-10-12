@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-sm-12">
+        <table id="{{ table.id }}" class="display compact" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                {% for col in table.cols %}
+                    {% if col.filter is defined and col.filter == 1 %}
+                        <th class="select-filter">{{ col.name }}</th>
+                    {% else %}
+                        <th>{{ col.name }}</th>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                {% for col in table.cols %}
+                    <th>{{ col.name }}</th>
+                {% endfor %}
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
