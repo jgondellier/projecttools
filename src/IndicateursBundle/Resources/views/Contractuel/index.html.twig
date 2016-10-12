@@ -7,18 +7,27 @@
         <div class="row">
             <div class="col-md-12">
                 <ul class="nav nav-pills">
-                    <li role="presentation" class="active"><a href="#">Réouverture sur incident</a></li>
-                    <li role="presentation"><a href="#">Délai de traitement incident</a></li>
-                    <li role="presentation"><a href="#">Délai de traitement assistance</a></li>
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#incidentReouverture">Réouverture sur incident</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#menu1">Délai de traitement incident</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#menu2">Délai de traitement assistance</a></li>
                 </ul>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div id="reoincicount"></div>
+            <div class="tab-content">
+                <div id="incidentReouverture" class="tab-pane fade in active">
+                    {{ table_incidentReouverture_HTML| raw }}
+                </div>
+                <div id="menu1" class="tab-pane fade">
+                    <h3>Menu 1</h3>
+                    <p>Some content in menu 1.</p>
+                </div>
+                <div id="menu2" class="tab-pane fade">
+                    <h3>Menu 2</h3>
+                    <p>Some content in menu 2.</p>
+                </div>
             </div>
         </div>
-        {{ table_incidentReouverture_HTML| raw }}
+
+
     </div>
     <script type="text/javascript">
         window.onload = function(){

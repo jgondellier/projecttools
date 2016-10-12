@@ -4,30 +4,7 @@
 
 {% block indic_content %}
     <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <table id="reopenTable" class="display compact" cellspacing="0" width="100%">
-                    <thead>
-                    <tr>
-                        <th class="select-filter">Mois</th>
-                        <th class="select-filter">Projet</th>
-                        <th class="select-filter">Nature</th>
-                        <th class="select-filter">Priorité</th>
-                        <th>Réouverture</th>
-                    </tr>
-                    </thead>
-                    <tfoot>
-                    <tr>
-                        <th>Mois</th>
-                        <th>Projet</th>
-                        <th>Nature</th>
-                        <th>Priorité</th>
-                        <th>Réouverture</th>
-                    </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
+    {{ table_delai_HTML| raw }}
         <div class="row">
             <div class="col-sm-12">
                 <div id="chartContainer" style="height: 300px; width: 100%;">
@@ -35,54 +12,6 @@
         </div>
     </div>
     <script type="text/javascript">
-        window.onload = function(){
-            $(document).ready(function() {
-                $.fn.dataTable.moment( 'MMMM','fr' );
-                $('#reopenTable').DataTable( {
-                    "ajax": "reopen/table/2016",
-                    "columns": [
-                        { "data": "Mois" },
-                        { "data": "Projet" },
-                        { "data": "Nature" },
-                        { "data": "Priorite" },
-                        { "data": "Reouverture" }
-                    ],
-                    "columnDefs": [ {
-                        "targets": 0,
-                        "orderable": false,
-                        }
-                     ],
-                    "scrollY":        "350px",
-                    "scrollCollapse": true,
-                    "paging":         false,
-                    dom: 'Bfrtip',
-                    buttons: [
-                        'excel', 'pdf', 'print'
-                    ],
-                    initComplete: function () {
-                        this.api().columns('.select-filter').every( function () {
-                            var column = this;
-                            var select = $('<select><option value=""></option></select>')
-                                .appendTo( $(column.footer()).empty() )
-                                .on( 'change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                        $(this).val()
-                                    );
-                                    column
-                                        .search( val ? '^'+val+'$' : '', true, false )
-                                        .draw();
-                                    var title = column.header();
-                                    getOpenCloseGraph($(title).html(),$(this).val());
-                                } );
-                            column.data().unique().sort().each( function ( d, j ) {
-                                select.append( '<option value="'+d+'">'+d+'</option>' )
-                            } );
-                        } );
-                    }
-                } );
-                getOpenCloseGraph();
-            } );
-        };
         function getOpenCloseGraph(type,id){
             if(type && id){
                 switch (type){
@@ -118,5 +47,14 @@
             }
 
         }
+    </script>
+{% endblock %}
+{% block indic_javascript %}
+    <script type="text/javascript">
+        window.onload = function(){
+            $(document).ready(function() {
+                {{ table_delai_JS| raw }}
+            } );
+        };
     </script>
 {% endblock %}

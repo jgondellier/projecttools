@@ -1,0 +1,17 @@
+indicateurs_reouverture_homepage:
+    path:   /reopen
+    defaults: { _controller: IndicateursBundle:Reouverture:index }
+
+indicateurs_reouverture_table:
+    path:   /reopen/table/{year}/{month}/{project}/{nature}/{priority}
+    defaults: { _controller: IndicateursBundle:Reouverture:Table,project: -1,month: -1,nature: -1, priority: -1 }
+    requirements:
+        method:  GET
+        year:  \d+
+
+indicateurs_reouverture_graph:
+    path:   /reopen/graph/{year}/{month}/{project}/{nature}/{priority}
+    defaults: { _controller: IndicateursBundle:Reouverture:Graph,project: -1,month: -1,nature: -1,priority: -1 }
+    requirements:
+        method:  GET
+        year:  \d+

@@ -1,0 +1,17 @@
+indicateurs_openclose_homepage:
+    path:     /openclose
+    defaults: { _controller: IndicateursBundle:OpenClose:index }
+
+indicateurs_openclose_graph:
+    path:     /openclose/graph/{year}/{month}/{project}/{nature}/{priority}
+    defaults: { _controller: IndicateursBundle:OpenClose:Graph,project: -1,month: -1,nature: -1, priority: -1 }
+    requirements:
+        method:  GET
+        year:  \d+
+
+indicateurs_openclose_table:
+    path:     /openclose/table/{year}/{month}/{project}/{nature}/{priority}
+    defaults: { _controller: IndicateursBundle:OpenClose:Table,project: -1,month: -1,nature: -1, priority: -1 }
+    requirements:
+        method:  GET
+        year:  \d+

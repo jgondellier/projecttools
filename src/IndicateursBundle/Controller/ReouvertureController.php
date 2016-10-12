@@ -12,7 +12,22 @@ class ReouvertureController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('IndicateursBundle:Reouverture:index.html.twig',array('activeMenu' => 'reouverture'));
+        /*Rendu du tableau */
+        $table['url']       = 'openclose/table/2016';
+        $table['id']        = 'opencloseTable';
+        $table['cols'][]    = array('filter'=>1,'name'=>'Mois','data'=>'Mois');
+        $table['cols'][]    = array('filter'=>1,'name'=>'Projet','data'=>'Projet');
+        $table['cols'][]    = array('filter'=>1,'name'=>'Nature','data'=>'Nature');
+        $table['cols'][]    = array('filter'=>1,'name'=>'Priorité','data'=>'Priorite');
+        $table['cols'][]    = array('filter'=>0,'name'=>'Réouverture','data'=>'Reouverture');
+        $table_delai_HTML   = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
+        $table_delai_JS     = $this->renderView('IndicateursBundle:Table:javscript.html.twig',array('table'=>$table));
+
+        return $this->render('IndicateursBundle:Reouverture:index.html.twig',array(
+            'activeMenu' => 'reouverture',
+            'table_delai_HTML'=>$table_delai_HTML,
+            'table_delai_JS'=>$table_delai_JS,
+        ));
     }
     public function TableAction(Request $request)
     {

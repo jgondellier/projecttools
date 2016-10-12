@@ -2,81 +2,21 @@ indicateurs_homepage:
     path:     /
     defaults: { _controller: IndicateursBundle:Default:index }
 
-indicateurs_openclose_homepage:
-    path:     /openclose
-    defaults: { _controller: IndicateursBundle:OpenClose:index }
+indicateurs_openclose:
+    resource: "@IndicateursBundle/Resources/config/openclose_routing.yml"
 
-indicateurs_openclose_graph:
-    path:     /openclose/graph/{year}/{month}/{project}/{nature}/{priority}
-    defaults: { _controller: IndicateursBundle:OpenClose:Graph,project: -1,month: -1,nature: -1, priority: -1 }
-    requirements:
-        method:  GET
-        year:  \d+
+indicateurs_reouverture:
+    resource: "@IndicateursBundle/Resources/config/reouverture_routing.yml"
 
-indicateurs_openclose_table:
-    path:     /openclose/table/{year}/{month}/{project}/{nature}/{priority}
-    defaults: { _controller: IndicateursBundle:OpenClose:Table,project: -1,month: -1,nature: -1, priority: -1 }
-    requirements:
-        method:  GET
-        year:  \d+
+indicateurs_delai_traitement:
+    resource: "@IndicateursBundle/Resources/config/delai_traitement_routing.yml"
 
-indicateurs_reouverture_homepage:
-    path:   /reopen
-    defaults: { _controller: IndicateursBundle:Reouverture:index }
-
-indicateurs_reouverture_table:
-    path:   /reopen/table/{year}/{month}/{project}/{nature}/{priority}
-    defaults: { _controller: IndicateursBundle:Reouverture:Table,project: -1,month: -1,nature: -1, priority: -1 }
-    requirements:
-        method:  GET
-        year:  \d+
-
-indicateurs_reouverture_graph:
-    path:   /reopen/graph/{year}/{month}/{project}/{nature}/{priority}
-    defaults: { _controller: IndicateursBundle:Reouverture:Graph,project: -1,month: -1,nature: -1,priority: -1 }
-    requirements:
-        method:  GET
-        year:  \d+
+indicateurs_contrat_reouverture_incident:
+    resource: "@IndicateursBundle/Resources/config/reouverture_incident_routing.yml"
 
 indicateurs_supanoforfait_count:
       path:   /supanoforfait/count/{year}
       defaults: { _controller: IndicateursBundle:SupAnoForfait:getCountSupAnoForfait}
-      requirements:
-          method:  GET
-          year:  \d+
-
-indicateurs_contrat_reouverture_incident_homepage:
-      path:   /contrat
-      defaults: { _controller: IndicateursBundle:Contractuel:index }
-
-indicateurs_contrat_reouverture_incident_count:
-      path:   /contrat/reoinci/count/{year}/{month}/{project}
-      defaults: { _controller: IndicateursBundle:Contractuel:IncidentReouvertureCount,project: -1,month: -1 }
-      requirements:
-          method:  GET
-          year:  \d+
-
-indicateurs_contrat_reouverture_incident_table:
-      path:   /contrat/reoinci/table/{year}/{month}/{project}
-      defaults: { _controller: IndicateursBundle:Contractuel:IncidentReouverture,project: -1,month: -1 }
-      requirements:
-          method:  GET
-          year:  \d+
-
-indicateurs_delai_traitement_homepage:
-      path:   /delai/traitement
-      defaults: { _controller: IndicateursBundle:DelaiTraitement:index }
-
-indicateurs_delai_traitement_table:
-      path:   /delai/traitement/table/{year}/{month}/{project}/{nature}/{priority}
-      defaults: { _controller: IndicateursBundle:DelaiTraitement:Table,project: -1,month: -1,nature: -1,priority: -1 }
-      requirements:
-          method:  GET
-          year:  \d+
-
-indicateurs_delai_traitement_graph:
-      path:   /delai/traitement/graph/{year}/{month}/{project}/{nature}/{priority}
-      defaults: { _controller: IndicateursBundle:DelaiTraitement:Graph,project: -1,month: -1,nature: -1,priority: -1 }
       requirements:
           method:  GET
           year:  \d+

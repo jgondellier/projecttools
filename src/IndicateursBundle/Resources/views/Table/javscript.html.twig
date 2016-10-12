@@ -31,7 +31,9 @@ $('#{{ table.id }}').DataTable( {
                                 .search( val ? '^'+val+'$' : '', true, false )
                                 .draw();
                         var title = column.header();
-                        getOpenCloseGraph($(title).html(),$(this).val());
+                        if (typeof getGraph === "function") {
+                            getOpenCloseGraph($(title).html(),$(this).val());
+                        }
                     } );
             column.data().unique().sort().each( function ( d, j ) {
                 select.append( '<option value="'+d+'">'+d+'</option>' )
