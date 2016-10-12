@@ -62,3 +62,21 @@ indicateurs_contrat_reouverture_incident_table:
       requirements:
           method:  GET
           year:  \d+
+
+indicateurs_delai_traitement_homepage:
+      path:   /delai/traitement
+      defaults: { _controller: IndicateursBundle:DelaiTraitement:index }
+
+indicateurs_delai_traitement_table:
+      path:   /delai/traitement/table/{year}/{month}/{project}/{nature}/{priority}
+      defaults: { _controller: IndicateursBundle:DelaiTraitement:Table,project: -1,month: -1,nature: -1,priority: -1 }
+      requirements:
+          method:  GET
+          year:  \d+
+
+indicateurs_delai_traitement_graph:
+      path:   /delai/traitement/graph/{year}/{month}/{project}/{nature}/{priority}
+      defaults: { _controller: IndicateursBundle:DelaiTraitement:Graph,project: -1,month: -1,nature: -1,priority: -1 }
+      requirements:
+          method:  GET
+          year:  \d+

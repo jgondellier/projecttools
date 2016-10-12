@@ -21,7 +21,9 @@
                         <li class="{% if (activeMenu is defined and activeMenu == 'homepage') %} active{% endif %}"><a href="{{ path('indicateurs_homepage') }}">Homepage <span class="sr-only">(current)</span></a></li>
                         <li class="{% if (activeMenu is defined and activeMenu == 'openclose') %} active{% endif %}"><a href="{{ path('indicateurs_openclose_homepage') }}">Ouvert/Fermé</a></li>
                         <li class="{% if (activeMenu is defined and activeMenu == 'reouverture') %} active{% endif %}"><a href="{{ path('indicateurs_reouverture_homepage') }}">Réouvertures</a></li>
+                        <li class="{% if (activeMenu is defined and activeMenu == 'delaiTraitement') %} active{% endif %}"><a href="{{ path('indicateurs_delai_traitement_homepage') }}">Délai</a></li>
                         <li class="{% if (activeMenu is defined and activeMenu == 'contractuel') %} active{% endif %}"><a href="{{ path('indicateurs_contrat_reouverture_incident_homepage') }}">Contractuel</a></li>
+
                     </ul>
                 </div>
             </div>

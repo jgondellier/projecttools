@@ -22,6 +22,8 @@
 {% endblock %}
 
 {% block javascripts %}
+    {% block indic_javascript %}
+    {% endblock %}
     {% javascripts output='js/compiled/main.indic.js'
     '@IndicateursBundle/Resources/public/js/buttons.bootstrap.min.js'
     '@IndicateursBundle/Resources/public/js/buttons.html5.min.js'

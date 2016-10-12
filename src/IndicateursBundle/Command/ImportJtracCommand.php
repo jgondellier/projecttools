@@ -78,7 +78,7 @@ class ImportJtracCommand extends ContainerAwareCommand
                     $entity_item->setSeverity($item['severity']);
                 }
                 if(isset($item['priority'])){
-                    $entity_item->setPriority($item['priority']);
+                    $entity_item->setPriority($list_project[$item['project_id']]['priority'][$item['priority']]);
                 }
                 if(isset($item['request_nature'])){
                     //On uniformise la request nature

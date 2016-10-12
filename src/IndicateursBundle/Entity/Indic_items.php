@@ -85,9 +85,9 @@ class Indic_items
     private $severity;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="priority", type="smallint", nullable=true)
+     * @ORM\Column(name="priority", type="string", length=20, nullable=true)
      */
     private $priority;
 

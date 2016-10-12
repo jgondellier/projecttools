@@ -206,6 +206,22 @@ class Indic_TRSBRepository extends EntityRepository
         return $query;
     }
 
+    public function delaiTraitement($year,$project,$month,$requestNature,$priority){
+        $query      = $this->createQueryBuilder('t');
+        $query->select('MONTH(t.openDate) mois, i.projectId projet, i.priority priority, i.requestNature nature, i.jtracId jtracid,t.TreatmentTime delai')
+            ->leftJoin("t.Indic_items",'i')
+            ->where('YEAR(t.openDate) = :year')
+            ->orderBy('t.openDate', 'ASC')
+            ->setParameter('year', $year);
+
+        $query = $this->projectFiltre($query,$project);
+        $query = $this->monthFiltre($query,$month);
+        $query = $this->natureFiltre($query,$requestNature);
+        $query = $this->priorityFiltre($query,$priority);
+
+        return $query->getQuery()->getArrayResult();
+    }
+
     /**
      * Filtre pour selectionner les incidents
      *
