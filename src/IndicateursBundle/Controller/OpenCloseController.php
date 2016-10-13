@@ -10,10 +10,16 @@ use Ob\HighchartsBundle\Highcharts\Highchart;
 
 class OpenCloseController extends Controller
 {
+    /**
+     * Homepage du nombre des Ouvertures/Fermetures des tickets
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction()
     {
         /*Rendu du tableau */
-        $table['url']       = 'openclose/table/2016';
+        $table['ajax']['url']               = 'openclose/table';
+        $table['ajax']['datas'][]            = array('name'=>'year','value'=>'2016');
         $table['id']        = 'opencloseTable';
         $table['cols'][]    = array('filter'=>1,'name'=>'Mois','data'=>'Mois');
         $table['cols'][]    = array('filter'=>1,'name'=>'Projet','data'=>'Projet');
@@ -30,11 +36,16 @@ class OpenCloseController extends Controller
         ));
     }
 
+    /**
+     * Retourne les résultats Open/close pour les afficher dans un tableau
+     *
+     * @param Request $request
+     * @return null|JsonResponse
+     */
     public function TableAction(Request $request)
     {
         if($request->isXmlHttpRequest()) {
             if ($request->getMethod() === 'GET') {
-                $entityManager  = $this->getDoctrine()->getManager();
                 $year           = $request->get('year');
                 $month          = $request->get('month');
                 $project        = $request->get('project');
@@ -43,8 +54,8 @@ class OpenCloseController extends Controller
                 $response       = new JsonResponse();
 
                 /*Tickets ouverts fermés par mois par projet*/
-                $t_open         = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$month,$project,$nature,$priority,'openDate');
-                $t_closed       = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$month,$project,$nature,$priority,'closedDate');
+                $t_open         = $this->getData($year,$month,$project,$nature,$priority,'openDate');
+                $t_closed       = $this->getData($year,$month,$project,$nature,$priority,'closedDate');
 
                 $t_result       = $this->formatForDataTable($t_open,$t_closed);
                 $response->setContent(json_encode($t_result));
@@ -55,11 +66,17 @@ class OpenCloseController extends Controller
         }
         return NULL;
     }
+
+    /**
+     * * Retourne les résultats Open/close pour les afficher dans un graphique
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function GraphAction(Request $request)
     {
         if($request->isXmlHttpRequest()) {
             if ($request->getMethod() === 'GET') {
-                $entityManager  = $this->getDoctrine()->getManager();
                 $year           = $request->get('year');
                 $month          = $request->get('month');
                 $project        = $request->get('project');
@@ -76,8 +93,8 @@ class OpenCloseController extends Controller
                 }
 
                 //Recuperation des données
-                $t_open         = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$month,$project,$nature,$priority,'openDate');
-                $t_close        = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$month,$project,$nature,$priority,'closedDate');
+                $t_open         = $this->getData($year,$month,$project,$nature,$priority,'openDate');
+                $t_close        = $this->getData($year,$month,$project,$nature,$priority,'closedDate');
 
                 $monthInterval  = $toolrender->getMonthInterval($t_open,$t_close);
 
@@ -136,7 +153,7 @@ class OpenCloseController extends Controller
             $t_openClose[$toolrender->getMonthName($open['mois'])][$list_project[$open['projet']]['name']][$open['nature']][$open['priority']]['Ouverture']=$open['somme'];
         }
         foreach ($t_closed as $closed){
-            $t_openClose[$toolrender->getMonthName($closed['mois'])][$list_project[$closed['projet']]['name']][$open['nature']][$open['priority']]['Fermeture']=$closed['somme'];
+            $t_openClose[$toolrender->getMonthName($closed['mois'])][$list_project[$closed['projet']]['name']][$closed['nature']][$closed['priority']]['Fermeture']=$closed['somme'];
         }
 
         //Init des valeurs null
@@ -158,5 +175,22 @@ class OpenCloseController extends Controller
             }
         }
         return $t_result;
+    }
+
+    /**
+     * Récupère la donnée
+     *
+     * @param $year
+     * @param $month
+     * @param $project
+     * @param $nature
+     * @param $priority
+     * @param $field
+     * @return array
+     */
+    private function getData($year,$month,$project,$nature,$priority,$field){
+        $entityManager  = $this->getDoctrine()->getManager();
+
+        return $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDateByMonthProject($year,$month,$project,$nature,$priority,$field);
     }
 }

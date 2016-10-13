@@ -1,6 +1,15 @@
 $.fn.dataTable.moment( 'MMMM','fr' );
 $('#{{ table.id }}').DataTable( {
-    "ajax": "{{ table.url }}",
+    "ajax":{
+        "url": "{{ table.ajax.url }}",
+{% if(table.ajax.datas is defined) %}
+        "data": {
+            {% for data in table.ajax.datas %}
+            "{{ data.name }}": "{{ data.value }}",
+            {% endfor %}
+        },
+{% endif %}
+    },
     "columns": [
         {% for col in table.cols %}
         { "data": "{{ col.data }}" },

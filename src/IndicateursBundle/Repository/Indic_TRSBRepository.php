@@ -44,30 +44,20 @@ class Indic_TRSBRepository extends EntityRepository
          * SELECT MONTH(t.`open_date`) mo, i.project_id p,count(t.id) FROM `indic_trsb` t left join indic_items i ON t.indic_items_id = i.id GROUP BY mo,p
          * */
         $query = $this->createQueryBuilder('t');
-        $query->select('MONTH(t.'.$field.') mois, i.projectId projet,i.priority priority, i.requestNature nature,count(t.id) somme')
+        $query->select('MONTH(t.'.$field.') mois, i.projectId projet,i.priority priority, i.requestNature nature,count(t.'.$field.') somme')
             ->leftJoin("t.Indic_items",'i')
             ->groupBy('mois')
             ->addGroupBy('projet')
+            ->addGroupBy('nature')
+            ->addGroupBy('priority')
             ->where('YEAR(t.'.$field.') = :year')
             ->orderBy('t.'.$field, 'ASC')
             ->setParameter('year', $year);
 
-        if($project !=-1 && $project != 'all' && $project != Null){
-            $query->andWhere('i.projectId = :project')
-                ->setParameter('project',$project);
-        }
-        if($month !=-1 && $month != 'all' && $month != Null){
-            $query->andWhere('MONTH(t.correctedDate) = :month')
-                ->setParameter('month',$month);
-        }
-        if($requestNature !=-1 && $requestNature != 'all' && $requestNature != Null){
-            $query->andWhere('i.requestNature = :requestNature')
-                ->setParameter('requestNature',$requestNature);
-        }
-        if($priority !=-1 && $priority != 'all' && $priority != Null){
-            $query->andWhere('i.priority = :priority')
-                ->setParameter('priority',$priority);
-        }
+        $query = $this->projectFiltre($query,$project);
+        $query = $this->monthFiltre($query,$month);
+        $query = $this->natureFiltre($query,$requestNature);
+        $query = $this->priorityFiltre($query,$priority);
 
         return $query->getQuery()->getArrayResult();
     }
@@ -89,6 +79,7 @@ class Indic_TRSBRepository extends EntityRepository
             ->leftJoin("t.Indic_items",'i')
             ->groupBy('mois')
             ->addGroupBy('projet')
+            ->addGroupBy('nature')
             ->addGroupBy('priority')
             ->where('YEAR(t.correctedDate) = :year')
             ->andWhere('t.refusedCount IS NOT NULL')
@@ -281,7 +272,7 @@ class Indic_TRSBRepository extends EntityRepository
     private function natureFiltre($query,$requestNature){
         /* @var \Doctrine\ORM\QueryBuilder $query */
         if($requestNature !=-1 && $requestNature != 'all' && $requestNature != Null){
-            $query->andWhere('i.requestNature = :requestNature')
+            $query->andWhere('i.requestNature LIKE :requestNature')
                 ->setParameter('requestNature',$requestNature);
         }
 

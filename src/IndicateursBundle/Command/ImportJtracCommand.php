@@ -79,10 +79,14 @@ class ImportJtracCommand extends ContainerAwareCommand
                 }
                 if(isset($item['priority'])){
                     $entity_item->setPriority($list_project[$item['project_id']]['priority'][$item['priority']]);
+                }else{
+                    $entity_item->setPriority('-');
                 }
                 if(isset($item['request_nature'])){
                     //On uniformise la request nature
                     $entity_item->setRequestNature($list_project[$item['project_id']]['type'][$item['request_nature']]);
+                }else{
+                    $entity_item->setRequestNature('-');
                 }
                 if(isset($item['cadre'])){
                     $entity_item->setCadre($item['cadre']);

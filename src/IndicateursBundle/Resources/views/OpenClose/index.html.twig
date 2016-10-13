@@ -21,38 +21,41 @@
             } );
         };
         function getGraph(type,id){
+            var data;
             if(type && id){
                 switch (type){
                     case "Mois":
-                        $.get( "openclose/graph/2016/"+id, function( data ) {
-                          $( "#chartContainer" ).html( data );
-                        });
+                         data = {"year" : "2016","month" : id}
                         break;
                     case "Projet":
-                        $.get( "openclose/graph/2016/all/"+id, function( data ) {
-                          $( "#chartContainer" ).html( data );
-                        });
+                        data = {"year" : "2016","projet" : id}
                         break;
                     case "Nature":
-                        $.get( "openclose/graph/2016/all/all/"+id, function( data ) {
-                          $( "#chartContainer" ).html( data );
-                        });
+                        data = {"year" : "2016","nature" : id}
                     break;
                     case "Priorité":
-                        $.get( "openclose/graph/2016/all/all/all/"+id, function( data ) {
-                          $( "#chartContainer" ).html( data );
-                        });
+                        data = {"year" : "2016","priority" : id}
                         break;
                     default:
-                        $.get( "openclose/graph/2016", function( data ) {
-                          $( "#chartContainer" ).html( data );
-                        });
+                        data = {year : "2016"}
                 }
             }else{
-                $.get( "openclose/graph/2016", function( data ) {
-                  $( "#chartContainer" ).html( data );
-                });
+                data = {year : "2016"}
             }
+            var request = $.ajax({
+              url: "openclose/graph",
+              method: "GET",
+              data: data,
+              dataType: "html"
+            });
+
+            request.done(function( data ) {
+              $( "#chartContainer" ).html( data );
+            });
+
+            request.fail(function( jqXHR, textStatus ) {
+              $( "#chartContainer" ).html( '<div class="alert alert-danger" role="alert">'+textStatus+'</div>' );
+            });
         }
     </script>
 {% endblock %}
