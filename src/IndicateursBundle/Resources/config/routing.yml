@@ -20,3 +20,6 @@ indicateurs_supanoforfait_count:
       requirements:
           method:  GET
           year:  \d+
+
+indicateurs_evolutionNBTicket:
+    resource: "@IndicateursBundle/Resources/config/evolutionNbTicket_routing.yml"

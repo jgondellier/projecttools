@@ -41,7 +41,7 @@ class Indic_TRSBRepository extends EntityRepository
      */
     public function getDateByMonthProject($year,$month=-1,$project=-1,$requestNature =-1,$priority=-1,$field){
         /*
-         * SELECT MONTH(t.`open_date`) mo, i.project_id p,count(t.id) FROM `indic_trsb` t left join indic_items i ON t.indic_items_id = i.id GROUP BY mo,p
+         * SELECT MONTH(t.open_date) mo, i.project_id p,count(t.id) FROM indic_trsb t left join indic_items i ON t.indic_items_id = i.id GROUP BY mo,p
          * */
         $query = $this->createQueryBuilder('t');
         $query->select('MONTH(t.'.$field.') mois, i.projectId projet,i.priority priority, i.requestNature nature,count(t.'.$field.') somme')
@@ -211,6 +211,22 @@ class Indic_TRSBRepository extends EntityRepository
         $query = $this->priorityFiltre($query,$priority);
 
         return $query->getQuery()->getArrayResult();
+    }
+
+    public function evolutionNBTicket($year,$month){
+        $query = $this->getEntityManager()->createQuery('
+            SELECT MONTH(t.openDate) mois, count(t.openDate) nombre
+            FROM IndicateursBundle\Entity\Indic_TRSB t
+            where MONTH(t.openDate) <= :month 
+            AND YEAR(t.openDate) = :year 
+            AND (MONTH(t.correctedDate) IS NULL 
+                 or MONTH(t.correctedDate) >= :month
+                 or MONTH(t.closedDate) IS NULL
+                 or MONTH(t.closedDate) >= :month) 
+            GROUP BY mois
+        ')->setParameter('month', $month)
+            ->setParameter('year', $year);
+        return $query->getArrayResult();
     }
 
     /**

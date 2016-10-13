@@ -1,0 +1,9 @@
+indicateurs_evolutionNBTicket_homepage:
+      path:   /evolutionnbticket
+      defaults: { _controller: IndicateursBundle:EvolutionNbTicket:index}
+
+indicateurs_evolutionNBTicket_graph:
+      path:   /evolutionnbticket/graph
+      defaults: { _controller: IndicateursBundle:EvolutionNbTicket:Graph}
+      requirements:
+          method:  GET
