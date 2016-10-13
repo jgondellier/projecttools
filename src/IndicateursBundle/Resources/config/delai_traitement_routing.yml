@@ -3,15 +3,15 @@ indicateurs_delai_traitement_homepage:
       defaults: { _controller: IndicateursBundle:DelaiTraitement:index }
 
 indicateurs_delai_traitement_table:
-      path:   /delai/traitement/table/{year}/{month}/{project}/{nature}/{priority}
-      defaults: { _controller: IndicateursBundle:DelaiTraitement:Table,project: -1,month: -1,nature: -1,priority: -1 }
+      path:   /delai/traitement/table
+      defaults: { _controller: IndicateursBundle:DelaiTraitement:Table }
       requirements:
           method:  GET
           year:  \d+
 
 indicateurs_delai_traitement_graph:
-      path:   /delai/traitement/graph/{year}/{month}/{project}/{nature}/{priority}
-      defaults: { _controller: IndicateursBundle:DelaiTraitement:Graph,project: -1,month: -1,nature: -1,priority: -1 }
+      path:   /delai/traitement/graph
+      defaults: { _controller: IndicateursBundle:DelaiTraitement:Graph }
       requirements:
           method:  GET
           year:  \d+

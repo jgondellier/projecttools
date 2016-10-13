@@ -13,7 +13,8 @@ class DelaiTraitementController extends Controller
     public function indexAction()
     {
         /*Rendu du tableau */
-        $table['url']       = 'traitement/table/2016';
+        $table['ajax']['url']           = 'traitement/table';
+        $table['ajax']['datas'][]       = array('name'=>'year','value'=>'2016');
         $table['id']        = 'delaiTable';
         $table['cols'][]    = array('filter'=>1,'name'=>'Mois','data'=>'Mois');
         $table['cols'][]    = array('filter'=>1,'name'=>'Projet','data'=>'Projet');
