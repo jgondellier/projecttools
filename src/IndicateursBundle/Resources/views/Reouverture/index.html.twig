@@ -20,40 +20,6 @@
                 getGraph();
             } );
         };
-        function getGraph(type,id){
-            if(type && id){
-                switch (type){
-                    case "Mois":
-                        $.get( "reopen/graph/2016/"+id, function( data ) {
-                          $( "#chartContainer" ).html( data );
-                        });
-                        break;
-                    case "Projet":
-                        $.get( "reopen/graph/2016/all/"+id, function( data ) {
-                          $( "#chartContainer" ).html( data );
-                        });
-                        break;
-                    case "Nature":
-                        $.get( "reopen/graph/2016/all/all/"+id, function( data ) {
-                          $( "#chartContainer" ).html( data );
-                        });
-                    break;
-                    case "Priorité":
-                        $.get( "reopen/graph/2016/all/all/all/"+id, function( data ) {
-                          $( "#chartContainer" ).html( data );
-                        });
-                        break;
-                    default:
-                        $.get( "reopen/graph/2016", function( data ) {
-                          $( "#chartContainer" ).html( data );
-                        });
-                }
-            }else{
-                $.get( "reopen/graph/2016", function( data ) {
-                  $( "#chartContainer" ).html( data );
-                });
-            }
-
-        }
     </script>
+    {{ graph_JS| raw }}
 {% endblock %}

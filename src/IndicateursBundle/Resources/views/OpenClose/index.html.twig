@@ -13,49 +13,13 @@
     </div>
 {% endblock %}
 {% block indic_javascript %}
-        <script type="text/javascript">
+    <script type="text/javascript">
         window.onload = function(){
             $(document).ready(function() {
                 {{ table_JS| raw }}
                 getGraph();
             } );
         };
-        function getGraph(type,id){
-            var data;
-            if(type && id){
-                switch (type){
-                    case "Mois":
-                         data = {"year" : "2016","month" : id}
-                        break;
-                    case "Projet":
-                        data = {"year" : "2016","projet" : id}
-                        break;
-                    case "Nature":
-                        data = {"year" : "2016","nature" : id}
-                    break;
-                    case "Priorité":
-                        data = {"year" : "2016","priority" : id}
-                        break;
-                    default:
-                        data = {year : "2016"}
-                }
-            }else{
-                data = {year : "2016"}
-            }
-            var request = $.ajax({
-              url: "openclose/graph",
-              method: "GET",
-              data: data,
-              dataType: "html"
-            });
-
-            request.done(function( data ) {
-              $( "#chartContainer" ).html( data );
-            });
-
-            request.fail(function( jqXHR, textStatus ) {
-              $( "#chartContainer" ).html( '<div class="alert alert-danger" role="alert">'+textStatus+'</div>' );
-            });
-        }
     </script>
+    {{ graph_JS| raw }}
 {% endblock %}

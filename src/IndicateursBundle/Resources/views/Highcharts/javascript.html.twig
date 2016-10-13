@@ -1,0 +1,39 @@
+<script type="text/javascript">
+    function getGraph(type,id){
+        var data;
+        if(type && id){
+            switch (type){
+                case "Mois":
+                    data = {"year" : "2016","month" : id}
+                    break;
+                case "Projet":
+                    data = {"year" : "2016","projet" : id}
+                    break;
+                case "Nature":
+                    data = {"year" : "2016","nature" : id}
+                    break;
+                case "Priorité":
+                    data = {"year" : "2016","priority" : id}
+                    break;
+                default:
+                    data = {year : "2016"}
+            }
+        }else{
+            data = {year : "2016"}
+        }
+        var request = $.ajax({
+            url: "{{ graph.ajax.url }}",
+            method: "GET",
+            data: data,
+            dataType: "html"
+        });
+
+        request.done(function( data ) {
+            $( "#{{ graph.id }}" ).html( data );
+        });
+
+        request.fail(function( jqXHR, textStatus ) {
+            $( "#{{ graph.id }}" ).html( '<div class="alert alert-danger" role="alert">'+textStatus+'</div>' );
+        });
+    }
+</script>

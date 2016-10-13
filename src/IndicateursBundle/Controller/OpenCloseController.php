@@ -29,10 +29,16 @@ class OpenCloseController extends Controller
         $table['cols'][]    = array('filter'=>0,'name'=>'Fermé','data'=>'Fermeture');
         $table_openclose_HTML   = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_openclose_JS     = $this->renderView('IndicateursBundle:Table:javscript.html.twig',array('table'=>$table));
+
+        /*Rendu du graph*/
+        $graph['ajax']['url']               = 'openclose/graph';
+        $graph['id']                        = 'chartContainer';
+        $graph_openclose_JS     = $this->renderView('IndicateursBundle:Highcharts:javascript.html.twig',array('graph'=>$graph));
         return $this->render('IndicateursBundle:OpenClose:index.html.twig',array(
             'activeMenu' => 'openclose',
             'table_HTML'=>$table_openclose_HTML,
             'table_JS'=>$table_openclose_JS,
+            'graph_JS'=>$graph_openclose_JS,
         ));
     }
 

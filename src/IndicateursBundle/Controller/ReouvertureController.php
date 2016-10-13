@@ -13,20 +13,27 @@ class ReouvertureController extends Controller
     public function indexAction()
     {
         /*Rendu du tableau */
-        $table['url']       = 'reopen/table/2016';
-        $table['id']        = 'reopenTable';
-        $table['cols'][]    = array('filter'=>1,'name'=>'Mois','data'=>'Mois');
-        $table['cols'][]    = array('filter'=>1,'name'=>'Projet','data'=>'Projet');
-        $table['cols'][]    = array('filter'=>1,'name'=>'Nature','data'=>'Nature');
-        $table['cols'][]    = array('filter'=>1,'name'=>'Priorité','data'=>'Priorite');
-        $table['cols'][]    = array('filter'=>0,'name'=>'Réouverture','data'=>'Reouverture');
-        $table_delai_HTML   = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
-        $table_delai_JS     = $this->renderView('IndicateursBundle:Table:javscript.html.twig',array('table'=>$table));
+        $table['ajax']['url']           = 'reopen/table';
+        $table['ajax']['datas'][]       = array('name'=>'year','value'=>'2016');
+        $table['id']                    = 'reopenTable';
+        $table['cols'][]                = array('filter'=>1,'name'=>'Mois','data'=>'Mois');
+        $table['cols'][]                = array('filter'=>1,'name'=>'Projet','data'=>'Projet');
+        $table['cols'][]                = array('filter'=>1,'name'=>'Nature','data'=>'Nature');
+        $table['cols'][]                = array('filter'=>1,'name'=>'Priorité','data'=>'Priorite');
+        $table['cols'][]                = array('filter'=>0,'name'=>'Réouverture','data'=>'Reouverture');
+        $table_delai_HTML               = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
+        $table_delai_JS                 = $this->renderView('IndicateursBundle:Table:javscript.html.twig',array('table'=>$table));
+
+        /*Rendu du graph*/
+        $graph['ajax']['url']           = 'reopen/graph';
+        $graph['id']                    = 'chartContainer';
+        $graph_delai_JS                 = $this->renderView('IndicateursBundle:Highcharts:javascript.html.twig',array('graph'=>$graph));
 
         return $this->render('IndicateursBundle:Reouverture:index.html.twig',array(
             'activeMenu' => 'reouverture',
             'table_HTML'=>$table_delai_HTML,
             'table_JS'=>$table_delai_JS,
+            'graph_JS'=>$graph_delai_JS,
         ));
     }
     public function TableAction(Request $request)

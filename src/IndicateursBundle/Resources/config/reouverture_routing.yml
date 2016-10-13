@@ -3,15 +3,13 @@ indicateurs_reouverture_homepage:
     defaults: { _controller: IndicateursBundle:Reouverture:index }
 
 indicateurs_reouverture_table:
-    path:   /reopen/table/{year}/{month}/{project}/{nature}/{priority}
-    defaults: { _controller: IndicateursBundle:Reouverture:Table,project: -1,month: -1,nature: -1, priority: -1 }
+    path:   /reopen/table
+    defaults: { _controller: IndicateursBundle:Reouverture:Table }
     requirements:
         method:  GET
-        year:  \d+
 
 indicateurs_reouverture_graph:
-    path:   /reopen/graph/{year}/{month}/{project}/{nature}/{priority}
-    defaults: { _controller: IndicateursBundle:Reouverture:Graph,project: -1,month: -1,nature: -1,priority: -1 }
+    path:   /reopen/graph
+    defaults: { _controller: IndicateursBundle:Reouverture:Graph}
     requirements:
         method:  GET
-        year:  \d+
