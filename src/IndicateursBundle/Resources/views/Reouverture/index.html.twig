@@ -1,18 +1,26 @@
 {% extends 'IndicateursBundle:Default:Indicateur.html.twig' %}
 
-{% block indic_title %}Nombre d'ouverture / Fermeture {% endblock %}
+{% block indic_title %}Nombre de réouverture {% endblock %}
 
 {% block indic_content %}
     <div class="container">
-    {{ table_delai_HTML| raw }}
+    {{ table_HTML| raw }}
         <div class="row">
             <div class="col-sm-12">
                 <div id="chartContainer" style="height: 300px; width: 100%;">
             </div>
         </div>
     </div>
+{% endblock %}
+{% block indic_javascript %}
     <script type="text/javascript">
-        function getOpenCloseGraph(type,id){
+        window.onload = function(){
+            $(document).ready(function() {
+                {{ table_JS| raw }}
+                getGraph();
+            } );
+        };
+        function getGraph(type,id){
             if(type && id){
                 switch (type){
                     case "Mois":
@@ -47,14 +55,5 @@
             }
 
         }
-    </script>
-{% endblock %}
-{% block indic_javascript %}
-    <script type="text/javascript">
-        window.onload = function(){
-            $(document).ready(function() {
-                {{ table_delai_JS| raw }}
-            } );
-        };
     </script>
 {% endblock %}

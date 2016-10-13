@@ -13,8 +13,8 @@ class ReouvertureController extends Controller
     public function indexAction()
     {
         /*Rendu du tableau */
-        $table['url']       = 'openclose/table/2016';
-        $table['id']        = 'opencloseTable';
+        $table['url']       = 'reopen/table/2016';
+        $table['id']        = 'reopenTable';
         $table['cols'][]    = array('filter'=>1,'name'=>'Mois','data'=>'Mois');
         $table['cols'][]    = array('filter'=>1,'name'=>'Projet','data'=>'Projet');
         $table['cols'][]    = array('filter'=>1,'name'=>'Nature','data'=>'Nature');
@@ -25,8 +25,8 @@ class ReouvertureController extends Controller
 
         return $this->render('IndicateursBundle:Reouverture:index.html.twig',array(
             'activeMenu' => 'reouverture',
-            'table_delai_HTML'=>$table_delai_HTML,
-            'table_delai_JS'=>$table_delai_JS,
+            'table_HTML'=>$table_delai_HTML,
+            'table_JS'=>$table_delai_JS,
         ));
     }
     public function TableAction(Request $request)

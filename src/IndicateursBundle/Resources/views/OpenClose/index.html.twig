@@ -1,33 +1,26 @@
-{% extends 'base.html.twig' %}
+{% extends 'IndicateursBundle:Default:Indicateur.html.twig' %}
 
-{% block title %}Indicateurs - Nombre d'ouverture / Fermeture {% endblock %}
+{% block indic_title %}Nombre d'ouverture / Fermeture {% endblock %}
 
-{% block stylesheets %}
-        {% stylesheets output='css/compiled/main.indic.css' filter='cssrewrite'
-        '@IndicateursBundle/Resources/public/css/datatables.min.css'
-        '@IndicateursBundle/Resources/public/css/jquery.dataTables.min.css'
-        '@IndicateursBundle/Resources/public/css/dataTables.bootstrap.min.css'%}
-        <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
-        {% endstylesheets %}
-{% endblock %}
-
-{% block body %}
+{% block indic_content %}
     <div class="container">
-        {{ table_delai_HTML| raw }}
+        {{ table_HTML| raw }}
         <div class="row">
             <div class="col-sm-12">
                 <div id="chartContainer" style="height: 300px; width: 100%;">
             </div>
         </div>
     </div>
-    <script type="text/javascript">
+{% endblock %}
+{% block indic_javascript %}
+        <script type="text/javascript">
         window.onload = function(){
             $(document).ready(function() {
-                {{ table_incidentReouverture_JS| raw }}
-                getOpenCloseGraph();
+                {{ table_JS| raw }}
+                getGraph();
             } );
         };
-        function getOpenCloseGraph(type,id){
+        function getGraph(type,id){
             if(type && id){
                 switch (type){
                     case "Mois":
@@ -62,17 +55,4 @@
             }
         }
     </script>
-{% endblock %}
-
-{% block javascripts %}
-    {% javascripts output='js/compiled/main.indic.js'
-    '@IndicateursBundle/Resources/public/js/datatables.min.js'
-    '@IndicateursBundle/Resources/public/js/highcharts.js'
-    '@IndicateursBundle/Resources/public/js/moment.min.js'
-    '@IndicateursBundle/Resources/public/js/moment-with-locales.min.js'
-    '@IndicateursBundle/Resources/public/js/datetime-moment.js'
-    '@IndicateursBundle/Resources/public/js/dataTables.sum.js'
-    '@IndicateursBundle/Resources/public/js/modules/exporting.js'%}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
 {% endblock %}

@@ -32,7 +32,7 @@ $('#{{ table.id }}').DataTable( {
                                 .draw();
                         var title = column.header();
                         if (typeof getGraph === "function") {
-                            getOpenCloseGraph($(title).html(),$(this).val());
+                            getGraph($(title).html(),$(this).val());
                         }
                     } );
             column.data().unique().sort().each( function ( d, j ) {

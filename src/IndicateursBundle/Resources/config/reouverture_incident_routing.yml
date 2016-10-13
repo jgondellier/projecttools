@@ -11,7 +11,7 @@ indicateurs_contrat_reouverture_incident_count:
 
 indicateurs_contrat_reouverture_incident_table:
       path:   /contrat/reoinci/table/{year}/{month}/{project}
-      defaults: { _controller: IndicateursBundle:Contractuel:IncidentReouverture,project: -1,month: -1 }
+      defaults: { _controller: IndicateursBundle:Contractuel:IncidentReouvertureTable,project: -1,month: -1 }
       requirements:
           method:  GET
           year:  \d+
