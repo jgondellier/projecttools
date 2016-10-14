@@ -7,11 +7,15 @@ indicateurs_delai_traitement_table:
       defaults: { _controller: IndicateursBundle:DelaiTraitement:Table }
       requirements:
           method:  GET
-          year:  \d+
 
 indicateurs_delai_traitement_graph:
       path:   /delai/traitement/graph
       defaults: { _controller: IndicateursBundle:DelaiTraitement:Graph }
       requirements:
           method:  GET
-          year:  \d+
+
+indicateurs_delai_traitement_incident_contrat:
+      path:   /delai/traitement/incident/contrat
+      defaults: { _controller: IndicateursBundle:Contractuel:IncidentDelaiTraitementContrat }
+      requirements:
+          method:  GET

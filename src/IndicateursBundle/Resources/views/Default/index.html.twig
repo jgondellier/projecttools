@@ -6,44 +6,34 @@
     <div class="container">
         {#{{ render(controller('IndicateursBundle:SupAnoForfait:getCountSupAnoForfait')) }}#}
         <div class="row">
-            <div id="supanoforfaitcount"></div>
-            <div id="reouvertureanocount"></div>
+            {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Nombre de Tickets consommés','id':'supanoforfaitcount'} %}
+            {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Nb anomalies réouvertes plus 1 fois','id':'reouvertureanocount'} %}
+            <div id="delaitraitementincident"></div>
         </div>
     </div>
     <script type="text/javascript">
         window.onload = function(){
             $(document).ready(function() {
-                var request = $.ajax({
-                    url: "supanoforfait/count",
-                    method: "GET",
-                    data: {year : "2016"},
-                    dataType: "json"
-                });
-
-                request.done(function( data ) {
-                    $( "#supanoforfaitcount" ).html( data );
-                });
-
-                request.fail(function( jqXHR, textStatus ) {
-                    $( "#supanoforfaitcount" ).html( '<div class="alert alert-danger" role="alert">'+textStatus+'</div>' );
-                });
-
-                request = $.ajax({
-                    url: "contrat/reoinci/count",
-                    method: "GET",
-                    data: {year : "2016"},
-                    dataType: "json"
-                });
-
-                request.done(function( data ) {
-                    $( "#reouvertureanocount" ).html( data );
-                });
-
-                request.fail(function( jqXHR, textStatus ) {
-                    $( "#reouvertureanocount" ).html( '<div class="alert alert-danger" role="alert">'+textStatus+'</div>' );
-                });
-
+                getAjaxValue("supanoforfait/count",{year : "2016"},'supanoforfaitcount');
+                getAjaxValue("contrat/reoinci/count",{year : "2016"},'reouvertureanocount');
+                getAjaxValue("delai/traitement/incident/contrat",{year : "2016"},'delaitraitementincident');
             });
         };
+        function getAjaxValue(url,param,id){
+            var request = $.ajax({
+                url: url,
+                method: "GET",
+                data: param,
+                dataType: "json"
+            });
+
+            request.done(function( data ) {
+                $( "#"+id ).html( data );
+            });
+
+            request.fail(function( jqXHR, textStatus ) {
+                $( "#"+id ).html( '<div class="alert alert-danger" role="alert">'+textStatus+'</div>' );
+            });
+        }
     </script>
 {% endblock %}

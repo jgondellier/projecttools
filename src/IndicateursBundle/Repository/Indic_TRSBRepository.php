@@ -212,6 +212,31 @@ class Indic_TRSBRepository extends EntityRepository
 
         return $query->getQuery()->getArrayResult();
     }
+    public function delaiTraitementIncidentContractuel($year,$project=-1,$month=-1){
+        $requestNature  = "bug";
+        $priority       = 'p1';
+        $timeMax        = '240';
+
+        $query          = $this->createQueryBuilder('t');
+        $query->select('count(t.id)')
+            ->addSelect('(SELECT count(tr.id) total 
+                        FROM IndicateursBundle\Entity\Indic_TRSB tr 
+                        LEFT JOIN IndicateursBundle\Entity\Indic_items it WITH tr.Indic_items = it.id 
+                        WHERE YEAR(tr.openDate) = :year and it.requestNature LIKE :requestNature and it.priority = :priority)')
+            ->leftJoin("t.Indic_items",'i')
+            ->where('YEAR(t.openDate) = :year')
+            ->andWhere('t.TreatmentTime < :timeMax')
+            ->orderBy('t.openDate', 'ASC')
+            ->setParameter('timeMax', $timeMax)
+            ->setParameter('year', $year);
+
+        $query = $this->projectFiltre($query,$project);
+        $query = $this->monthFiltre($query,$month);
+        $query = $this->natureFiltre($query,$requestNature);
+        $query = $this->priorityFiltre($query,$priority);
+
+        return $query->getQuery()->getArrayResult();
+    }
 
     public function evolutionNBTicket($year,$month){
         $query = $this->getEntityManager()->createQuery('

@@ -100,11 +100,30 @@ class ContractuelController extends Controller
         return $listData;
     }
 
-    //Delai de traitement sur incident
-    public function IncidentDelaiTraitement()
+    /**
+     * Delai de traitement sur incident P1 suivant le contrat
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function IncidentDelaiTraitementContratAction(Request $request)
     {
+        if($request->isXmlHttpRequest()) {
+            if ($request->getMethod() === 'GET') {
+                $entityManager  = $this->getDoctrine()->getManager();
+                $year           = $request->get('year');
+                $response       = new JsonResponse();
 
+                $count          = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->delaiTraitementIncidentContractuel($year);
+
+                var_dump($count);exit;
+
+                $template       = $this->renderView('IndicateursBundle:Contractuel:DelaiTraitementncidentContrat.html.twig',array("count"=>$count["somme"]));
+
+                $response->setContent(json_encode($template));
+                return $response;
+            }
+        }
     }
 
-    //Nombre de réouverture sur incident
 }
