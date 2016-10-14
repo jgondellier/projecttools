@@ -22,7 +22,7 @@ class ReouvertureController extends Controller
         $table['cols'][]                = array('filter'=>1,'name'=>'Priorité','data'=>'Priorite');
         $table['cols'][]                = array('filter'=>0,'name'=>'Réouverture','data'=>'Reouverture');
         $table_delai_HTML               = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
-        $table_delai_JS                 = $this->renderView('IndicateursBundle:Table:javscript.html.twig',array('table'=>$table));
+        $table_delai_JS                 = $this->renderView('table_javscript.html.twig',array('table'=>$table));
 
         /*Rendu du graph*/
         $graph['ajax']['url']           = 'reopen/graph';

@@ -23,7 +23,7 @@ class DelaiTraitementController extends Controller
         $table['cols'][]    = array('filter'=>0,'name'=>'JtracId','data'=>'JtracId');
         $table['cols'][]    = array('filter'=>0,'name'=>'Délai','data'=>'Delai');
         $table_delai_HTML = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
-        $table_delai_JS = $this->renderView('IndicateursBundle:Table:javscript.html.twig',array('table'=>$table));
+        $table_delai_JS = $this->renderView('table_javscript.html.twig',array('table'=>$table));
 
         return $this->render('IndicateursBundle:DelaiTraitement:index.html.twig',array(
             'activeMenu' => 'delaiTraitement',

@@ -13,13 +13,6 @@
     </div>
 {% endblock %}
 {% block indic_javascript %}
-    <script type="text/javascript">
-        window.onload = function(){
-            $(document).ready(function() {
-                {{ table_JS| raw }}
-                getGraph();
-            } );
-        };
-    </script>
+    {{ table_JS| raw }}
     {{ graph_JS| raw }}
 {% endblock %}

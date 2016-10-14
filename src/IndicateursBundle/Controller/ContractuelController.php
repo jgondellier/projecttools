@@ -21,7 +21,7 @@ class ContractuelController extends Controller
         $table['cols'][]    = array('filter'=>1,'name'=>'Projet','data'=>'Projet');
         $table['cols'][]    = array('filter'=>0,'name'=>'Nombre','data'=>'Nombre');
         $table_incidentReouverture_HTML = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
-        $table_incidentReouverture_JS = $this->renderView('IndicateursBundle:Table:javscript.html.twig',array('table'=>$table));
+        $table_incidentReouverture_JS = $this->renderView('table_javscript.html.twig',array('table'=>$table));
 
         return $this->render('IndicateursBundle:Contractuel:index.html.twig',array(
             'activeMenu' => 'contractuel',
