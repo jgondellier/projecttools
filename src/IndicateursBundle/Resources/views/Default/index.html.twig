@@ -8,7 +8,7 @@
         <div class="row">
             {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Nombre de Tickets consommés','id':'supanoforfaitcount'} %}
             {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Nb anomalies réouvertes plus 1 fois','id':'reouvertureanocount'} %}
-            <div id="delaitraitementincident"></div>
+            {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Délai Traitements des Ano P1','id':'delaitraitementincident'} %}
         </div>
     </div>
     <script type="text/javascript">

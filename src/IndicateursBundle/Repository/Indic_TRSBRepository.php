@@ -218,11 +218,11 @@ class Indic_TRSBRepository extends EntityRepository
         $timeMax        = '240';
 
         $query          = $this->createQueryBuilder('t');
-        $query->select('count(t.id)')
-            ->addSelect('(SELECT count(tr.id) total 
+        $query->select('count(t.id) nb')
+            ->addSelect('(SELECT count(tr.id) 
                         FROM IndicateursBundle\Entity\Indic_TRSB tr 
                         LEFT JOIN IndicateursBundle\Entity\Indic_items it WITH tr.Indic_items = it.id 
-                        WHERE YEAR(tr.openDate) = :year and it.requestNature LIKE :requestNature and it.priority = :priority)')
+                        WHERE YEAR(tr.openDate) = :year and it.requestNature LIKE :requestNature and it.priority = :priority) total')
             ->leftJoin("t.Indic_items",'i')
             ->where('YEAR(t.openDate) = :year')
             ->andWhere('t.TreatmentTime < :timeMax')
@@ -235,7 +235,8 @@ class Indic_TRSBRepository extends EntityRepository
         $query = $this->natureFiltre($query,$requestNature);
         $query = $this->priorityFiltre($query,$priority);
 
-        return $query->getQuery()->getArrayResult();
+
+        return $query->getQuery()->getOneOrNullResult();
     }
 
     public function evolutionNBTicket($year,$month){

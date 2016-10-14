@@ -116,9 +116,7 @@ class ContractuelController extends Controller
 
                 $count          = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->delaiTraitementIncidentContractuel($year);
 
-                var_dump($count);exit;
-
-                $template       = $this->renderView('IndicateursBundle:Contractuel:DelaiTraitementncidentContrat.html.twig',array("count"=>$count["somme"]));
+                $template       = $this->renderView('IndicateursBundle:Contractuel:DelaiTraitementncidentContrat.html.twig',array("nb"=>$count['nb'],"total"=>$count['total'],"pourcent"=>round($count['nb']/$count['total']*100)));
 
                 $response->setContent(json_encode($template));
                 return $response;
