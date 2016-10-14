@@ -3,15 +3,15 @@ indicateurs_contrat_reouverture_incident_homepage:
       defaults: { _controller: IndicateursBundle:Contractuel:index }
 
 indicateurs_contrat_reouverture_incident_count:
-      path:   /contrat/reoinci/count/{year}/{month}/{project}
-      defaults: { _controller: IndicateursBundle:Contractuel:IncidentReouvertureCount,project: -1,month: -1 }
+      path:   /contrat/reoinci/count
+      defaults: { _controller: IndicateursBundle:Contractuel:IncidentReouvertureCount }
       requirements:
           method:  GET
           year:  \d+
 
 indicateurs_contrat_reouverture_incident_table:
-      path:   /contrat/reoinci/table/{year}/{month}/{project}
-      defaults: { _controller: IndicateursBundle:Contractuel:IncidentReouvertureTable,project: -1,month: -1 }
+      path:   /contrat/reoinci/table
+      defaults: { _controller: IndicateursBundle:Contractuel:IncidentReouvertureTable }
       requirements:
           method:  GET
           year:  \d+

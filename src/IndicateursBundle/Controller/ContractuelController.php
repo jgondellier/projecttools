@@ -14,7 +14,8 @@ class ContractuelController extends Controller
     {
 
         /*Rendu du tableau */
-        $table['url']       = 'contrat/reoinci/table/2016';
+        $table['ajax']['url']           = 'contrat/reoinci/table';
+        $table['ajax']['datas'][]       = array('name'=>'year','value'=>'2016');
         $table['id']        = 'reoinciTable';
         $table['cols'][]    = array('filter'=>1,'name'=>'Mois','data'=>'Mois');
         $table['cols'][]    = array('filter'=>1,'name'=>'Projet','data'=>'Projet');
