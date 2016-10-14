@@ -7,11 +7,11 @@
 
 {% block stylesheets %}
     {% stylesheets output='css/compiled/main.indic.css' filter='cssrewrite'
-    '@IndicateursBundle/Resources/public/css/datatables.min.css'
-    '@IndicateursBundle/Resources/public/css/buttons.bootstrap.min.css'
-    '@IndicateursBundle/Resources/public/css/buttons.dataTables.min.css'
-    '@IndicateursBundle/Resources/public/css/jquery.dataTables.min.css'
-    '@IndicateursBundle/Resources/public/css/dataTables.bootstrap.min.css'%}
+        '@IndicateursBundle/Resources/public/css/datatables.min.css'
+        '@IndicateursBundle/Resources/public/css/buttons.bootstrap.min.css'
+        '@IndicateursBundle/Resources/public/css/buttons.dataTables.min.css'
+        '@IndicateursBundle/Resources/public/css/jquery.dataTables.min.css'
+        '@IndicateursBundle/Resources/public/css/dataTables.bootstrap.min.css'%}
     <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
     {% endstylesheets %}
 {% endblock %}
@@ -25,19 +25,22 @@
     {% block indic_javascript %}
     {% endblock %}
     {% javascripts output='js/compiled/main.indic.js'
-    '@IndicateursBundle/Resources/public/js/buttons.bootstrap.min.js'
-    '@IndicateursBundle/Resources/public/js/buttons.html5.min.js'
-    '@IndicateursBundle/Resources/public/js/buttons.print.min.js'
-    '@IndicateursBundle/Resources/public/js/dataTables.bootstrap.min.js'
-    '@IndicateursBundle/Resources/public/js/dataTables.buttons.min.js'
-    '@IndicateursBundle/Resources/public/js/datatables.min.js'
-    '@IndicateursBundle/Resources/public/js/pdfmake.min.js'
-    '@IndicateursBundle/Resources/public/js/vfs_fonts.js'
-    '@IndicateursBundle/Resources/public/js/moment.min.js'
-    '@IndicateursBundle/Resources/public/js/moment-with-locales.min.js'
-    '@IndicateursBundle/Resources/public/js/datetime-moment.js'
-    '@IndicateursBundle/Resources/public/js/highcharts.js'
-    '@IndicateursBundle/Resources/public/js/modules/exporting.js'%}
+        '@IndicateursBundle/Resources/public/js/datatables.min.js'
+        '@IndicateursBundle/Resources/public/js/dataTables.bootstrap.min.js'
+        '@IndicateursBundle/Resources/public/js/jquery.dataTables.min.js'
+        '@IndicateursBundle/Resources/public/js/dataTables.buttons.min.js'
+        '@IndicateursBundle/Resources/public/js/buttons.bootstrap.min.js'
+        '@IndicateursBundle/Resources/public/js/buttons.html5.min.js'
+        '@IndicateursBundle/Resources/public/js/buttons.print.min.js'
+        '@IndicateursBundle/Resources/public/js/pdfmake.min.js'
+        '@IndicateursBundle/Resources/public/js/vfs_fonts.js'
+        '@IndicateursBundle/Resources/public/js/jszip.min.js'
+        '@IndicateursBundle/Resources/public/js/buttons.flash.min.js'
+        '@IndicateursBundle/Resources/public/js/moment.min.js'
+        '@IndicateursBundle/Resources/public/js/moment-with-locales.min.js'
+        '@IndicateursBundle/Resources/public/js/datetime-moment.js'
+        '@IndicateursBundle/Resources/public/js/highcharts.js'
+        '@IndicateursBundle/Resources/public/js/modules/exporting.js'%}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
