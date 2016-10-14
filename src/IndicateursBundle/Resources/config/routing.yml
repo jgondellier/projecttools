@@ -15,7 +15,7 @@ indicateurs_contrat_reouverture_incident:
     resource: "@IndicateursBundle/Resources/config/reouverture_incident_routing.yml"
 
 indicateurs_supanoforfait_count:
-      path:   /supanoforfait/count/{year}
+      path:   /supanoforfait/count
       defaults: { _controller: IndicateursBundle:SupAnoForfait:getCountSupAnoForfait}
       requirements:
           method:  GET

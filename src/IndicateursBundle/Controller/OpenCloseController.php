@@ -28,7 +28,7 @@ class OpenCloseController extends Controller
         $table['cols'][]    = array('filter'=>0,'name'=>'Ouvert','data'=>'Ouverture');
         $table['cols'][]    = array('filter'=>0,'name'=>'Fermé','data'=>'Fermeture');
         $table_openclose_HTML   = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
-        $table_openclose_JS     = $this->renderView('table_javscript.html.twig',array('table'=>$table));
+        $table_openclose_JS     = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 
         /*Rendu du graph*/
         $graph['ajax']['url']               = 'openclose/graph';

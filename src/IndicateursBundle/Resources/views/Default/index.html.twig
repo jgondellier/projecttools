@@ -13,12 +13,36 @@
     <script type="text/javascript">
         window.onload = function(){
             $(document).ready(function() {
-                $.get( "supanoforfait/count/2016", function( data ) {
+                var request = $.ajax({
+                    url: "supanoforfait/count",
+                    method: "GET",
+                    data: {year : "2016"},
+                    dataType: "json"
+                });
+
+                request.done(function( data ) {
                     $( "#supanoforfaitcount" ).html( data );
                 });
-                $.get( "contrat/reoinci/count/2016", function( data ) {
+
+                request.fail(function( jqXHR, textStatus ) {
+                    $( "#supanoforfaitcount" ).html( '<div class="alert alert-danger" role="alert">'+textStatus+'</div>' );
+                });
+
+                request = $.ajax({
+                    url: "contrat/reoinci/count",
+                    method: "GET",
+                    data: {year : "2016"},
+                    dataType: "json"
+                });
+
+                request.done(function( data ) {
                     $( "#reouvertureanocount" ).html( data );
                 });
+
+                request.fail(function( jqXHR, textStatus ) {
+                    $( "#reouvertureanocount" ).html( '<div class="alert alert-danger" role="alert">'+textStatus+'</div>' );
+                });
+
             });
         };
     </script>
