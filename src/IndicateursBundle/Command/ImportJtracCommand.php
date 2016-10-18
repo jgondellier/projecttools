@@ -67,7 +67,8 @@ class ImportJtracCommand extends ContainerAwareCommand
                     $entity_item = new Indic_items();
                 }
                 $entity_item->setItemId($item['id']);
-                $entity_item->setJtracId($item['jtrac_id']);
+                /*Traitement pour les id jtrac*/
+                $entity_item->setJtracId($list_project[$item['project_id']]['prefix'].'-'.$item['jtrac_id']);
                 $entity_item->setProjectId($item['project_id']);
                 $entity_item->setCreatedDate($item['created_date']);
                 $entity_item->setCreatedBy($item['created_by']);

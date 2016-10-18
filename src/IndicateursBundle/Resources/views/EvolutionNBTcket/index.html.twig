@@ -4,20 +4,11 @@
 
 {% block indic_content %}
     <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div id="chartContainer" style="height: 300px; width: 100%;">
-            </div>
-        </div>
+        {{ graph_HTML| raw }}
+        {{ table_HTML| raw }}
     </div>
 {% endblock %}
 {% block indic_javascript %}
-    <script type="text/javascript">
-        window.onload = function(){
-            $(document).ready(function() {
-                getGraph();
-            } );
-        };
-    </script>
-    {{ graph_JS| raw }}
+     {{ graph_JS| raw }}
+    {{ table_JS| raw }}
 {% endblock %}

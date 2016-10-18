@@ -56,12 +56,6 @@ class DelaiTraitementController extends Controller
         }
         return NULL;
     }
-
-    public function GraphAction(Request $request)
-    {
-
-    }
-
     private function formatForDataTable($t_data){
         $list_project   = $this->container->getParameter('list_project');
         $toolrender     = $this->get('indicateurs.rendertools');

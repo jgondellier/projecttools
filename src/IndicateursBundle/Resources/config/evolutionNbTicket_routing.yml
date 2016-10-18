@@ -7,3 +7,9 @@ indicateurs_evolutionNBTicket_graph:
       defaults: { _controller: IndicateursBundle:EvolutionNbTicket:Graph}
       requirements:
           method:  GET
+
+indicateurs_evolutionNBTicket_table:
+      path:   /evolutionnbticket/table
+      defaults: { _controller: IndicateursBundle:EvolutionNbTicket:Table}
+      requirements:
+          method:  GET

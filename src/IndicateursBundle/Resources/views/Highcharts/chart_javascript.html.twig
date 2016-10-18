@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    function getGraph(type,id){
+    function getGraph{{ graph.id }}(type,id){
         var data;
         if(type && id){
             switch (type){
@@ -16,10 +16,10 @@
                     data = {"year" : "2016","priority" : id}
                     break;
                 default:
-                    data = {year : "2016"}
+                    data = {"year" : "2016"}
             }
         }else{
-            data = {year : "2016"}
+            data = {"year" : "2016"}
         }
         var request = $.ajax({
             url: "{{ graph.ajax.url }}",
@@ -36,4 +36,5 @@
             $( "#{{ graph.id }}" ).html( '<div class="alert alert-danger" role="alert">'+textStatus+'</div>' );
         });
     }
+    addLoadEvent(getGraph{{ graph.id }});
 </script>

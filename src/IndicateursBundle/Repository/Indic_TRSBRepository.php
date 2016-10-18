@@ -29,6 +29,34 @@ class Indic_TRSBRepository extends EntityRepository
     }
 
     /**
+     * Retourne tous les tickets par mois de création.
+     *
+     * @param $year
+     * @param int $month
+     * @param int $project
+     * @param int $requestNature
+     * @param int $priority
+     * @param int $notClosedCorrected
+     * @return array
+     */
+    public function getAllByMonthCreated($year,$month=-1,$project=-1,$requestNature =-1,$priority=-1,$notClosedCorrected=-1){
+        $query = $this->createQueryBuilder('t');
+        $query->select('MONTH(t.openDate) mois, i.projectId projet,i.priority priority, i.requestNature nature,i.status status,i.jtracId jtracid')
+            ->leftJoin("t.Indic_items",'i')
+            ->where('YEAR(t.openDate) = :year')
+            ->orderBy('t.openDate', 'ASC')
+            ->setParameter('year', $year);
+
+        $query = $this->notClosedCorrectedFiltre($query,$notClosedCorrected);
+        $query = $this->projectFiltre($query,$project);
+        $query = $this->monthFiltre($query,$month);
+        $query = $this->natureFiltre($query,$requestNature);
+        $query = $this->priorityFiltre($query,$priority);
+
+        return $query->getQuery()->getArrayResult();
+    }
+
+    /**
      * Donne les tickets par mois et par projet en fonction de la date donnée.
      *
      * @param $year
@@ -40,9 +68,6 @@ class Indic_TRSBRepository extends EntityRepository
      * @return array
      */
     public function getDateByMonthProject($year,$month=-1,$project=-1,$requestNature =-1,$priority=-1,$field){
-        /*
-         * SELECT MONTH(t.open_date) mo, i.project_id p,count(t.id) FROM indic_trsb t left join indic_items i ON t.indic_items_id = i.id GROUP BY mo,p
-         * */
         $query = $this->createQueryBuilder('t');
         $query->select('MONTH(t.'.$field.') mois, i.projectId projet,i.priority priority, i.requestNature nature,count(t.'.$field.') somme')
             ->leftJoin("t.Indic_items",'i')
@@ -235,25 +260,54 @@ class Indic_TRSBRepository extends EntityRepository
         $query = $this->natureFiltre($query,$requestNature);
         $query = $this->priorityFiltre($query,$priority);
 
-
         return $query->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * Donne le nombre de ticket par mois, avec le mois d'origine, qui ne sont pas corrigé ni clos.
+     *
+     * @param $year
+     * @param $month
+     * @return array
+     */
     public function evolutionNBTicket($year,$month){
         $query = $this->getEntityManager()->createQuery('
             SELECT MONTH(t.openDate) mois, count(t.openDate) nombre
             FROM IndicateursBundle\Entity\Indic_TRSB t
             where MONTH(t.openDate) <= :month 
             AND YEAR(t.openDate) = :year 
-            AND (MONTH(t.correctedDate) IS NULL 
-                 or MONTH(t.correctedDate) >= :month
-                 or MONTH(t.closedDate) IS NULL
-                 or MONTH(t.closedDate) >= :month) 
+            AND ((MONTH(t.correctedDate) IS NULL 
+                 or MONTH(t.correctedDate) > :month)
+                 AND (MONTH(t.closedDate) IS NULL
+                 or MONTH(t.closedDate) > :month)) 
             GROUP BY mois
         ')->setParameter('month', $month)
             ->setParameter('year', $year);
         return $query->getArrayResult();
     }
+
+    /**
+     * @param $year
+     * @param $month
+     * @return array
+     */
+    public function evolutionNBTicketDetail($year,$month){
+        $query = $this->getEntityManager()->createQuery('
+            SELECT MONTH(t.openDate) mois, i.projectId projet,i.priority priority, i.requestNature nature,i.status status,i.jtracId jtracid
+            FROM IndicateursBundle\Entity\Indic_TRSB t
+            LEFT JOIN IndicateursBundle\Entity\Indic_Items i
+            WITH t.Indic_items = i.id
+            where MONTH(t.openDate) <= :month 
+            AND YEAR(t.openDate) = :year 
+           AND ((MONTH(t.correctedDate) IS NULL 
+                 or MONTH(t.correctedDate) > :month)
+                 AND (MONTH(t.closedDate) IS NULL
+                 or MONTH(t.closedDate) > :month)) 
+        ')->setParameter('month', $month)
+            ->setParameter('year', $year);
+        return $query->getArrayResult();
+    }
+
 
     /**
      * Filtre pour selectionner les incidents
@@ -332,6 +386,23 @@ class Indic_TRSBRepository extends EntityRepository
         if($priority !=-1 && $priority != 'all' && $priority != Null){
             $query->andWhere('i.priority = :priority')
                 ->setParameter('priority',$priority);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Permet de ne garder que les ticket ouvert et en cours.
+     *
+     * @param $query
+     * @param $status
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function notClosedCorrectedFiltre($query,$status){
+        /* @var \Doctrine\ORM\QueryBuilder $query */
+        if($status !=-1 && $status != 'all' && $status != Null){
+            $query->andWhere('t.closedDate IS NULL');
+            $query->andWhere('t.correctedDate IS NULL');
         }
 
         return $query;

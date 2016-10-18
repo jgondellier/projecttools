@@ -29,9 +29,9 @@ class Indic_items
     private $itemId;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="jtrac_id", type="integer")
+     * @ORM\Column(name="jtrac_id", type="string", length=20)
      */
     private $jtracId;
 
