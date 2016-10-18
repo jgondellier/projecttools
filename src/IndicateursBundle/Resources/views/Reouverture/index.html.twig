@@ -4,12 +4,8 @@
 
 {% block indic_content %}
     <div class="container">
-    {{ table_HTML| raw }}
-        <div class="row">
-            <div class="col-sm-12">
-                <div id="chartContainer" style="height: 300px; width: 100%;">
-            </div>
-        </div>
+        {{ table_HTML| raw }}
+        {{ graph_HTML| raw }}
     </div>
 {% endblock %}
 {% block indic_javascript %}
