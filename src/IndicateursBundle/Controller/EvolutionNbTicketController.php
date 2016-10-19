@@ -14,7 +14,7 @@ class EvolutionNbTicketController extends Controller
     {
         $jtrac_url   = $this->container->getParameter('jtrac_url');
         /*Rendu du tableau */
-        $table['ajax']['url']           = 'evolutionnbticket/table';
+        $table['ajax']['url']           = $this->generateUrl('indicateurs_evolutionNBTicket_table');
         $table['ajax']['datas'][]       = array('name'=>'year','value'=>'2016');
         $table['ajax']['datas'][]       = array('name'=>'month','value'=>'09');
         $table['id']                    = 'ticketTable';
@@ -28,7 +28,7 @@ class EvolutionNbTicketController extends Controller
         $table_JS = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 
         /*Rendu du graph*/
-        $graph['ajax']['url']               = 'evolutionnbticket/graph';
+        $graph['ajax']['url']               = $this->generateUrl('indicateurs_evolutionNBTicket_graph');
         $graph['id']                        = 'chartContainer';
         $graph_HTML             = $this->renderView('IndicateursBundle:Highcharts:chart.html.twig',array('graph'=>$graph));
         $graph_JS               = $this->renderView('IndicateursBundle:Highcharts:chart_javascript.html.twig',array('graph'=>$graph));
