@@ -50,6 +50,7 @@ class UpdateJtracCommand extends ContainerAwareCommand
             $findKnowledge      = False;
             $findCorrected      = False;
             $findAnswer         = False;
+            $previousStatus     = "";
             $refused            = 0;
 
             //On regarde si une entrée TRSB n'existe pas déjà
@@ -101,9 +102,10 @@ class UpdateJtracCommand extends ContainerAwareCommand
                 }
 
                 //On calcul le nombre de réouverture en fait le nombre de refuse
-                if($history->getStatus() == $t_status['refused'][$item->getProjectId()]){
+                if(($history->getStatus() == $t_status['refused'][$item->getProjectId()]) && ($t_status['refused'][$item->getProjectId()] != $previousStatus)){
                     $refused++;
                 }
+                $previousStatus = $history->getStatus();
             }
             if($refused!=0){
                 $entity_trsb->setRefusedCount($refused);
