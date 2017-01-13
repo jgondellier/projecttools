@@ -31,14 +31,12 @@ class ImportJtrac
         $t_history            = array();
         $dateMin              = new \DateTime('2016-01-01 00:00:00');
 
-        $patterns[0] = '/<detail>.*?<\/detail>/s';
-        $patterns[1] = '/<comment>.*?<\/comment>/s';
-        $replacements[0] = '<detail></detail>';//<![CDATA[$1]]>
-        $replacements[1] = '<comment></comment>';//<![CDATA[$1]]>
+        var_dump($itemsFile);
 
         if (file_exists($itemsFile)) {
             $stringFile         = file_get_contents ($itemsFile);
-            $stringFile         = preg_replace($patterns,$replacements,$stringFile,-1,$count);
+            $stringFile         = $this->traitXMLFile($stringFile);
+            file_put_contents($itemsFile.".trait", $stringFile);
             $simplexmlItemsFile = simplexml_load_string($stringFile);
         }else{
             echo 'Fichier '.$itemsFile.' introuvable !';
@@ -73,16 +71,17 @@ class ImportJtrac
             }
         }
 
+        var_dump($historyFile);
         if (file_exists($historyFile)) {
-            $historyFile            = file_get_contents ($historyFile);
-            //$historyFile            = preg_replace($patterns,$replacements,$historyFile);
-            //var_dump($historyFile);exit;
-            $simplexmlHistoryFile   = simplexml_load_string($historyFile);
+            $stringFile             = file_get_contents ($historyFile);
+            $stringFile             = $this->traitXMLFiletest($stringFile);
+            file_put_contents($historyFile.".trait", $stringFile);
+            $simplexmlHistoryFile   = simplexml_load_string($stringFile);
         }else{
             echo 'Fichier '.$historyFile.' introuvable !';
             exit();
         }
-
+        //var_dump($counth);exit;
         //traitements des historys
         foreach($simplexmlHistoryFile->dbo_history as $dbo_history){
             $dateCreation = \DateTime::createFromFormat('Y-m-d H:i:s', str_replace('T',' ',strval($dbo_history->time_stamp)));
@@ -113,6 +112,7 @@ class ImportJtrac
                 }
             }
         }
+
         return array('items'=>$t_item,'historys'=>$t_history);
     }
 
@@ -195,5 +195,55 @@ class ImportJtrac
 
     public function setItem($t_item){
 
+    }
+
+    /**
+     * Pre traitement des fichiers XML.
+     *
+     * @param $stringFile
+     * @return mixed
+     */
+    private function traitXMLFile($stringFile){
+
+        //Suppression des caractères particuliers
+        $stringFile         = str_replace('','',$stringFile);
+        $stringFile         = str_replace('','',$stringFile);
+        $stringFile         = str_replace('','',$stringFile);
+        $stringFile         = str_replace('','',$stringFile);
+        $stringFile         = str_replace('','',$stringFile);
+
+        //CDATA dans les champs texte riche
+        $patterns[0] = '/<detail>(.*?)<\/detail>/uxmsi';
+        $patterns[1] = '/<comment>(.*?)<\/comment>/uxmsi';
+        $patterns[2] = '/<cus_str_01>(.*?)<\/cus_str_01>/uxmsi';
+        $replacements[0] = '<detail><![CDATA[$1]]></detail>';//<![CDATA[$1]]>
+        $replacements[1] = '<comment><![CDATA[$1]]></comment>';//<![CDATA[$1]]>
+        $replacements[2] = '<cus_str_01><![CDATA[$1]]></cus_str_01>';//<![CDATA[$1]]>
+
+        $stringFile         = preg_replace($patterns,$replacements,$stringFile);
+
+        return $stringFile;
+    }
+
+    private function traitXMLFiletest($stringFile){
+
+        //Suppression des caractères particuliers
+        $stringFile         = str_replace('','',$stringFile);
+        $stringFile         = str_replace('','',$stringFile);
+        $stringFile         = str_replace('','',$stringFile);
+        $stringFile         = str_replace('','',$stringFile);
+        $stringFile         = str_replace('','',$stringFile);
+
+        //CDATA dans les champs texte riche
+        //$patterns[0] = '/<detail>(.*?)<\/detail>/uxmsi';
+        $patterns[1] = '/<comment>(.*?)<\/comment>/uxmsi';
+        $patterns[2] = '/<cus_str_01>(.*?)<\/cus_str_01>/uxmsi';
+        //$replacements[0] = '<detail><![CDATA[$1]]></detail>';//<![CDATA[$1]]>
+        $replacements[1] = '<comment><![CDATA[$1]]></comment>';//<![CDATA[$1]]>
+        $replacements[2] = '<cus_str_01><![CDATA[$1]]></cus_str_01>';//<![CDATA[$1]]>
+
+        $stringFile         = preg_replace($patterns,$replacements,$stringFile);
+
+        return $stringFile;
     }
 }
