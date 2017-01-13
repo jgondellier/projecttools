@@ -187,15 +187,18 @@ class Indic_TRSBRepository extends EntityRepository
     /**
      * Donne le nombre de ticket support/anno consommé sur le forfait prévue.
      *
+     * @param $year
      * @return mixed
      */
-    public function getCountSupAnoByDateCreated(){
-        $year       = '2016';
-        $query      = $this->supAnoInitRequete($year);
+    public function getCountSupAnoByDateCreated($year){
+        if ($year){
+            $query      = $this->supAnoInitRequete($year);
 
-        $query->select('count(t.openDate) total');
+            $query->select('count(t.openDate) total');
 
-        return $query->getQuery()->getOneOrNullResult();
+            return $query->getQuery()->getOneOrNullResult();
+        }
+        return Null;
     }
 
     /**

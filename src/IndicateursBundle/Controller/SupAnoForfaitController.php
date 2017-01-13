@@ -16,6 +16,12 @@ class SupAnoForfaitController extends Controller
         return $this->render('IndicateursBundle:Default:index.html.twig',array('activeMenu' => 'homepage'));
     }
 
+    /**
+     * Permet d'avoir le nombre de tickets consommmés
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function getCountSupAnoForfaitAction(Request $request)
     {
         if($request->isXmlHttpRequest()) {
@@ -24,8 +30,9 @@ class SupAnoForfaitController extends Controller
                 $response       = new JsonResponse();
                 $contrat        = $this->container->getParameter('contrat');
                 $nbForfait      = $contrat["nbsupano"];
+                $year           = $request->get('year');
 
-                $nbSupAno       = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getCountSupAnoByDateCreated();
+                $nbSupAno       = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getCountSupAnoByDateCreated($year);
                 $nbSupAno       = $nbSupAno['total'];
                 $pourcent       = round($nbSupAno/$nbForfait*100);
 
