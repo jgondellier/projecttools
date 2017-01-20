@@ -28,6 +28,7 @@ class UpdateDelaiCommand extends ContainerAwareCommand
         $entityManager      = $container->get('doctrine')->getManager();
         $t_status           = $container->getParameter('status');
         $list_project       = $container->getParameter('list_project');
+        $listTRSBUser       = $container->getParameter('list_trsb_user');
 
         $output->writeln([
             'Récupération des items',
@@ -70,7 +71,9 @@ class UpdateDelaiCommand extends ContainerAwareCommand
                     }
                     //On renseigne le temps de réponse
                     $delaiResponse = 0;
-                    if($dateAnswer){
+                    if(array_key_exists($item->getCreatedBy(),$listTRSBUser)){
+                        $entity_trsb->setResponseTime(0);
+                    }else if($dateAnswer){
                         $delaiResponse = round($this->getTimeElapsed($dateDebut,$dateAnswer),2);
                         $entity_trsb->setResponseTime($delaiResponse);
                     }

@@ -9,6 +9,8 @@
             {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Nombre de Tickets consommés','id':'supanoforfaitcount'} %}
             {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Nb anomalies réouvertes plus 1 fois','id':'reouvertureanocount'} %}
             {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Délai Traitements des Ano P1','id':'delaitraitementincident'} %}
+            {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Délai Traitements du Support','id':'delaitraitementsupport'} %}
+            {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Délai Réponse du Support','id':'delaireponsesupport'} %}
         </div>
     </div>
     <script type="text/javascript">
@@ -17,6 +19,8 @@
                 getAjaxValue("supanoforfait/count",{year : "2016"},'supanoforfaitcount');
                 getAjaxValue("contrat/reoinci/count",{year : "2016"},'reouvertureanocount');
                 getAjaxValue("delai/traitement/incident/contrat",{year : "2016"},'delaitraitementincident');
+                getAjaxValue("delai/traitement/support/contrat",{year : "2016"},'delaitraitementsupport');
+                getAjaxValue("delai/reponse/support/contrat",{year : "2016"},'delaireponsesupport');
             });
         };
         function getAjaxValue(url,param,id){

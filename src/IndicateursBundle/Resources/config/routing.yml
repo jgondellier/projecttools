@@ -15,11 +15,20 @@ indicateurs_contrat_reouverture_incident:
     resource: "@IndicateursBundle/Resources/config/reouverture_incident_routing.yml"
 
 indicateurs_supanoforfait_count:
-      path:   /supanoforfait/count
-      defaults: { _controller: IndicateursBundle:SupAnoForfait:getCountSupAnoForfait}
-      requirements:
-          method:  GET
-          year:  \d+
+    path:   /supanoforfait/count
+    defaults: { _controller: IndicateursBundle:SupAnoForfait:getCountSupAnoForfait}
+    requirements:
+        method:  GET
+        year:  \d+
 
 indicateurs_evolutionNBTicket:
     resource: "@IndicateursBundle/Resources/config/evolutionNbTicket_routing.yml"
+
+inicateurs_contractuel:
+    resource: "@IndicateursBundle/Resources/config/contracuel_routing.yml"
+
+indicateurs_help:
+    path:   /help
+    defaults: { _controller: IndicateursBundle:Help:index}
+    requirements:
+        method:  GET

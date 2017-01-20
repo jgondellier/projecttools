@@ -256,6 +256,8 @@ class Indic_TRSBRepository extends EntityRepository
             ->andWhere('t.TreatmentTime < :timeMax')
             ->orderBy('t.openDate', 'ASC')
             ->setParameter('timeMax', $timeMax)
+            ->setParameter('priority', $priority)
+            ->setParameter('requestNature', $requestNature)
             ->setParameter('year', $year);
 
         $query = $this->projectFiltre($query,$project);
@@ -264,6 +266,154 @@ class Indic_TRSBRepository extends EntityRepository
         $query = $this->priorityFiltre($query,$priority);
 
         return $query->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * Delai de traitement des tickets support
+     *
+     * @param $year
+     * @param int $project
+     * @param int $month
+     * @return mixed
+     */
+    public function delaiTtmntSupport($year,$project=-1,$month=-1){
+        $requestNature  = "support";
+
+        $query          = $this->createQueryBuilder('t');
+        $query->select('count(t.id) nb')
+            ->addSelect('(SELECT sum(tr.TreatmentTime) 
+                        FROM IndicateursBundle\Entity\Indic_TRSB tr 
+                        LEFT JOIN IndicateursBundle\Entity\Indic_items it WITH tr.Indic_items = it.id 
+                        WHERE YEAR(tr.openDate) = :year and it.requestNature LIKE :requestNature) delaiTotal')
+            ->leftJoin("t.Indic_items",'i')
+            ->where('YEAR(t.openDate) = :year')
+            ->orderBy('t.openDate', 'ASC')
+            ->setParameter('requestNature', $requestNature)
+            ->setParameter('year', $year);
+
+        $query = $this->projectFiltre($query,$project);
+        $query = $this->monthFiltre($query,$month);
+        $query = $this->natureFiltre($query,$requestNature);
+
+        return $query->getQuery()->getOneOrNullResult();
+    }
+    /**
+     * Delai de reponse des tickets support
+     *
+     * @param $year
+     * @param int $project
+     * @param int $month
+     * @return mixed
+     */
+    public function delaireponseSupport($year,$project=-1,$month=-1){
+        $requestNature  = "support";
+
+        $query          = $this->createQueryBuilder('t');
+        $query->select('count(t.id) nb')
+            ->addSelect('(SELECT sum(tr.ResponseTime) 
+                        FROM IndicateursBundle\Entity\Indic_TRSB tr 
+                        LEFT JOIN IndicateursBundle\Entity\Indic_items it WITH tr.Indic_items = it.id 
+                        WHERE YEAR(tr.openDate) = :year and it.requestNature LIKE :requestNature) delaiTotal')
+            ->leftJoin("t.Indic_items",'i')
+            ->where('YEAR(t.openDate) = :year')
+            ->orderBy('t.openDate', 'ASC')
+            ->setParameter('requestNature', $requestNature)
+            ->setParameter('year', $year);
+
+        $query = $this->projectFiltre($query,$project);
+        $query = $this->monthFiltre($query,$month);
+        $query = $this->natureFiltre($query,$requestNature);
+
+        return $query->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * Permet de récupérer un temps passé total sur un nombre de ticket.
+     *
+     * @param string $field
+     *  Le champ date sur lequel appliqué le temps passé.
+     * @param string $requestNature
+     *  La nature du ticket sur le lequel on se base.
+     * @param array $t_delai
+     *  Permet de filtre sur le temps désiré.
+     * @param array $t_filtre
+     *  Filtre sur l'année, le mois, le projet et ou la priorité
+     * @param string $select
+     *  Permet de selectionner soit le total et la somme soit la liste des tickets
+     * @return \Doctrine\ORM\QueryBuilder|null|array
+     */
+    public function delai($field,$requestNature,$t_delai,$t_filtre,$select ="nb"){
+        $year       = "";
+        $month      = "";
+        $project    = "";
+        $priority   = "";
+        $time       = "";
+        $operator   = "";
+
+        //Valeurs obligatoire sans quoi la requete n'a plus de sens
+        if(!$requestNature or !$field){
+            return null;
+        }
+        //As t'on une selection à faire sur un temps en particulier
+        if (!empty($t_delai)){
+            if (array_key_exists('time',$t_delai)){
+                $time = $t_delai['time'];
+            }
+            if (array_key_exists('operator',$t_delai)){
+                $operator = $t_delai['operator'];
+            }
+        }
+        //On regarde si on doit filtrer sur certains champs
+        if(!empty($t_filtre)){
+            if (array_key_exists('year',$t_filtre)){
+                $year = $t_filtre['year'];
+            }
+            if (array_key_exists('month',$t_filtre)){
+                $month = $t_filtre['month'];
+            }
+            if (array_key_exists('project',$t_filtre)){
+                $project = $t_filtre['project'];
+            }
+            if (array_key_exists('priority',$t_filtre)){
+                $priority = $t_filtre['priority'];
+            }
+
+        }
+        $query          = $this->createQueryBuilder('t');
+        switch ($select){
+            case 'count':
+            case '':
+                $query->select('count(t.id) count');
+                break;
+            case 'sum':
+                $query->select('sum(t.'.$field.') sum');
+                break;
+            case 'liste':
+                $query->select('MONTH(t.openDate) mois,t.correctedDate,t.closedDate,t.ResponseTime, i.jtracId,i.projectId,i.requestNature,i.priority');
+                break;
+        }
+
+        $query->leftJoin("t.Indic_items",'i')
+            ->where('YEAR(t.openDate) = :year')
+            ->orderBy('t.openDate', 'ASC')
+            ->setParameter('year', $year);
+
+        $query = $this->delaiSelector($query,$field,$time,$operator);
+        $query = $this->projectFiltre($query,$project);
+        $query = $this->monthFiltre($query,$month,$field);
+        $query = $this->natureFiltre($query,$requestNature);
+        $query = $this->priorityFiltre($query,$priority);
+
+        switch ($select){
+            case 'nb':
+            case 'sum':
+            case '':
+                return $query->getQuery()->getOneOrNullResult();
+                break;
+            case 'liste':
+                return $query->getQuery()->getArrayResult();
+                break;
+        }
     }
 
     /**
@@ -332,9 +482,29 @@ class Indic_TRSBRepository extends EntityRepository
     }
 
     /**
-     * Filtre sur un projet.
+     * Permet de selectionner des tickets par rappport a un delai.
      *
      * @param \Doctrine\ORM\QueryBuilder
+     * @param string $field
+     * @param string $time
+     * @param string $operator
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function delaiSelector($query,$field,$time,$operator){
+        /* @var \Doctrine\ORM\QueryBuilder $query */
+        if($field && $time && $operator){
+            $query->andWhere('t.'.$field.' '.$operator.' :time')
+                ->setParameter('time',$time);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Filtre sur un projet.
+     *
+     * @param \Doctrine\ORM\QueryBuilder $query
+     * @param string $project
      * @return \Doctrine\ORM\QueryBuilder
      */
     private function projectFiltre($query,$project){
@@ -346,16 +516,19 @@ class Indic_TRSBRepository extends EntityRepository
 
         return $query;
     }
+
     /**
      * Filtre sur un mois.
      *
-     * @param \Doctrine\ORM\QueryBuilder
+     * @param \Doctrine\ORM\QueryBuilder $query
+     * @param string $month
+     * @param string $field
      * @return \Doctrine\ORM\QueryBuilder
      */
-    private function monthFiltre($query,$month){
+    private function monthFiltre($query,$month,$field = 'correctedDate'){
         /* @var \Doctrine\ORM\QueryBuilder $query */
         if($month !=-1 && $month != 'all' && $month != Null){
-            $query->andWhere('MONTH(t.correctedDate) = :month')
+            $query->andWhere('MONTH(t.'.$field.') = :month')
                 ->setParameter('month',$month);
         }
 

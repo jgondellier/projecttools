@@ -19,3 +19,15 @@ indicateurs_delai_traitement_incident_contrat:
       defaults: { _controller: IndicateursBundle:Contractuel:IncidentDelaiTraitementContrat }
       requirements:
           method:  GET
+
+indicateurs_delai_traitement_support_contrat:
+      path:   /delai/traitement/support/contrat
+      defaults: { _controller: IndicateursBundle:DelaiTmntSupport:DelaiTtmntSupport }
+      requirements:
+          method:  GET
+
+indicateurs_delai_reponse_support_contrat:
+      path:   /delai/reponse/support/contrat
+      defaults: { _controller: IndicateursBundle:Contractuel:SupportDelaiReponseContrat }
+      requirements:
+          method:  GET

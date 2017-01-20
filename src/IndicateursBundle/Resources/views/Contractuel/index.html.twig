@@ -8,8 +8,8 @@
             <div class="col-md-12">
                 <ul class="nav nav-pills">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#incidentReouverture">Réouverture sur incident</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#menu1">Délai de traitement incident</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#menu2">Délai de traitement assistance</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#incident">Délai de prise en compte incident</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#assistance">Délai de prise en compte assistance</a></li>
                 </ul>
             </div>
         </div>
@@ -18,20 +18,69 @@
                 <div id="incidentReouverture" class="tab-pane fade in active">
                     {{ table_incidentReouverture_HTML| raw }}
                 </div>
-                <div id="menu1" class="tab-pane fade">
-                    <h3>Menu 1</h3>
-                    <p>Some content in menu 1.</p>
+                <div id="incident" class="tab-pane fade">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Incident P1</div>
+                        <div class="panel-body">
+                            {{ table_incident_pun_HTML| raw }}
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Incident P2</div>
+                        <div class="panel-body">
+                            {{ table_incident_pdeux_HTML| raw }}
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Incident P3</div>
+                        <div class="panel-body">
+                            {{ table_incident_ptrois_HTML| raw }}
+                        </div>
+                    </div>
                 </div>
-                <div id="menu2" class="tab-pane fade">
-                    <h3>Menu 2</h3>
-                    <p>Some content in menu 2.</p>
+                <div id="assistance" class="tab-pane fade">
+                    {{ graph_assistance_HTML| raw }}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Assistance P1</div>
+                        <div class="panel-body">
+                            {{ table_assistance_pun_HTML| raw }}
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Assistance P2</div>
+                        <div class="panel-body">
+                            {{ table_assistance_pdeux_HTML| raw }}
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Assistance P3</div>
+                        <div class="panel-body">
+                            {{ table_assistance_ptrois_HTML| raw }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-
     </div>
 {% endblock %}
 {% block indic_javascript %}
     {{ table_incidentReouverture_JS| raw }}
+    {{ table_incident_pun_JS| raw }}
+    {{ table_incident_pdeux_JS| raw }}
+    {{ table_incident_ptrois_JS| raw }}
+    {{ table_assistance_pun_JS| raw }}
+    {{ table_assistance_pdeux_JS| raw }}
+    {{ table_assistance_ptrois_JS| raw }}
+    {{ graph_assistance_JS| raw }}
+    <script type="text/javascript">
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            $('#reoinciTable').DataTable().columns.adjust().draw();
+            $('#incidentTablePun').DataTable().columns.adjust().draw();
+            $('#incidentTablePdeux').DataTable().columns.adjust().draw();
+            $('#incidentTablePtrois').DataTable().columns.adjust().draw();
+            $('#assistanceTablePun').DataTable().columns.adjust().draw();
+            $('#assistanceTablePdeux').DataTable().columns.adjust().draw();
+            $('#assistanceTablePtrois').DataTable().columns.adjust().draw();
+        })
+    </script>
 {% endblock %}

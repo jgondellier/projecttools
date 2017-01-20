@@ -16,7 +16,7 @@ class EvolutionNbTicketController extends Controller
         /*Rendu du tableau */
         $table['ajax']['url']           = $this->generateUrl('indicateurs_evolutionNBTicket_table');
         $table['ajax']['datas'][]       = array('name'=>'year','value'=>'2016');
-        $table['ajax']['datas'][]       = array('name'=>'month','value'=>'09');
+        $table['ajax']['datas'][]       = array('name'=>'month','value'=>'12');
         $table['id']                    = 'ticketTable';
         $table['cols'][]                = array('filter'=>1,'name'=>'Mois','data'=>'Mois');
         $table['cols'][]                = array('filter'=>1,'name'=>'Projet','data'=>'Projet');

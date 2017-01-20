@@ -1,0 +1,19 @@
+{% extends 'IndicateursBundle:Default:Indicateur.html.twig' %}
+
+{% block indic_title %}Dashboard {% endblock %}
+
+{% block indic_content %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Délai de traitement des demandes d’assistance </div>
+                <div class="panel-body">
+                    Cet indicateur concerne uniquement les tickets supports.<br/>
+                    Il est calculé en prenant la date de création du ticket et la date de prise en compte.<br/>
+                    La règle de calcul est la suivante : <br/>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

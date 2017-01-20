@@ -1,0 +1,17 @@
+indicateurs_contrat_traitement_liste:
+    path:   /contrat/liste/{year}/{requestNature}/{priority}
+    defaults: { _controller: IndicateursBundle:Contractuel:listeDelaiContrat, priority: -1 }
+    requirements:
+        method:  GET
+        year:  \d+
+        requestNature: support|anomalie
+        priority: -1|p1|p2|p3|p4
+
+indicateurs_contrat_traitement_graph:
+    path:   /contrat/graph/{year}/{requestNature}/{priority}
+    defaults: { _controller: IndicateursBundle:Contractuel:Graph, priority: -1 }
+    requirements:
+        method:  GET
+        year:  \d+
+        requestNature: support|anomalie
+        priority: -1|p1|p2|p3|p4
