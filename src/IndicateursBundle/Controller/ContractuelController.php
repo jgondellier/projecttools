@@ -182,12 +182,27 @@ class ContractuelController extends Controller
                 $entityManager  = $this->getDoctrine()->getManager();
                 $toolrender     = $this->get('indicateurs.rendertools');
                 $t_liste        = array();
-                $datas          = array();
-                $month          = array('1','2','3','4','5','6','7','8','9','10','11','12');
+                $data           = array();
+                $categories     = array();
 
                 //Les delai contractuel
                 $contrat        = $this->container->getParameter('contrat');
                 $delai_priorite = $contrat['delai_priorite'];
+
+                //Les mois
+                for ($mois = 1; $mois <= 12; $mois++) {
+                    //Initialisation du graphe sur 12 mois
+                    $data['0']['data'][$mois-1] = 0;
+                    $data['0']['type'] = 'line';
+                    $data['0']['name'] = 'P1';
+                    $data['1']['data'][$mois-1] = 0;
+                    $data['1']['type'] = 'line';
+                    $data['1']['name'] = 'P2';
+                    $data['2']['data'][$mois-1] = 0;
+                    $data['2']['type'] = 'line';
+                    $data['2']['name'] = 'P3';
+                    $categories[] = $toolrender->getMonthName($mois);
+                }
 
                 //Liste des tickets dépassant le délai
                 if($priority && $priority!=-1){
@@ -200,7 +215,6 @@ class ContractuelController extends Controller
                 }
 
                 //Reorganiation de la liste
-                $data=array();
                 foreach($t_liste as $liste){
                     switch ($liste['priority']){
                         case 'p1':
@@ -214,30 +228,11 @@ class ContractuelController extends Controller
                             break;
                     }
                     if(array_key_exists($index,$data) && array_key_exists('mois',$data[$index]['data'])){
-                        $data[$index]['data'][$liste['mois']] += 1;
+                        $data[$index]['data'][$liste['mois']-1] += 1;
                     }else{
-                        $data[$index]['data'][$liste['mois']] = 1;
+                        $data[$index]['data'][$liste['mois']-1] = 1;
                     }
-                    $data[$index]['type'] = 'line';
-                    $data[$index]['name'] = $liste['priority'];
                 }
-
-                ///var_dump($data);
-
-                //Initialisation du graph
-                /*$datas = array(
-                    array(
-                        'type' => 'line',
-                        "name" => "Supports.",
-                        "data" => array("0"=>18,"1"=>8,"2"=>28,"3"=>32,"4"=>5,"5"=>45)
-                    ),
-                    array(
-                        'type' => 'line',
-                        "name" => "Anomalie",
-                        "data" => array("0"=>22)
-                    )
-                );
-                var_dump($datas);*/
 
                 $ob = new Highchart();
                 $ob->chart->renderTo('chartContainerAssistance');
@@ -247,7 +242,7 @@ class ContractuelController extends Controller
 
                 $ob->xAxis->title(array('text' => "Mois"));
 
-                $ob->xAxis->categories($month);
+                $ob->xAxis->categories($categories);
 
                 $ob->series($data);
 
