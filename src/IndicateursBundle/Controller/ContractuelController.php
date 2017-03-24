@@ -178,7 +178,6 @@ class ContractuelController extends Controller
                 $requestNature  = $request->get('requestNature');
                 $year           = $request->get('year');
                 $priority       = $request->get('priority');
-                $response       = new JsonResponse();
                 $entityManager  = $this->getDoctrine()->getManager();
                 $toolrender     = $this->get('indicateurs.rendertools');
                 $t_liste        = array();

@@ -68,4 +68,46 @@ class DelaiTraitementController extends Controller
 
         return $listData;
     }
+
+    public function GraphAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            if ($request->getMethod() === 'GET') {
+                $requestNature  = $request->get('requestNature');
+                $year           = $request->get('year');
+                $priority       = $request->get('priority');
+                $entityManager  = $this->getDoctrine()->getManager();
+                $toolrender     = $this->get('indicateurs.rendertools');
+                $t_liste        = array();
+                $data           = array();
+                $categories     = array();
+
+                //Les delai contractuel
+                $contrat        = $this->container->getParameter('contrat');
+                $delai_priorite = $contrat['delai_priorite'];
+
+                //Liste des tickets par tranche de delai dépassé
+
+
+
+
+                $ob = new Highchart();
+                $ob->chart->renderTo('chartContainerAssistance');
+                $ob->title->text('Delai assistance pour '.$year);
+
+                $ob->yAxis->title(array('text' => "Nombre de tickets"));
+
+                $ob->xAxis->title(array('text' => "Mois"));
+
+                $ob->xAxis->categories($categories);
+
+                $ob->series($data);
+
+                return $this->render('@Indicateurs/Highcharts/rendu.html.twig', array(
+                    'ob' => $ob
+                ));
+
+            }
+        }
+    }
 }
