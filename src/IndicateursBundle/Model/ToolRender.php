@@ -20,10 +20,10 @@ class ToolRender{
     public function formatData($t_data,$monthInterval){
         $t_result   = array();
         foreach($t_data as $data) {
-            if (isset($t_result[$data['mois']])) {
-                $t_result[$data['mois']] += $data['somme'];
+            if (isset($t_result[$data["annee"].sprintf("%02d", $data["mois"])])) {
+                $t_result[$data["annee"].sprintf("%02d", $data["mois"])] += $data['somme'];
             } else {
-                $t_result[$data['mois']] = $data['somme'];
+                $t_result[$data["annee"].sprintf("%02d", $data["mois"])] = $data['somme'];
             }
         }
         $data       = array();
@@ -43,23 +43,23 @@ class ToolRender{
      * Récupère la liste des dates utilisé entre deux liste.
      * Evite la desynchro des index de date entre deux array.
      *
-     * @param $t_data1
-     * @param $t_data2
+     * @param array $t_data1
+     * @param array $t_data2
      * @return array
      */
     public function getMonthInterval($t_data1,$t_data2 = Null){
-        $listMonth = array();
+        $listYear = array();
         foreach ($t_data1 as $data){
-            $listMonth[$data["mois"]]=$this->getMonthName($data["mois"]);
+            $listYear[$data["annee"].sprintf("%02d", $data["mois"])]=$this->getMonthName($data["mois"])." ".$data["annee"];
         }
         if($t_data2){
             foreach ($t_data2 as $data){
-                $listMonth[$data["mois"]]=$this->getMonthName($data["mois"]);
+                $listYear[$data["annee"].sprintf("%02d", $data["mois"])]=$this->getMonthName($data["mois"])." ".$data["annee"];
             }
         }
+        ksort($listYear);
 
-        ksort($listMonth);
-        return $listMonth;
+        return $listYear;
     }
 
     /**
@@ -112,5 +112,20 @@ class ToolRender{
         }
 
         return null;
+    }
+
+    /**
+     * Permet d'initier le tableau avec les premières colonnes habituelles
+     *
+     * @param array $table
+     * @return array $table
+     */
+    public function initColTable($table){
+        $table['cols'][]    = array('filter'=>1,'name'=>'Année','data'=>'Annee','id'=>'year');
+        $table['cols'][]    = array('filter'=>1,'name'=>'Mois','data'=>'Mois','id'=>'month');
+        $table['cols'][]    = array('filter'=>1,'name'=>'Projet','data'=>'Projet','id'=>'project');
+        $table['cols'][]    = array('filter'=>1,'name'=>'Nature','data'=>'Nature','id'=>'nature');
+        $table['cols'][]    = array('filter'=>1,'name'=>'Priorité','data'=>'Priorite','id'=>'priority');
+        return $table;
     }
 }

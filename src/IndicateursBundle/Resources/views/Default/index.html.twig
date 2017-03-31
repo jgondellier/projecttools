@@ -6,7 +6,8 @@
     <div class="container">
         {#{{ render(controller('IndicateursBundle:SupAnoForfait:getCountSupAnoForfait')) }}#}
         <div class="row">
-            {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Nombre de Tickets consommés','id':'supanoforfaitcount'} %}
+            {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Nb de Tickets consommés 2016','id':'supanoforfaitcount2016'} %}
+            {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Nb de Tickets consommés 2017','id':'supanoforfaitcount2017'} %}
             {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Nb anomalies réouvertes plus 1 fois','id':'reouvertureanocount'} %}
             {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Délai Traitements des Ano P1','id':'delaitraitementincident'} %}
             {% include '@Indicateurs/Default/panel_hp.html.twig' with {'titre': 'Délai Traitements du Support','id':'delaitraitementsupport'} %}
@@ -16,7 +17,8 @@
     <script type="text/javascript">
         window.onload = function(){
             $(document).ready(function() {
-                getAjaxValue("supanoforfait/count",{year : "2016"},'supanoforfaitcount');
+                getAjaxValue("supanoforfait/count",{year : "2016"},'supanoforfaitcount2016');
+                getAjaxValue("supanoforfait/count",{year : "2017"},'supanoforfaitcount2017');
                 getAjaxValue("contrat/reoinci/count",{year : "2016"},'reouvertureanocount');
                 getAjaxValue("delai/traitement/incident/contrat",{year : "2016"},'delaitraitementincident');
                 getAjaxValue("delai/traitement/support/contrat",{year : "2016"},'delaitraitementsupport');

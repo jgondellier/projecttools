@@ -12,18 +12,18 @@ class DelaiTraitementController extends Controller
 {
     public function indexAction()
     {
+        $toolrender     = $this->get('indicateurs.rendertools');
+        $jtrac_url      = $this->container->getParameter('jtrac_url');
+
         /*Rendu du tableau */
-        $table['ajax']['url']           = 'traitement/table';
-        $table['ajax']['datas'][]       = array('name'=>'year','value'=>'2016');
-        $table['id']        = 'delaiTable';
-        $table['cols'][]    = array('filter'=>1,'name'=>'Mois','data'=>'Mois');
-        $table['cols'][]    = array('filter'=>1,'name'=>'Projet','data'=>'Projet');
-        $table['cols'][]    = array('filter'=>1,'name'=>'Nature','data'=>'Nature');
-        $table['cols'][]    = array('filter'=>1,'name'=>'Priorité','data'=>'Priorite');
-        $table['cols'][]    = array('filter'=>0,'name'=>'JtracId','data'=>'JtracId');
-        $table['cols'][]    = array('filter'=>0,'name'=>'Délai','data'=>'Delai');
-        $table_delai_HTML = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
-        $table_delai_JS = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
+        $table['ajax']['url']       = 'traitement/table';
+        $table['ajax']['datas'][]   = array('name'=>'year','value'=>'2016');
+        $table['id']                = 'delaiTable';
+        $table                      = $toolrender->initColTable($table);
+        $table['cols'][]            = array('filter'=>0,'name'=>'JtracId','data'=>'JtracId','href'=>$jtrac_url);
+        $table['cols'][]            = array('filter'=>0,'name'=>'Délai','data'=>'Delai');
+        $table_delai_HTML           = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
+        $table_delai_JS             = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 
         return $this->render('IndicateursBundle:DelaiTraitement:index.html.twig',array(
             'activeMenu' => 'delaiTraitement',
@@ -63,7 +63,7 @@ class DelaiTraitementController extends Controller
 
         //Formalisation de la donnée
         foreach ($t_data as $data){
-            $listData['data'][] = array('Mois'=>$toolrender->getMonthName($data['mois']),'Projet'=>$list_project[$data['projet']]['name'],'Nature'=>$data['nature'],'Priorite'=>$data['priority'],'JtracId'=>$data['jtracid'],'Delai'=>$data['delai']);
+            $listData['data'][] = array('Annee'=>$data['annee'],'Mois'=>$toolrender->getMonthName($data['mois']),'Projet'=>$list_project[$data['projet']]['name'],'Nature'=>$data['nature'],'Priorite'=>$data['priority'],'JtracId'=>$data['jtracid'],'Delai'=>$data['delai']);
         }
 
         return $listData;
@@ -73,7 +73,7 @@ class DelaiTraitementController extends Controller
     {
         if ($request->isXmlHttpRequest()) {
             if ($request->getMethod() === 'GET') {
-                $requestNature  = $request->get('requestNature');
+                /*$requestNature  = $request->get('requestNature');
                 $year           = $request->get('year');
                 $priority       = $request->get('priority');
                 $entityManager  = $this->getDoctrine()->getManager();
@@ -85,10 +85,6 @@ class DelaiTraitementController extends Controller
                 //Les delai contractuel
                 $contrat        = $this->container->getParameter('contrat');
                 $delai_priorite = $contrat['delai_priorite'];
-
-                //Liste des tickets par tranche de delai dépassé
-
-
 
 
                 $ob = new Highchart();
@@ -106,7 +102,7 @@ class DelaiTraitementController extends Controller
                 return $this->render('@Indicateurs/Highcharts/rendu.html.twig', array(
                     'ob' => $ob
                 ));
-
+                */
             }
         }
     }

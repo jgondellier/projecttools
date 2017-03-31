@@ -12,16 +12,14 @@ class EvolutionNbTicketController extends Controller
 {
     public function indexAction()
     {
+        $toolrender     = $this->get('indicateurs.rendertools');
         $jtrac_url   = $this->container->getParameter('jtrac_url');
         /*Rendu du tableau */
         $table['ajax']['url']           = $this->generateUrl('indicateurs_evolutionNBTicket_table');
-        $table['ajax']['datas'][]       = array('name'=>'year','value'=>'2016');
-        $table['ajax']['datas'][]       = array('name'=>'month','value'=>'12');
+        //$table['ajax']['datas'][]       = array('name'=>'year','value'=>'2016');
+        //$table['ajax']['datas'][]       = array('name'=>'month','value'=>'12');
         $table['id']                    = 'ticketTable';
-        $table['cols'][]                = array('filter'=>1,'name'=>'Mois','data'=>'Mois');
-        $table['cols'][]                = array('filter'=>1,'name'=>'Projet','data'=>'Projet');
-        $table['cols'][]                = array('filter'=>1,'name'=>'Nature','data'=>'Nature');
-        $table['cols'][]                = array('filter'=>1,'name'=>'Priorité','data'=>'Priorite');
+        $table                          = $toolrender->initColTable($table);
         $table['cols'][]                = array('filter'=>1,'name'=>'Status','data'=>'Status');
         $table['cols'][]                = array('filter'=>0,'name'=>'JtracId','data'=>'JtracId','href'=>$jtrac_url);
         $table_HTML = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
@@ -46,43 +44,48 @@ class EvolutionNbTicketController extends Controller
     {
         if($request->isXmlHttpRequest()) {
             if ($request->getMethod() === 'GET') {
-                $year           = $request->get('year');
                 $entityManager  = $this->getDoctrine()->getManager();
                 $toolrender     = $this->get('indicateurs.rendertools');
                 $categories     = array();
                 $datas          = array();
 
+                //On récupère la liste des mois et année des tickets disponible
+                $t_listDate     = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getListeDateTickets();
+
                 //On fait une requete pour chaque mois de l'année
                 $t_evolution    = array();
-                for ($mois = 1; $mois <= 12; $mois++) {
-                    $t_result = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->evolutionNBTicket($year,$mois);
+                foreach ($t_listDate as $date){
+                    $t_result = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->evolutionNBTicket($date['annee'],$date['mois']);
                     foreach($t_result as $result){
-                        $t_evolution[$result['mois']][$mois] = $result["nombre"];
+                        $t_evolution[$result['annee']][$result['mois']][$date['annee'].$date['mois']] = $result["nombre"];
                     }
-                    $categories[] = $toolrender->getMonthName($mois);
+                    $categories[] = $toolrender->getMonthName($date['mois']);
                 }
 
                 //Initialisation du graph
-                foreach($t_evolution as $month => $evol){
-                    $data=array();
-                    for ($mois = 1; $mois <= 12; $mois++) {
-                        if(isset($evol[$mois])){
-                            $data[] = intval($evol[$mois]);
-                        }else{
-                            $data[] = 0;
+                foreach($t_evolution as $year => $t_month) {
+                    foreach ($t_month as $month => $evol) {
+                        $data = array();
+                        foreach ($t_listDate as $date) {
+                            if (isset($evol[$date['annee'].$date['mois']])) {
+                                $data[] = intval($evol[$date['annee'].$date['mois']]);
+                            } else {
+                                $data[] = 0;
+                            }
                         }
-                    }
 
-                    $datas[] = array(
-                        "name" => $toolrender->getMonthName($month),
-                        "data" => $data,
-                    );
+                        $datas[] = array(
+                            "name" => $toolrender->getMonthName($month).' '.$year,
+                            "data" => $data,
+                        );
+                    }
                 }
 
                 $ob = new Highchart();
                 $ob->chart->renderTo('chartContainer');
-                $ob->title->text('Evolution du nombre de tickets pour'.$year);
+                $ob->title->text('Evolution du nombre de tickets pour '.$year);
                 $ob->chart->type('column');
+                $ob->legend->enabled(false);
 
                 $ob->yAxis->title(array('text' => "Nombre de tickets"));
 
@@ -109,15 +112,12 @@ class EvolutionNbTicketController extends Controller
         if($request->isXmlHttpRequest()) {
             if ($request->getMethod() === 'GET') {
                 $entityManager  = $this->getDoctrine()->getManager();
-                $year           = $request->get('year');
-                $month          = $request->get('month');
-                $project        = $request->get('project');
-                $nature         = $request->get('nature');
-                $priority       = $request->get('priority');
                 $response       = new JsonResponse();
 
+                $t_listDate     = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getLastDate();
+
                 /*Tickets non ferme et non corrigé par mois*/
-                $t_Ticket     = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->evolutionNBTicketDetail($year,'09');
+                $t_Ticket     = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->evolutionNBTicket($t_listDate[0]['annee'],$t_listDate[0]['mois'],True);
 
                 $response->setContent(json_encode($this->formatForDataTable($t_Ticket)));
                 return $response;
@@ -134,7 +134,7 @@ class EvolutionNbTicketController extends Controller
 
         //Formalisation de la donnée
         foreach ($t_data as $data){
-            $listData['data'][] = array('Mois'=>$toolrender->getMonthName($data['mois']),'Projet'=>$list_project[$data['projet']]['name'],'Nature'=>$data['nature'],'Priorite'=>$data['priority'],'Status'=>$list_project[$data['projet']]['status'][$data['status']],'JtracId'=>$data['jtracid']);
+            $listData['data'][] = array('Annee'=>$data['annee'],'Mois'=>$toolrender->getMonthName($data['mois']),'Projet'=>$list_project[$data['projet']]['name'],'Nature'=>$data['nature'],'Priorite'=>$data['priority'],'Status'=>$list_project[$data['projet']]['status'][$data['status']],'JtracId'=>$data['jtracid']);
         }
 
         return $listData;

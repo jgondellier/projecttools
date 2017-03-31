@@ -12,6 +12,8 @@ class ReouvertureController extends Controller
 {
     public function indexAction()
     {
+        $toolrender     = $this->get('indicateurs.rendertools');
+
         /*Rendu du graph*/
         $graph['ajax']['url']           = $this->generateUrl('indicateurs_reouverture_graph');
         $graph['id']                    = 'chartContainer';
@@ -20,12 +22,9 @@ class ReouvertureController extends Controller
 
         /*Rendu du tableau */
         $table['ajax']['url']           = $this->generateUrl('indicateurs_reouverture_table');
-        $table['ajax']['datas'][]       = array('name'=>'year','value'=>'2016');
+        //$table['ajax']['datas'][]       = array('name'=>'year','value'=>'2016');
         $table['id']                    = 'reopenTable';
-        $table['cols'][]                = array('filter'=>1,'name'=>'Mois','data'=>'Mois');
-        $table['cols'][]                = array('filter'=>1,'name'=>'Projet','data'=>'Projet');
-        $table['cols'][]                = array('filter'=>1,'name'=>'Nature','data'=>'Nature');
-        $table['cols'][]                = array('filter'=>1,'name'=>'Priorité','data'=>'Priorite');
+        $table                          = $toolrender->initColTable($table);
         $table['cols'][]                = array('filter'=>0,'name'=>'Réouverture','data'=>'Reouverture');
         $table_HTML                     = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_JS                       = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table,'graph'=>$graph));
@@ -68,7 +67,7 @@ class ReouvertureController extends Controller
             if ($request->getMethod() === 'GET') {
                 $entityManager  = $this->getDoctrine()->getManager();
                 $year           = $request->get('year');
-                $project        = $request->get('projet');
+                $project        = $request->get('project');
                 $month          = $request->get('month');
                 $nature         = $request->get('nature');
                 $priority       = $request->get('priority');
@@ -81,7 +80,9 @@ class ReouvertureController extends Controller
                         $project = $idPro;
                     }
                 }
+
                 $t_reopen         = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getRefusedCountByMonthProject($year,$month,$project,$nature,$priority);
+
                 $monthInterval    = $toolrender->getMonthInterval($t_reopen);
                 $t_reopen         = $toolrender->formatData($t_reopen,$monthInterval);
 
@@ -126,7 +127,7 @@ class ReouvertureController extends Controller
 
         //Formalisation de la donnée
         foreach ($t_data as $data){
-            $listData['data'][] = array('Mois'=>$toolrender->getMonthName($data['mois']),'Projet'=>$list_project[$data['projet']]['name'],'Nature'=>$data['nature'],'Priorite'=>$data['priority'],'Reouverture'=>$data['somme']);
+            $listData['data'][] = array('Annee'=>$data['annee'],'Mois'=>$toolrender->getMonthName($data['mois']),'Projet'=>$list_project[$data['projet']]['name'],'Nature'=>$data['nature'],'Priorite'=>$data['priority'],'Reouverture'=>$data['somme']);
         }
 
         return $listData;

@@ -5,7 +5,7 @@
             <tr>
                 {% for col in table.cols %}
                     {% if col.filter is defined and col.filter == 1 %}
-                        <th class="select-filter">{{ col.name }}</th>
+                        <th class="select-filter"{% if col.id is defined%} id="{{ col.id }}"{% endif %}>{{ col.name }}</th>
                     {% else %}
                         <th>{{ col.name }}</th>
                     {% endif %}

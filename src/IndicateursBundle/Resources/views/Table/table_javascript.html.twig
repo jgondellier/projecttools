@@ -47,8 +47,14 @@
                                         .draw();
                                 var title = column.header();
                                 {% if(graph is defined) %}
+                                var table = $('#{{ table.id }}').DataTable();
+                                var datas = {};
+                                $('.dataTables_scrollFoot select').each(function( index ) {
+                                    var columnHeader = table.column( index ).header();
+                                    datas[columnHeader.id] = $( this ).val();
+                                });
                                 if (typeof getGraph{{ graph.id }} === "function") {
-                                    getGraph{{ graph.id }}($(title).html(),$(this).val());
+                                    getGraph{{ graph.id }}(datas);
                                 }
                                 {% endif %}
                             } );

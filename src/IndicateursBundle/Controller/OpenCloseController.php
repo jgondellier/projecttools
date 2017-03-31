@@ -17,6 +17,8 @@ class OpenCloseController extends Controller
      */
     public function indexAction()
     {
+        $toolrender     = $this->get('indicateurs.rendertools');
+
         /*Rendu du graph*/
         $graph['ajax']['url']   = $this->generateUrl('indicateurs_openclose_graph');
         $graph['id']            = 'chartContainer';
@@ -25,12 +27,9 @@ class OpenCloseController extends Controller
 
         /*Rendu du tableau */
         $table['ajax']['url']                = $this->generateUrl('indicateurs_openclose_table');
-        $table['ajax']['datas'][]            = array('name'=>'year','value'=>'2016');
+        //$table['ajax']['datas'][]            = array('name'=>'year','value'=>'2016');
         $table['id']        = 'opencloseTable';
-        $table['cols'][]    = array('filter'=>1,'name'=>'Mois','data'=>'Mois');
-        $table['cols'][]    = array('filter'=>1,'name'=>'Projet','data'=>'Projet');
-        $table['cols'][]    = array('filter'=>1,'name'=>'Nature','data'=>'Nature');
-        $table['cols'][]    = array('filter'=>1,'name'=>'Priorité','data'=>'Priorite');
+        $table              = $toolrender->initColTable($table);
         $table['cols'][]    = array('filter'=>0,'name'=>'Ouvert','data'=>'Ouverture');
         $table['cols'][]    = array('filter'=>0,'name'=>'Fermé','data'=>'Fermeture');
         $table_HTML   = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
@@ -88,7 +87,7 @@ class OpenCloseController extends Controller
             if ($request->getMethod() === 'GET') {
                 $year           = $request->get('year');
                 $month          = $request->get('month');
-                $project        = $request->get('projet');
+                $project        = $request->get('project');
                 $nature         = $request->get('nature');
                 $priority       = $request->get('priority');
                 $list_project   = $this->container->getParameter('list_project');
@@ -126,7 +125,12 @@ class OpenCloseController extends Controller
 
                 $ob = new Highchart();
                 $ob->chart->renderTo('chartContainer');
-                $ob->title->text('Nombre de Tickets Ouverts/Fermés pour '.$year);
+                $titleTexte = 'Nombre de Tickets Ouverts/Fermés';
+                if($year){
+                    $titleTexte .= ' pour '.$year;
+                }
+                $ob->title->text($titleTexte);
+
                 //$ob->chart->type('column');
 
                 $ob->yAxis->title(array('text' => "Nombre de tickets"));
@@ -159,30 +163,33 @@ class OpenCloseController extends Controller
 
         //Formalisation de la donnée
         foreach ($t_open as $open){
-            $t_openClose[$toolrender->getMonthName($open['mois'])][$list_project[$open['projet']]['name']][$open['nature']][$open['priority']]['Ouverture']=$open['somme'];
+            $t_openClose[$open['annee']][$toolrender->getMonthName($open['mois'])][$list_project[$open['projet']]['name']][$open['nature']][$open['priority']]['Ouverture']=$open['somme'];
         }
         foreach ($t_closed as $closed){
-            $t_openClose[$toolrender->getMonthName($closed['mois'])][$list_project[$closed['projet']]['name']][$closed['nature']][$closed['priority']]['Fermeture']=$closed['somme'];
+            $t_openClose[$closed['annee']][$toolrender->getMonthName($closed['mois'])][$list_project[$closed['projet']]['name']][$closed['nature']][$closed['priority']]['Fermeture']=$closed['somme'];
         }
 
         //Init des valeurs null
-        foreach($t_openClose as $month=>$listProjet){
-            foreach($listProjet as $project=>$listNature){
-                foreach($listNature as $nature=>$listPriority){
-                    foreach($listPriority as $priority=>$openClose){
-                        $openCount = 0;
-                        $closeCount = 0;
-                        if(isset($openClose['Ouverture'])){
-                            $openCount = $openClose['Ouverture'];
+        foreach($t_openClose as $year=>$listMonth){
+            foreach($listMonth as $month=>$listProjet){
+                foreach($listProjet as $project=>$listNature){
+                    foreach($listNature as $nature=>$listPriority){
+                        foreach($listPriority as $priority=>$openClose){
+                            $openCount = 0;
+                            $closeCount = 0;
+                            if(isset($openClose['Ouverture'])){
+                                $openCount = $openClose['Ouverture'];
+                            }
+                            if(isset($openClose['Fermeture'])){
+                                $closeCount = $openClose['Fermeture'];
+                            }
+                            $t_result['data'][] = array('Annee'=>$year,'Mois'=>$month,'Projet'=>$project,'Nature'=>$nature,'Priorite'=>$priority,'Ouverture'=>$openCount,'Fermeture'=>$closeCount);
                         }
-                        if(isset($openClose['Fermeture'])){
-                            $closeCount = $openClose['Fermeture'];
-                        }
-                        $t_result['data'][] = array('Mois'=>$month,'Projet'=>$project,'Nature'=>$nature,'Priorite'=>$priority,'Ouverture'=>$openCount,'Fermeture'=>$closeCount);
                     }
                 }
             }
         }
+
         return $t_result;
     }
 

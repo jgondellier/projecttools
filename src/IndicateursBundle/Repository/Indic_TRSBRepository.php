@@ -67,20 +67,21 @@ class Indic_TRSBRepository extends EntityRepository
      * @param $field
      * @return array
      */
-    public function getDateByMonthProject($year,$month=-1,$project=-1,$requestNature =-1,$priority=-1,$field){
+    public function getDateByMonthProject($year=-1,$month=-1,$project=-1,$requestNature =-1,$priority=-1,$field){
         $query = $this->createQueryBuilder('t');
-        $query->select('MONTH(t.'.$field.') mois, i.projectId projet,i.priority priority, i.requestNature nature,count(t.'.$field.') somme')
+        $query->select('YEAR(t.'.$field.') annee, MONTH(t.'.$field.') mois, i.projectId projet,i.priority priority, i.requestNature nature,count(t.'.$field.') somme')
             ->leftJoin("t.Indic_items",'i')
-            ->groupBy('mois')
+            ->groupBy('annee')
+            ->addGroupBy('mois')
             ->addGroupBy('projet')
             ->addGroupBy('nature')
             ->addGroupBy('priority')
-            ->where('YEAR(t.'.$field.') = :year')
-            ->orderBy('t.'.$field, 'ASC')
-            ->setParameter('year', $year);
+            ->where('t.'.$field.' IS NOT NULL')
+            ->orderBy('t.'.$field, 'ASC');
 
         $query = $this->projectFiltre($query,$project);
-        $query = $this->monthFiltre($query,$month);
+        $query = $this->yearFiltre($query,$year,$field);
+        $query = $this->monthFiltre($query,$month,$field);
         $query = $this->natureFiltre($query,$requestNature);
         $query = $this->priorityFiltre($query,$priority);
 
@@ -91,28 +92,58 @@ class Indic_TRSBRepository extends EntityRepository
      * Nombre de réouvertures sur des Tickets sur une période.
      * Réouvert ce n'est que les tickets qui ont été refusé dans leur history.
      *
-     * @param $year
+     * @param int $year
      * @param int $month
      * @param int $project
      * @param int $requestNature
      * @param int $priority
+     * @param string $field le champ date sur lequel se baser
      * @return array
      */
-    public function getRefusedCountByMonthProject($year,$month=-1,$project=-1,$requestNature =-1,$priority=-1){
+    public function getRefusedCountByMonthProject($year=-1,$month=-1,$project=-1,$requestNature =-1,$priority=-1,$field = 'correctedDate'){
         $query = $this->createQueryBuilder('t');
-        $query->select('MONTH(t.correctedDate) mois, i.projectId projet, i.priority priority, i.requestNature nature,count(t.refusedCount) somme')
+        $query->select('YEAR(t.'.$field.') annee, MONTH(t.'.$field.') mois, i.projectId projet, i.priority priority, i.requestNature nature,count(t.refusedCount) somme')
             ->leftJoin("t.Indic_items",'i')
-            ->groupBy('mois')
+            ->groupBy('annee')
+            ->addGroupBy('mois')
             ->addGroupBy('projet')
             ->addGroupBy('nature')
             ->addGroupBy('priority')
-            ->where('YEAR(t.correctedDate) = :year')
-            ->andWhere('t.refusedCount IS NOT NULL')
-            ->orderBy('t.correctedDate', 'ASC')
-            ->setParameter('year', $year);
+            ->where('t.refusedCount IS NOT NULL')
+            ->andWhere('t.'.$field.' IS NOT NULL')
+            ->orderBy('t.'.$field, 'ASC');
 
         $query = $this->projectFiltre($query,$project);
-        $query = $this->monthFiltre($query,$month);
+        $query = $this->yearFiltre($query,$year,$field);
+        $query = $this->monthFiltre($query,$month,$field);
+        $query = $this->natureFiltre($query,$requestNature);
+        $query = $this->priorityFiltre($query,$priority);
+
+        return $query->getQuery()->getArrayResult();
+    }
+
+    /**
+     * Retourne la liste des tickets fermé avec leurs délai de traitement.
+     *
+     * @param $year
+     * @param $project
+     * @param $month
+     * @param $requestNature
+     * @param $priority
+     * @param string $field
+     * @return array
+     */
+    public function delaiTraitement($year,$project,$month,$requestNature,$priority,$field='openDate'){
+        $query      = $this->createQueryBuilder('t');
+        $query->select('YEAR(t.'.$field.') annee, MONTH(t.'.$field.') mois, i.projectId projet, i.priority priority, i.requestNature nature, i.jtracId jtracid,t.TreatmentTime delai')
+            ->leftJoin("t.Indic_items",'i')
+            ->where('t.'.$field.' IS NOT NULL')
+            ->andWhere('t.correctedDate IS NOT NULL')
+            ->orderBy('t.'.$field, 'ASC');
+
+        $query = $this->projectFiltre($query,$project);
+        $query = $this->yearFiltre($query,$year,$field);
+        $query = $this->monthFiltre($query,$month,$field);
         $query = $this->natureFiltre($query,$requestNature);
         $query = $this->priorityFiltre($query,$priority);
 
@@ -225,21 +256,6 @@ class Indic_TRSBRepository extends EntityRepository
         return $query;
     }
 
-    public function delaiTraitement($year,$project,$month,$requestNature,$priority){
-        $query      = $this->createQueryBuilder('t');
-        $query->select('MONTH(t.openDate) mois, i.projectId projet, i.priority priority, i.requestNature nature, i.jtracId jtracid,t.TreatmentTime delai')
-            ->leftJoin("t.Indic_items",'i')
-            ->where('YEAR(t.openDate) = :year')
-            ->orderBy('t.openDate', 'ASC')
-            ->setParameter('year', $year);
-
-        $query = $this->projectFiltre($query,$project);
-        $query = $this->monthFiltre($query,$month);
-        $query = $this->natureFiltre($query,$requestNature);
-        $query = $this->priorityFiltre($query,$priority);
-
-        return $query->getQuery()->getArrayResult();
-    }
     public function delaiTraitementIncidentContractuel($year,$project=-1,$month=-1){
         $requestNature  = "bug";
         $priority       = 'p1';
@@ -421,45 +437,37 @@ class Indic_TRSBRepository extends EntityRepository
      *
      * @param $year
      * @param $month
+     * @param boolean $detail
      * @return array
      */
-    public function evolutionNBTicket($year,$month){
-        $query = $this->getEntityManager()->createQuery('
-            SELECT MONTH(t.openDate) mois, count(t.openDate) nombre
-            FROM IndicateursBundle\Entity\Indic_TRSB t
-            where MONTH(t.openDate) <= :month 
-            AND YEAR(t.openDate) = :year 
-            AND ((MONTH(t.correctedDate) IS NULL 
-                 or MONTH(t.correctedDate) > :month)
-                 AND (MONTH(t.closedDate) IS NULL
-                 or MONTH(t.closedDate) > :month)) 
-            GROUP BY mois
-        ')->setParameter('month', $month)
-            ->setParameter('year', $year);
-        return $query->getArrayResult();
-    }
+    public function evolutionNBTicket($year,$month,$detail = False){
+        $month = $month+1;
+        $date = $year."-".$month."-"."01";
 
-    /**
-     * @param $year
-     * @param $month
-     * @return array
-     */
-    public function evolutionNBTicketDetail($year,$month){
-        $query = $this->getEntityManager()->createQuery('
-            SELECT MONTH(t.openDate) mois, i.projectId projet,i.priority priority, i.requestNature nature,i.status status,i.jtracId jtracid
+        $select = 'SELECT YEAR(t.openDate) annee, MONTH(t.openDate) mois, count(t.openDate) nombre ';
+        $groupBy = 'GROUP BY annee, mois';
+        $orderBy = 'ORDER BY annee DESC, mois DESC';
+        if($detail){
+            $select = 'SELECT YEAR(t.openDate) annee, MONTH(t.openDate) mois, i.projectId projet,i.priority priority, i.requestNature nature,i.status status,i.jtracId jtracid ';
+            $groupBy = '';
+            $orderBy = 'ORDER BY annee ASC, mois ASC';
+        }
+
+        $query = $this->getEntityManager()->createQuery($select.'
             FROM IndicateursBundle\Entity\Indic_TRSB t
             LEFT JOIN IndicateursBundle\Entity\Indic_Items i
             WITH t.Indic_items = i.id
-            where MONTH(t.openDate) <= :month 
-            AND YEAR(t.openDate) = :year 
-           AND ((MONTH(t.correctedDate) IS NULL 
-                 or MONTH(t.correctedDate) > :month)
-                 AND (MONTH(t.closedDate) IS NULL
-                 or MONTH(t.closedDate) > :month)) 
-        ')->setParameter('month', $month)
-            ->setParameter('year', $year);
+            where t.openDate < :date 
+            AND ((t.correctedDate IS NULL 
+                 or t.correctedDate >= :date)
+                 AND (t.closedDate IS NULL
+                 or t.closedDate >= :date)) 
+            '.$groupBy.' '.$orderBy
+        )->setParameter('date', $date);
+
         return $query->getArrayResult();
     }
+
 
 
     /**
@@ -512,6 +520,24 @@ class Indic_TRSBRepository extends EntityRepository
         if($project !=-1 && $project != 'all' && $project != Null){
             $query->andWhere('i.projectId = :project')
                 ->setParameter('project',$project);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Filtre sur une année.
+     *
+     * @param \Doctrine\ORM\QueryBuilder $query
+     * @param int $year
+     * @param string $field
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function yearFiltre($query,$year,$field = 'correctedDate'){
+        /* @var \Doctrine\ORM\QueryBuilder $query */
+        if($year !=-1 && $year != 'all' && $year != Null){
+            $query->andWhere('YEAR(t.'.$field.') = :year')
+                ->setParameter('year',$year);
         }
 
         return $query;
@@ -582,5 +608,38 @@ class Indic_TRSBRepository extends EntityRepository
         }
 
         return $query;
+    }
+
+    /**
+     * Donne la liste des mois et années de tous les tickets créés.
+     *
+     * @return array
+     */
+    public function getListeDateTickets(){
+        $query = $this->createQueryBuilder('t');
+        $query->select('YEAR(t.openDate) annee, MONTH(t.openDate) mois')
+            ->groupBy('annee')
+            ->addGroupBy('mois')
+            ->where('t.openDate IS NOT NULL')
+            ->orderBy('t.openDate', 'ASC');
+
+        return $query->getQuery()->getArrayResult();
+    }
+
+    /**
+     * Donna la date la plus récente des ticket créés.
+     *
+     * @return array
+     */
+    public function getLastDate(){
+        $query = $this->createQueryBuilder('t');
+        $query->select('YEAR(t.openDate) annee, MONTH(t.openDate) mois')
+            ->groupBy('annee')
+            ->addGroupBy('mois')
+            ->where('t.openDate IS NOT NULL')
+            ->orderBy('t.openDate', 'DESC')
+            ->setMaxResults(1);
+
+        return $query->getQuery()->getArrayResult();
     }
 }
