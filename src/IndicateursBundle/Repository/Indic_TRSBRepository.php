@@ -133,7 +133,7 @@ class Indic_TRSBRepository extends EntityRepository
      * @param string $field
      * @return array
      */
-    public function delaiTraitement($year,$project,$month,$requestNature,$priority,$field='openDate'){
+    public function delaiTraitement($year,$month,$project,$requestNature,$priority,$field='openDate'){
         $query      = $this->createQueryBuilder('t');
         $query->select('YEAR(t.'.$field.') annee, MONTH(t.'.$field.') mois, i.projectId projet, i.priority priority, i.requestNature nature, i.jtracId jtracid,t.TreatmentTime delai')
             ->leftJoin("t.Indic_items",'i')

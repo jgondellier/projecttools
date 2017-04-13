@@ -86,14 +86,14 @@ class DelaiTraitementController extends Controller
                 $nature         = $request->get('nature');
                 $priority       = $request->get('priority');
                 $entityManager  = $this->getDoctrine()->getManager();
-                $toolrender     = $this->get('indicateurs.rendertools');
-                $t_liste        = array();
-                $data           = array();
-                $categories     = array();
+                $list_project   = $this->container->getParameter('list_project');
 
-                //Les delai contractuel
-                $contrat        = $this->container->getParameter('contrat');
-                $delai_priorite = $contrat['delai_priorite'];
+                //On cherche l'id du projet
+                foreach($list_project as $idPro => $pro){
+                    if($pro["name"] == $project){
+                        $project = $idPro;
+                    }
+                }
 
                 $t_delai        = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->delaiTraitement($year,$month,$project,$nature,$priority);
 
