@@ -151,6 +151,34 @@ class Indic_TRSBRepository extends EntityRepository
     }
 
     /**
+     * Fonction retournant le delai de traitement ou de reponse.
+     *
+     * @param $year
+     * @param $month
+     * @param $project
+     * @param $requestNature
+     * @param $priority
+     * @param string $field
+     * @return array
+     */
+    public function getDelai($year,$month,$project,$requestNature,$priority,$field='TreatmentTime'){
+        $query      = $this->createQueryBuilder('t');
+        $query->select('YEAR(t.openDate) annee, MONTH(t.openDate) mois, i.projectId projet, i.priority priority, i.requestNature nature, i.jtracId jtracid,t.'.$field.' delai')
+            ->leftJoin("t.Indic_items",'i')
+            ->where('t.openDate IS NOT NULL')
+            ->andWhere('t.correctedDate IS NOT NULL')
+            ->orderBy('t.'.$field, 'ASC');
+
+        $query = $this->projectFiltre($query,$project);
+        $query = $this->yearFiltre($query,$year,$field);
+        $query = $this->monthFiltre($query,$month,$field);
+        $query = $this->natureFiltre($query,$requestNature);
+        $query = $this->priorityFiltre($query,$priority);
+
+        return $query->getQuery()->getArrayResult();
+    }
+
+    /**
      * Retourne le nombre d'incidentsur l'année.
      *
      * @param $year

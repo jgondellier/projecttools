@@ -128,4 +128,81 @@ class ToolRender{
         $table['cols'][]    = array('filter'=>1,'name'=>'Priorité','data'=>'Priorite','id'=>'priority');
         return $table;
     }
+
+    /**
+     * Retourne les valeurs formatées correctement pour afficher un camembert
+     *
+     * @param $t_delai
+     * @param $contrat
+     * @return array
+     */
+    public function formatDataForPieGraph($t_delai,$contrat){
+        $t_interval = $this->setIntervalValue($contrat);
+
+        $t_NbInterval = array();
+        $t_data = array();
+
+        foreach($t_delai as $delai){
+            $t_NbInterval = $this->getIntervalDelai($delai,$t_interval,$t_NbInterval);
+        }
+
+        foreach($t_NbInterval as $index => $nbInterval){
+            $t_data[] = array($index,$nbInterval);
+        }
+
+        return $t_data;
+    }
+
+    /**
+     * Permet d'avoir le nombre d'occurence de delai entre une période fournie.
+     *
+     * @param $data
+     * @param $t_interval
+     * @param $t_result
+     * @return mixed
+     */
+    private function getIntervalDelai($data,$t_interval,$t_result){
+        //on convertit la donnée en heure
+        $delai = $data['delai']/60;
+        foreach($t_interval as $i =>$interval){
+            if($delai > $interval['min'] AND $delai < $interval['max']){
+                if(array_key_exists('Entre '.$interval['min'].' et '.$interval['max'].' heures',$t_result)){
+                    $t_result['Entre '.$interval['min'].' et '.$interval['max'].' heures'] += 1;
+                }else{
+                    $t_result['Entre '.$interval['min'].' et '.$interval['max'].' heures'] = 1;
+                }
+                return $t_result;
+            }
+        }
+        return $t_result;
+    }
+
+    /**
+     * Retourne un tableau avec des valeur founis pour faire un intervale de temps.
+     *
+     * @param $contrat
+     * @return array
+     */
+    private function setIntervalValue($contrat){
+        $delai_interval = $contrat['delai_interval'];
+
+        $t_interval     = array();
+        $previous       = null;
+        // trie du tableau des valeurs le plus petites au plus grande
+        sort($delai_interval);
+
+        //Premiere valeur
+        $firstValue     = array_shift($delai_interval);
+        $t_interval[]   = array('min'=>0,'max'=>$firstValue);
+        $previous       = $firstValue;
+
+        foreach($delai_interval as $interval){
+            $t_interval[]   = array('min'=>$previous,'max'=>$interval);
+            $previous       = $interval;
+        }
+        //Derniere valeur
+        $t_interval[] = array('min'=>array_pop($delai_interval),'max'=>99999999);
+
+        return $t_interval;
+    }
 }

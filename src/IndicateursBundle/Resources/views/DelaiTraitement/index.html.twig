@@ -4,11 +4,38 @@
 
 {% block indic_content %}
     <div class="container">
-        {{ table_HTML| raw }}
-        {{ graph_HTML| raw }}
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-pills">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#corrected">Délai de traitement</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#answer">Délai de réponse</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row" style="margin-top:30px;">
+            <div class="tab-content">
+                <div id="corrected" class="tab-pane fade in active">
+                    {{ graph_corrected_HTML| raw }}
+                    {{ table_corrected_HTML| raw }}
+                </div>
+                <div id="answer" class="tab-pane fade">
+                    {{ graph_answer_HTML| raw }}
+                    {{ table_answer_HTML| raw }}
+                </div>
+            </div>
+        </div>
+
     </div>
 {% endblock %}
 {% block indic_javascript %}
-    {{ table_JS| raw }}
-    {{ graph_JS| raw }}
+    {{ table_corrected_JS| raw }}
+    {{ graph_corrected_JS| raw }}
+    {{ table_answer_JS| raw }}
+    {{ graph_answer_JS| raw }}
+    <script type="text/javascript">
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            $('#correctedTable').DataTable().columns.adjust().draw();
+            $('#answerTable').DataTable().columns.adjust().draw();
+        })
+    </script>
 {% endblock %}

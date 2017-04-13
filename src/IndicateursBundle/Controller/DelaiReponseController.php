@@ -8,9 +8,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 
-class DelaiTraitementController extends Controller
+class DelaiReponseController extends Controller
 {
-
     public function TableAction(Request $request)
     {
         if($request->isXmlHttpRequest()) {
@@ -24,7 +23,7 @@ class DelaiTraitementController extends Controller
                 $response       = new JsonResponse();
 
                 /*Tickets avec délai par anne, mois par projet...*/
-                $t_delai        = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDelai($year,$month,$project,$nature,$priority,'TreatmentTime');
+                $t_delai        = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDelai($year,$month,$project,$nature,$priority,'ResponseTime');
 
                 $t_result       = $this->formatForDataTable($t_delai);
                 $response->setContent(json_encode($t_result));
@@ -48,12 +47,6 @@ class DelaiTraitementController extends Controller
         return $listData;
     }
 
-    /**
-     * Permet de faire le graphique en camembert
-     *
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function GraphAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
@@ -74,13 +67,15 @@ class DelaiTraitementController extends Controller
                     }
                 }
 
-                $t_delai        = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDelai($year,$month,$project,$nature,$priority,'TreatmentTime');
+                $t_delai        = $entityManager->getRepository("IndicateursBundle:Indic_TRSB")->getDelai($year,$month,$project,$nature,$priority,'ResponseTime');
                 $contrat        = $this->container->getParameter('contrat');
                 $data           = $toolrender->formatDataForPieGraph($t_delai,$contrat);
 
+                /*On regroupe les résultats en fonction des delais*/
+
                 $ob = new Highchart();
-                $ob->chart->renderTo('correctedChartContainer');
-                $ob->title->text('Nombre de ticket par delai de traitement.');
+                $ob->chart->renderTo('answerChartContainer');
+                $ob->title->text('Nombre de ticket par delai de reponse.');
 
                 $ob->plotOptions->pie(array(
                     'allowPointSelect'  => true,
@@ -99,4 +94,5 @@ class DelaiTraitementController extends Controller
             }
         }
     }
+
 }

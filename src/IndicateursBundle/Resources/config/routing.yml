@@ -8,8 +8,8 @@ indicateurs_openclose:
 indicateurs_reouverture:
     resource: "@IndicateursBundle/Resources/config/reouverture_routing.yml"
 
-indicateurs_delai_traitement:
-    resource: "@IndicateursBundle/Resources/config/delai_traitement_routing.yml"
+indicateurs_delai:
+    resource: "@IndicateursBundle/Resources/config/delai_routing.yml"
 
 indicateurs_contrat_reouverture_incident:
     resource: "@IndicateursBundle/Resources/config/reouverture_incident_routing.yml"

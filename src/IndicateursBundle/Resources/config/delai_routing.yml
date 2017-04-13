@@ -1,6 +1,6 @@
-indicateurs_delai_traitement_homepage:
-      path:   /delai/traitement
-      defaults: { _controller: IndicateursBundle:DelaiTraitement:index }
+indicateurs_delai_homepage:
+      path:   /delai
+      defaults: { _controller: IndicateursBundle:Delai:index }
 
 indicateurs_delai_traitement_table:
       path:   /delai/traitement/table
@@ -14,6 +14,18 @@ indicateurs_delai_traitement_graph:
       requirements:
           method:  GET
 
+indicateurs_delai_reponse_table:
+      path:   /delai/reponse/table
+      defaults: { _controller: IndicateursBundle:DelaiReponse:Table }
+      requirements:
+          method:  GET
+
+indicateurs_delai_reponse_graph:
+      path:   /delai/reponse/graph
+      defaults: { _controller: IndicateursBundle:DelaiReponse:Graph }
+      requirements:
+          method:  GET
+
 indicateurs_delai_traitement_incident_contrat:
       path:   /delai/traitement/incident/contrat
       defaults: { _controller: IndicateursBundle:Contractuel:IncidentDelaiTraitementContrat }
@@ -23,11 +35,5 @@ indicateurs_delai_traitement_incident_contrat:
 indicateurs_delai_traitement_support_contrat:
       path:   /delai/traitement/support/contrat
       defaults: { _controller: IndicateursBundle:DelaiTmntSupport:DelaiTtmntSupport }
-      requirements:
-          method:  GET
-
-indicateurs_delai_reponse_support_contrat:
-      path:   /delai/reponse/support/contrat
-      defaults: { _controller: IndicateursBundle:Contractuel:SupportDelaiReponseContrat }
       requirements:
           method:  GET
