@@ -23,49 +23,49 @@ class ContractuelController extends Controller
 
         /*Rendu du tableau Réouverture*/
         $table['ajax']['url']           = $this->generateUrl('indicateurs_contrat_reouverture_incident_table');
-        $table['ajax']['datas'][]       = array('name'=>'year','value'=>'2016');
+        $table['ajax']['datas'][]       = array('name'=>'year','value'=>'2017');
         $table['id']                    = 'reoinciTable';
         $table_incidentReouverture_HTML = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_incidentReouverture_JS   = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 
         /*rendu du tableau traitement incident p1*/
-        $table['ajax']['url']       = $this->generateUrl('indicateurs_contrat_traitement_liste', array('year'=>'2016','requestNature'=>'anomalie','priority'=>'p1'));
+        $table['ajax']['url']       = $this->generateUrl('indicateurs_contrat_traitement_liste', array('year'=>'2017','requestNature'=>'anomalie','priority'=>'p1'));
         $table['id']                = 'incidentTablePun';
         $table_incident_pun_HTML    = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_incident_pun_JS      = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 
         /*rendu du tableau traitement incident p2*/
-        $table['ajax']['url']       = $this->generateUrl('indicateurs_contrat_traitement_liste', array('year'=>'2016','requestNature'=>'anomalie','priority'=>'p2'));
+        $table['ajax']['url']       = $this->generateUrl('indicateurs_contrat_traitement_liste', array('year'=>'2017','requestNature'=>'anomalie','priority'=>'p2'));
         $table['id']                = 'incidentTablePdeux';
         $table_incident_pdeux_HTML  = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_incident_pdeux_JS    = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 
         /*rendu du tableau traitement incident p3*/
-        $table['ajax']['url']       = $this->generateUrl('indicateurs_contrat_traitement_liste', array('year'=>'2016','requestNature'=>'anomalie','priority'=>'p3'));
+        $table['ajax']['url']       = $this->generateUrl('indicateurs_contrat_traitement_liste', array('year'=>'2017','requestNature'=>'anomalie','priority'=>'p3'));
         $table['id']                = 'incidentTablePtrois';
         $table_incident_ptrois_HTML = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_incident_ptrois_JS   = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 
-        /*rendu du tableau traitement assisance*/
-        $table['ajax']['url']           = $this->generateUrl('indicateurs_contrat_traitement_liste', array('year'=>'2016','requestNature'=>'support','priority'=>'p1'));
+        /*rendu du tableau traitement assisance p1*/
+        $table['ajax']['url']           = $this->generateUrl('indicateurs_contrat_traitement_liste', array('year'=>'2017','requestNature'=>'support','priority'=>'p1'));
         $table['id']                    = 'assistanceTablePun';
         $table_assistance_pun_HTML      = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_assistance_pun_JS        = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 
-        /*rendu du tableau traitement assisance*/
-        $table['ajax']['url']           = $this->generateUrl('indicateurs_contrat_traitement_liste', array('year'=>'2016','requestNature'=>'support','priority'=>'p2'));
+        /*rendu du tableau traitement assisance p2*/
+        $table['ajax']['url']           = $this->generateUrl('indicateurs_contrat_traitement_liste', array('year'=>'2017','requestNature'=>'support','priority'=>'p2'));
         $table['id']                    = 'assistanceTablePdeux';
         $table_assistance_pdeux_HTML    = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_assistance_pdeux_JS      = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 
-        /*rendu du tableau traitement assisance*/
-        $table['ajax']['url']           = $this->generateUrl('indicateurs_contrat_traitement_liste', array('year'=>'2016','requestNature'=>'support','priority'=>'p3'));
+        /*rendu du tableau traitement assisance p3*/
+        $table['ajax']['url']           = $this->generateUrl('indicateurs_contrat_traitement_liste', array('year'=>'2017','requestNature'=>'support','priority'=>'p3'));
         $table['id']                    = 'assistanceTablePtrois';
         $table_assistance_ptrois_HTML   = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_assistance_ptrois_JS     = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 
         /*Rendu du graph traitement assisance*/
-        $graph['ajax']['url']           = $this->generateUrl('indicateurs_contrat_traitement_graph', array('year'=>'2016','requestNature'=>'support'));
+        $graph['ajax']['url']           = $this->generateUrl('indicateurs_contrat_traitement_graph', array('year'=>'2017','requestNature'=>'support'));
         $graph['id']                    = 'chartContainerAssistance';
         $graph_assistance_HTML           = $this->renderView('IndicateursBundle:Highcharts:chart.html.twig',array('graph'=>$graph));
         $graph_assistance_JS             = $this->renderView('IndicateursBundle:Highcharts:chart_javascript.html.twig',array('graph'=>$graph));

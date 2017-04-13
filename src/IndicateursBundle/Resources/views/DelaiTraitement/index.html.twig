@@ -4,9 +4,11 @@
 
 {% block indic_content %}
     <div class="container">
-        {{ table_delai_HTML| raw }}
+        {{ table_HTML| raw }}
+        {{ graph_HTML| raw }}
     </div>
 {% endblock %}
 {% block indic_javascript %}
-    {{ table_delai_JS| raw }}
+    {{ table_JS| raw }}
+    {{ graph_JS| raw }}
 {% endblock %}

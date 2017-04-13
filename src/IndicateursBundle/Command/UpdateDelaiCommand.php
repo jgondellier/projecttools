@@ -68,6 +68,8 @@ class UpdateDelaiCommand extends ContainerAwareCommand
                     }
                     if($delaiTreatment != 0){
                         $entity_trsb->setTreatmentTime(round($delaiTreatment,2));
+                    }elseif($delaiTreatment == 0){
+                        $entity_trsb->setTreatmentTime(0);
                     }
                     //On renseigne le temps de réponse
                     $delaiResponse = 0;

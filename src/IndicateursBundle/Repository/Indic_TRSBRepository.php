@@ -192,7 +192,7 @@ class Indic_TRSBRepository extends EntityRepository
         $count = 1;
         $query->leftJoin("t.Indic_items",'i')
             ->where('YEAR(t.openDate) = :year')
-            ->andWhere('t.refusedCount > :count')
+            ->andWhere('t.refusedCount >= :count')
             ->orderBy('t.openDate', 'ASC')
             ->setParameter('year',$year)
             ->setParameter('count',$count);

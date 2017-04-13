@@ -18,6 +18,10 @@
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html("<a href='{{ col.href }}"+oData.{{ col.data }}+"' target='_blank'>"+oData.{{ col.data }}+"</a>");
                     }
+                    {% elseif ((col.convert is defined)) %},
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).html(Math.round(oData.{{ col.data }}/60)+" heures");
+                    }
                     {% endif %} },
                 {% endfor %}
             ],
