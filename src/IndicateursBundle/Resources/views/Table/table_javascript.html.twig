@@ -53,7 +53,7 @@
                                 {% if(graph is defined) %}
                                 var table = $('#{{ table.id }}').DataTable();
                                 var datas = {};
-                                $('.dataTables_scrollFoot select').each(function( index ) {
+                                $('#{{ table.id }}_wrapper .dataTables_scrollFoot select').each(function( index ) {
                                     var columnHeader = table.column( index ).header();
                                     datas[columnHeader.id] = $( this ).val();
                                 });
