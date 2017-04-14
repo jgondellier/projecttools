@@ -164,15 +164,39 @@ class ToolRender{
     private function getIntervalDelai($data,$t_interval,$t_result){
         //on convertit la donnée en heure
         $delai = $data['delai']/60;
-        foreach($t_interval as $i =>$interval){
-            if($delai > $interval['min'] AND $delai < $interval['max']){
-                if(array_key_exists('Entre '.$interval['min'].' et '.$interval['max'].' heures',$t_result)){
-                    $t_result['Entre '.$interval['min'].' et '.$interval['max'].' heures'] += 1;
-                }else{
-                    $t_result['Entre '.$interval['min'].' et '.$interval['max'].' heures'] = 1;
+        foreach($t_interval as $i =>$interval) {
+            if ($interval['max'] == 'max') {
+                if ($delai >= $interval['min']) {
+                    $label = 'Plus de '.$interval['min'].' heures';
+                    return $this->setIntervalResultValue($label,$t_result);
                 }
-                return $t_result;
+            }elseif($interval['min'] == 'min'){
+                if ($delai <= $interval['max']) {
+                    $label = 'Moins de '.$interval['max'].' heures';
+                    return $this->setIntervalResultValue($label,$t_result);
+                }
+            }else{
+                if($delai > $interval['min'] AND $delai < $interval['max']) {
+                    $label = 'Entre '.$interval['min'].' et '.$interval['max'].' heures';
+                    return $this->setIntervalResultValue($label,$t_result);
+                }
             }
+        }
+        return $t_result;
+    }
+
+    /**
+     * Renseigne un array pour les résultats des intervelles de delai.
+     *
+     * @param $label
+     * @param $t_result
+     * @return mixed
+     */
+    private function setIntervalResultValue($label,$t_result){
+        if (array_key_exists($label, $t_result)) {
+            $t_result[$label] += 1;
+        } else {
+            $t_result[$label] = 1;
         }
         return $t_result;
     }
@@ -201,7 +225,7 @@ class ToolRender{
             $previous       = $interval;
         }
         //Derniere valeur
-        $t_interval[] = array('min'=>array_pop($delai_interval),'max'=>99999999);
+        $t_interval[] = array('min'=>array_pop($delai_interval),'max'=>'max');
 
         return $t_interval;
     }
