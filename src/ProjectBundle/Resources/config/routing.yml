@@ -1,0 +1,6 @@
+project_homepage:
+    path:     /
+    defaults: { _controller: ProjectBundle:Default:index }
+
+project_contact:
+    resource: "@ProjectBundle/Resources/config/contact_routing.yml"

@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new GanttBundle\GanttBundle(),
             new IndicateursBundle\IndicateursBundle(),
             new Ob\HighchartsBundle\ObHighchartsBundle(),
+            new ProjectBundle\ProjectBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

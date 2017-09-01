@@ -1,0 +1,15 @@
+{% extends 'ProjectBundle:Default:Project.html.twig' %}
+
+{% block project_title %}Liste des contacts {% endblock %}
+
+{% block project_content %}
+    <div class="container">
+        {{ table_HTML| raw }}
+        {{ graph_HTML| raw }}
+    </div>
+{% endblock %}
+
+{% block project_javascript %}
+    {{ table_JS| raw }}
+    {{ graph_JS| raw }}
+{% endblock %}

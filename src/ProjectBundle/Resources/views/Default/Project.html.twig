@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Indicateurs - {% block indic_title %}
+    Project - {% block project_title %}
     {% endblock %}
 {% endblock %}
 
 {% block stylesheets %}
-    {% stylesheets output='css/compiled/main.indic.css' filter='cssrewrite'
+    {% stylesheets output='css/compiled/main.project.css' filter='cssrewrite'
         '@IndicateursBundle/Resources/public/css/datatables.min.css'
         '@IndicateursBundle/Resources/public/css/jquery.dataTables.min.css'
         '@IndicateursBundle/Resources/public/css/buttons.bootstrap.min.css'
@@ -19,24 +19,19 @@
 {% block sousmenu %}
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-            <li class="{% if (activeMenu is defined and activeMenu == 'homepage') %} active{% endif %}"><a href="{{ path('indicateurs_homepage') }}">Homepage <span class="sr-only">(current)</span></a></li>
-            <li class="{% if (activeMenu is defined and activeMenu == 'openclose') %} active{% endif %}"><a href="{{ path('indicateurs_openclose_homepage') }}">Ouvert/Fermé</a></li>
-            <li class="{% if (activeMenu is defined and activeMenu == 'reouverture') %} active{% endif %}"><a href="{{ path('indicateurs_reouverture_homepage') }}">Réouvertures</a></li>
-            <li class="{% if (activeMenu is defined and activeMenu == 'evolutionNbTicket') %} active{% endif %}"><a href="{{ path('indicateurs_evolutionNBTicket_homepage') }}">Evolution Nb Ticket</a></li>
-            <li class="{% if (activeMenu is defined and activeMenu == 'delai') %} active{% endif %}"><a href="{{ path('indicateurs_delai_homepage') }}">Délai</a></li>
-            <li class="{% if (activeMenu is defined and activeMenu == 'contractuel') %} active{% endif %}"><a href="{{ path('indicateurs_contrat_reouverture_incident_homepage') }}">Contractuel</a></li>
-            <li class="{% if (activeMenu is defined and activeMenu == 'help') %} active{% endif %}"><a href="{{ path('indicateurs_help') }}"><span class="glyphicon glyphicon-lamp"></span></a></li>
+            <li class="{% if (activeMenu is defined and activeMenu == 'homepage') %} active{% endif %}"><a href="{{ path('project_homepage') }}">Homepage <span class="sr-only">(current)</span></a></li>
+
         </ul>
     </div>
 {% endblock %}
 
 {% block body %}
-    {% block indic_content %}
+    {% block project_content %}
     {% endblock %}
 {% endblock %}
 
 {% block javascripts %}
-    {% block indic_javascript %}
+    {% block project_javascript %}
     {% endblock %}
     {% javascripts output='js/compiled/main.indic.js'
         '@IndicateursBundle/Resources/public/js/datatables.min.js'

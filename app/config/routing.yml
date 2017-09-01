@@ -1,3 +1,11 @@
+homepage:
+    path:     /
+    defaults: { _controller: ProjectBundle:HPGlobale:index }
+
+project:
+    resource: "@ProjectBundle/Resources/config/routing.yml"
+    prefix:   /projet
+
 gantt:
     resource: "@GanttBundle/Controller/"
     type:     annotation

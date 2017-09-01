@@ -1,0 +1,9 @@
+project_contact_homepage:
+  path: /
+  defaults: { _controller: ProjectBundle:Contact:index}
+
+project_contact_table:
+    path:     /table
+    defaults: { _controller: ProjectBundle:Contact:Table}
+    requirements:
+        method:  GET
