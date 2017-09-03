@@ -5,7 +5,7 @@ namespace ProjectBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Indic_project
+ * project
  *
  * @ORM\Table(name="project_project")
  * @ORM\Entity(repositoryClass="ProjectBundle\Repository\ProjectRepository")
