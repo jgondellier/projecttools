@@ -2,6 +2,7 @@
 
 namespace ProjectBundle\Controller;
 
+use ProjectBundle\Entity\Contact;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,7 +18,7 @@ class ContactController extends Controller
         $table['cols'][]                = array('filter'=>0,'name'=>'Nom','data'=>'nom');
         $table['cols'][]                = array('filter'=>0,'name'=>'Prenom','data'=>'prenom');
         $table['cols'][]                = array('filter'=>0,'name'=>'Mail','data'=>'mail');
-        $table['cols'][]                = array('filter'=>0,'name'=>'Projet','data'=>'projet');
+        $table['cols'][]                = array('filter'=>0,'name'=>'Projet','data'=>'projectName');
         $table['cols'][]                = array('filter'=>0,'name'=>'description','data'=>'description');
         $table_HTML                     = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_JS                       = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
@@ -40,19 +41,19 @@ class ContactController extends Controller
             if ($request->getMethod() === 'GET') {
                 $entityManager  = $this->getDoctrine()->getManager();
 
+                $idBnp         = $request->get('$idBnp');
                 $nom            = $request->get('nom');
                 $prenom         = $request->get('prenom');
                 $mail           = $request->get('mail');
-                $projet         = $request->get('projet');
-                $description    = $request->get('description');
+                $project        = $request->get('project');
 
                 $response       = new JsonResponse();
 
                 /*Recuperation des contacts en base*/
-                $t_contact      = ;
+                $t_contact['data']      = $entityManager->getRepository("ProjectBundle:Contact")->getContacts($idBnp,$nom,$prenom,$mail,$project);
 
-                $t_result       = $this->formatForDataTable($t_open,$t_closed);
-                $response->setContent(json_encode($t_result));
+//                $t_result       = $this->formatForDataTable($t_open,$t_closed);
+                $response->setContent(json_encode($t_contact));
                 return $response;
             }
         }else{
@@ -60,48 +61,20 @@ class ContactController extends Controller
         }
         return NULL;
     }
-    /**
-     * Formate les donnée ouverture fermeture pour les afficher dans un tablea DataTable
-     *
-     * @param $t_open
-     * @param $t_closed
-     * @return array
-     */
-    private function formatForDataTable($t_open,$t_closed){
-        $list_project   = $this->container->getParameter('list_project');
-        $t_openClose    = array();
-        $t_result       = array();
-        $toolrender     = $this->get('indicateurs.rendertools');
 
-        //Formalisation de la donnée
-        foreach ($t_open as $open){
-            $t_openClose[$open['annee']][$toolrender->getMonthName($open['mois'])][$list_project[$open['projet']]['name']][$open['nature']][$open['priority']]['Ouverture']=$open['somme'];
-        }
-        foreach ($t_closed as $closed){
-            $t_openClose[$closed['annee']][$toolrender->getMonthName($closed['mois'])][$list_project[$closed['projet']]['name']][$closed['nature']][$closed['priority']]['Fermeture']=$closed['somme'];
-        }
+    public function addAction(Request $request)
+    {
+        $contact = new Contact();
 
-        //Init des valeurs null
-        foreach($t_openClose as $year=>$listMonth){
-            foreach($listMonth as $month=>$listProjet){
-                foreach($listProjet as $project=>$listNature){
-                    foreach($listNature as $nature=>$listPriority){
-                        foreach($listPriority as $priority=>$openClose){
-                            $openCount = 0;
-                            $closeCount = 0;
-                            if(isset($openClose['Ouverture'])){
-                                $openCount = $openClose['Ouverture'];
-                            }
-                            if(isset($openClose['Fermeture'])){
-                                $closeCount = $openClose['Fermeture'];
-                            }
-                            $t_result['data'][] = array('Annee'=>$year,'Mois'=>$month,'Projet'=>$project,'Nature'=>$nature,'Priorite'=>$priority,'Ouverture'=>$openCount,'Fermeture'=>$closeCount);
-                        }
-                    }
-                }
-            }
-        }
+        $form = $this->get('form.factory')->createBuilder('form', $contact)
+            ->add('idBnp', 'text')
+            ->add('idJtrac', 'text')
+            ->add('nom', 'text')
+            ->add('prenom', 'text')
+            ->add('mail', 'text')
+            ->add('description', 'textarea')
+            ->add('project', 'text');
 
-        return $t_result;
+
     }
 }

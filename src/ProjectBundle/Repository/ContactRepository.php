@@ -12,4 +12,45 @@ use Doctrine\ORM\EntityRepository;
  */
 class ContactRepository extends EntityRepository
 {
+    /**
+     * Permet de selectionner les contacts.
+     *
+     * @param $idBnp
+     * @param $nom
+     * @param $prenom
+     * @param $mail
+     * @param $project
+     * @return array
+     */
+    public function getContacts($idBnp,$nom,$prenom,$mail,$project){
+
+        $query      = $this->createQueryBuilder('c');
+        $query->select('p.name projectName, c.id, c.nom, c.prenom, c.description, c.idBnp, c.mail ')
+            ->leftJoin("c.project",'p')
+            ->orderBy('c.nom', 'ASC')
+            ->orderBy('c.prenom', 'ASC');
+
+        if($idBnp !=-1 && $idBnp != 'all' && $idBnp != Null){
+            $query->andWhere('c.idBnp = :idBnp')
+                ->setParameter('idBnp',$idBnp);
+        }
+        if($nom !=-1 && $nom != 'all' && $nom != Null){
+            $query->andWhere('c.nom = :nom')
+                ->setParameter('nom',$nom);
+        }
+        if($prenom !=-1 && $prenom != 'all' && $prenom != Null){
+            $query->andWhere('c.prenom = :prenom')
+                ->setParameter('prenom',$prenom);
+        }
+        if($mail !=-1 && $mail != 'all' && $mail != Null){
+            $query->andWhere('c.mail = :mail')
+                ->setParameter('mail',$mail);
+        }
+        if($project !=-1 && $project != 'all' && $project != Null){
+            $query->andWhere('p.projectId = :project')
+                ->setParameter('project',$project);
+        }
+
+        return $query->getQuery()->getArrayResult();
+    }
 }

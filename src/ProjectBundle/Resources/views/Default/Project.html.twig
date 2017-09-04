@@ -20,7 +20,8 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
             <li class="{% if (activeMenu is defined and activeMenu == 'homepage') %} active{% endif %}"><a href="{{ path('project_homepage') }}">Homepage <span class="sr-only">(current)</span></a></li>
-
+            <li class="{% if (activeMenu is defined and activeMenu == 'contact') %} active{% endif %}"><a href="{{ path('project_contact_homepage') }}">Contact</a></li>
+            {#<li class="{% if (activeMenu is defined and activeMenu == 'project') %} active{% endif %}"><a href="{{ path('project_projet_homepage') }}">Projet</a></li>#}
         </ul>
     </div>
 {% endblock %}
