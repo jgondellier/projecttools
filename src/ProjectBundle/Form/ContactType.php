@@ -14,12 +14,12 @@ class ContactType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('idBnp')
-            ->add('idJtrac')
-            ->add('nom')
-            ->add('prenom')
-            ->add('mail')
-            ->add('description')
+            ->add('idBnp','text')
+            ->add('idJtrac','text')
+            ->add('nom','text', array('required' => true))
+            ->add('prenom','text', array('required' => true))
+            ->add('mail','text')
+            ->add('description','textarea')
             ->add('project', 'entity', array('property' => 'name', 'class' => 'ProjectBundle\Entity\Project'));
     }
     

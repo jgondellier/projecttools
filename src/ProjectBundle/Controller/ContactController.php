@@ -62,19 +62,31 @@ class ContactController extends Controller
         return NULL;
     }
 
-    public function addAction(Request $request)
+     public function addAction(Request $request)
     {
+        if (!$request->isXmlHttpRequest()) {
+            return new JsonResponse(array('message' => 'You can access this only using Ajax!'), 400);
+        }
+
         $contact = new Contact();
 
-        $form = $this->get('form.factory')->createBuilder('form', $contact)
-            ->add('idBnp', 'text')
-            ->add('idJtrac', 'text')
-            ->add('nom', 'text')
-            ->add('prenom', 'text')
-            ->add('mail', 'text')
-            ->add('description', 'textarea')
-            ->add('project', 'text');
+        $contactForm = $this->createForm( new Contact() );
+        $contactForm->handleRequest($request);
 
+        if ($contactForm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($contact);
+            $em->flush();
 
+            return new JsonResponse(array('message' => 'Success!'), 200);
+        }
+
+        return new JsonResponse(
+            array(
+                'message' => 'Success !',
+                'form' => $this->renderView('ProjectBundle:Contact:Contact_Form.html.twig',
+                    array(
+                        'form' => $contactForm->createView(),
+                    ))), 200);
     }
 }
