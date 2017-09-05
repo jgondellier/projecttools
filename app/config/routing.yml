@@ -1,3 +1,15 @@
+project_project:
+    resource: "@ProjectBundle/Controller/ProjectController.php"
+    type:     annotation
+
+project_environnement:
+    resource: "@ProjectBundle/Controller/EnvironnementController.php"
+    type:     annotation
+
+project_project:
+    resource: "@ProjectBundle/Controller/ProjectController.php"
+    type:     annotation
+
 homepage:
     path:     /
     defaults: { _controller: ProjectBundle:HPGlobale:index }

@@ -6,14 +6,14 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ProjectType extends AbstractType
+class EnvironnementType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('jtracId')->add('jiraId')->add('name')->add('sourcecodeUrl');
+        $builder->add('name')->add('url')->add('dateCreation')->add('dateModification')->add('project');
     }
     
     /**
@@ -22,7 +22,7 @@ class ProjectType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'ProjectBundle\Entity\Project'
+            'data_class' => 'ProjectBundle\Entity\Environnement'
         ));
     }
 
@@ -31,7 +31,7 @@ class ProjectType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'projectbundle_project';
+        return 'projectbundle_environnement';
     }
 
 

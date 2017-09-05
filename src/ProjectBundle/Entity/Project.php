@@ -3,6 +3,7 @@
 namespace ProjectBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * project
@@ -12,6 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Project
 {
+    public function __construct()
+    {
+        $this->environnements   = new ArrayCollection();
+        $this->contacts         = new ArrayCollection();
+    }
+
     /**
      * @var int
      *
@@ -24,9 +31,16 @@ class Project
     /**
      * @var int
      *
-     * @ORM\Column(name="project_id", type="smallint", unique=true)
+     * @ORM\Column(name="jtrac_id", type="smallint", unique=true, nullable=true)
      */
-    private $projectId;
+    private $jtracId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="jira_id", type="smallint", unique=true, nullable=true)
+     */
+    private $jiraId;
 
     /**
      * @var string
@@ -38,9 +52,20 @@ class Project
     /**
      * @var string
      *
-     * @ORM\Column(name="code_url", type="string", length=50)
+     * @ORM\Column(name="sourcecode_url", type="string", length=255, nullable=true)
      */
-    private $codeUrl;
+    private $sourcecodeUrl;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ProjectBundle\Entity\Environnement", mappedBy="project")
+     */
+    private $environnements;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ProjectBundle\Entity\Contact", mappedBy="project")
+     */
+    private $contacts;
+
 
     /**
      * Get id
@@ -53,33 +78,56 @@ class Project
     }
 
     /**
-     * Set projectId
+     * Set jtracId
      *
-     * @param integer $projectId
-     * @return Indic_project
+     * @param integer $jtracId
+     * @return Project
      */
-    public function setProjectId($projectId)
+    public function setJtracId($jtracId)
     {
-        $this->projectId = $projectId;
+        $this->jtracId = $jtracId;
 
         return $this;
     }
 
     /**
-     * Get projectId
+     * Get jtracId
      *
      * @return integer 
      */
-    public function getProjectId()
+    public function getJtracId()
     {
-        return $this->projectId;
+        return $this->jtracId;
+    }
+
+    /**
+     * Set jiraId
+     *
+     * @param integer $jiraId
+     * @return Project
+     */
+    public function setJiraId($jiraId)
+    {
+        $this->jiraId = $jiraId;
+
+        return $this;
+    }
+
+    /**
+     * Get jiraId
+     *
+     * @return integer 
+     */
+    public function getJiraId()
+    {
+        return $this->jiraId;
     }
 
     /**
      * Set name
      *
      * @param string $name
-     * @return Indic_project
+     * @return Project
      */
     public function setName($name)
     {
@@ -99,25 +147,91 @@ class Project
     }
 
     /**
-     * Set codeUrl
+     * Set sourcecodeUrl
      *
-     * @param string $codeUrl
-     * @return Indic_project
+     * @param string $sourcecodeUrl
+     * @return Project
      */
-    public function setCodeUrl($codeUrl)
+    public function setSourcecodeUrl($sourcecodeUrl)
     {
-        $this->codeUrl = $codeUrl;
+        $this->sourcecodeUrl = $sourcecodeUrl;
 
         return $this;
     }
 
     /**
-     * Get codeUrl
+     * Get sourcecodeUrl
      *
      * @return string 
      */
-    public function getCodeUrl()
+    public function getSourcecodeUrl()
     {
-        return $this->codeUrl;
+        return $this->sourcecodeUrl;
+    }
+
+    /**
+     * Add environnements
+     *
+     * @param \ProjectBundle\Entity\Environnement $environnements
+     * @return Project
+     */
+    public function addEnvironnement(\ProjectBundle\Entity\Environnement $environnements)
+    {
+        $this->environnements[] = $environnements;
+
+        return $this;
+    }
+
+    /**
+     * Remove environnements
+     *
+     * @param \ProjectBundle\Entity\Environnement $environnements
+     */
+    public function removeEnvironnement(\ProjectBundle\Entity\Environnement $environnements)
+    {
+        $this->environnements->removeElement($environnements);
+    }
+
+    /**
+     * Get environnements
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEnvironnements()
+    {
+        return $this->environnements;
+    }
+
+    /**
+     * Add contacts
+     *
+     * @param \ProjectBundle\Entity\Contact $contacts
+     * @return Project
+     */
+    public function addContact(\ProjectBundle\Entity\Contact $contacts)
+    {
+        $this->contacts[] = $contacts;
+
+        return $this;
+    }
+
+    /**
+     * Remove contacts
+     *
+     * @param \ProjectBundle\Entity\Contact $contacts
+     */
+    public function removeContact(\ProjectBundle\Entity\Contact $contacts)
+    {
+        $this->contacts->removeElement($contacts);
+    }
+
+    /**
+     * Get contacts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
     }
 }

@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Contact
 {
+    public function __construct()
+    {
+        $this->dateCreation = new \Datetime();
+    }
+
     /**
      * @var int
      *
@@ -64,10 +69,24 @@ class Contact
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ProjectBundle\Entity\Project")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity="ProjectBundle\Entity\Project", inversedBy="contacts")
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
      */
     private $project;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_creation", type="datetime")
+     */
+    private $dateCreation;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_modification", type="datetime")
+     */
+    private $dateModification;
 
 
     /**
@@ -262,5 +281,51 @@ class Contact
     public function getProject()
     {
         return $this->project;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     * @return Contact
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime 
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
+     * Set dateModification
+     *
+     * @param \DateTime $dateModification
+     * @return Contact
+     */
+    public function setDateModification($dateModification)
+    {
+        $this->dateModification = $dateModification;
+
+        return $this;
+    }
+
+    /**
+     * Get dateModification
+     *
+     * @return \DateTime 
+     */
+    public function getDateModification()
+    {
+        return $this->dateModification;
     }
 }

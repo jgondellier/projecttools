@@ -41,7 +41,7 @@ class ContactController extends Controller
             if ($request->getMethod() === 'GET') {
                 $entityManager  = $this->getDoctrine()->getManager();
 
-                $idBnp         = $request->get('$idBnp');
+                $idBnp          = $request->get('idBnp');
                 $nom            = $request->get('nom');
                 $prenom         = $request->get('prenom');
                 $mail           = $request->get('mail');
