@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new IndicateursBundle\IndicateursBundle(),
             new Ob\HighchartsBundle\ObHighchartsBundle(),
             new ProjectBundle\ProjectBundle(),
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

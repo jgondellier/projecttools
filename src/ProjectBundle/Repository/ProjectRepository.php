@@ -12,4 +12,39 @@ use Doctrine\ORM\EntityRepository;
  */
 class ProjectRepository extends EntityRepository
 {
+    /**
+     * Permet de selectionner les Projets
+     *
+     * @param $name
+     * @param $sourcecodeUrl
+     * @param $jtracId
+     * @param $jiraId
+     * @return array
+     */
+    public function getProjects($name,$sourcecodeUrl,$jtracId,$jiraId){
+
+        $query      = $this->createQueryBuilder('p');
+        $query->select('p.id DT_RowId, p.name, p.sourcecodeUrl, p.jtracId, p.jiraId')
+            ->orderBy('p.name', 'ASC');
+
+        if($name !=-1 && $name != 'all' && $name != Null){
+            $query->andWhere('p.name = :name')
+                ->setParameter('name',$name);
+        }
+        if($sourcecodeUrl !=-1 && $sourcecodeUrl != 'all' && $sourcecodeUrl != Null){
+            $query->andWhere('p.sourcecodeUrl = :sourcecodeUrl')
+                ->setParameter('sourcecodeUrl',$sourcecodeUrl);
+        }
+        if($jtracId !=-1 && $jtracId != 'all' && $jtracId != Null){
+            $query->andWhere('p.jtracId = :jtracId')
+                ->setParameter('jtracId',$jtracId);
+        }
+        if($jiraId !=-1 && $jiraId != 'all' && $jiraId != Null){
+            $query->andWhere('p.jiraId = :jiraId')
+                ->setParameter('jiraId',$jiraId);
+        }
+
+
+        return $query->getQuery()->getArrayResult();
+    }
 }

@@ -5,7 +5,10 @@ namespace ProjectBundle\Controller;
 use ProjectBundle\Entity\Project;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Project controller.
@@ -22,26 +25,27 @@ class ProjectController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $projects = $em->getRepository('ProjectBundle:Project')->findAll();
-
+        /*Formulaire de nouveau projet*/
+        $project = new Project();
+        $form = $this->createForm('ProjectBundle\Form\ProjectType', $project);
 
         /*Rendu du tableau */
-        $table['ajax']['url']           = $this->generateUrl('project_contact_table');
-        $table['id']                    = 'contactTable';
-        $table['cols'][]                = array('filter'=>0,'name'=>'Nom','data'=>'nom');
-        $table['cols'][]                = array('filter'=>0,'name'=>'Prenom','data'=>'prenom');
-        $table['cols'][]                = array('filter'=>0,'name'=>'Mail','data'=>'mail');
-        $table['cols'][]                = array('filter'=>0,'name'=>'Projet','data'=>'projectName');
-        $table['cols'][]                = array('filter'=>0,'name'=>'description','data'=>'description');
+        $table['ajax']['url']           = $this->generateUrl('project_table');
+        $table['id']                    = 'projectTable';
+        $table['cols'][]                = array('filter'=>0,'name'=>'Name','data'=>'name');
+        $table['cols'][]                = array('filter'=>0,'name'=>'Code Source','data'=>'sourcecodeUrl');
+        $table['cols'][]                = array('filter'=>0,'name'=>'jtracId','data'=>'jtracId');
+        $table['cols'][]                = array('filter'=>0,'name'=>'jiraId','data'=>'jiraId');
+        $table['cols'][]                = array('filter'=>0,'name'=>'modifier','data'=>'null','edit'=>1);
+        $table['cols'][]                = array('filter'=>0,'name'=>'supprimer','data'=>'null','del'=>1);
         $table_HTML                     = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_JS                       = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 
-        return $this->render('ProjectBundle:Contact:Contacts.html.twig',array(
-            'activeMenu' => 'contact',
+        return $this->render('ProjectBundle:Project:Project.html.twig',array(
+            'activeMenu' => 'projet',
             'table_HTML'=>$table_HTML,
             'table_JS'=>$table_JS,
+            'form' => $form->createView(),
         ));
     }
 
@@ -50,6 +54,9 @@ class ProjectController extends Controller
      *
      * @param Request $request
      * @return null|JsonResponse
+     *
+     * @Route("/table", name="project_table")
+     * @Method("GET")
      */
     public function TableAction(Request $request)
     {
@@ -57,16 +64,15 @@ class ProjectController extends Controller
             if ($request->getMethod() === 'GET') {
                 $entityManager  = $this->getDoctrine()->getManager();
 
-                $idBnp         = $request->get('idBnp');
-                $nom            = $request->get('nom');
-                $prenom         = $request->get('prenom');
-                $mail           = $request->get('mail');
-                $project        = $request->get('project');
+                $name           = $request->get('name');
+                $sourcecodeUrl  = $request->get('sourcecodeUrl');
+                $jtracId        = $request->get('jtracId');
+                $jiraId         = $request->get('jiraId');
 
                 $response       = new JsonResponse();
 
                 /*Recuperation des contacts en base*/
-                $t_contact['data']      = $entityManager->getRepository("ProjectBundle:Contact")->getProjects($idBnp,$nom,$prenom,$mail,$project);
+                $t_contact['data']      = $entityManager->getRepository("ProjectBundle:Project")->getProjects($name,$sourcecodeUrl,$jtracId,$jiraId);
 
                 $response->setContent(json_encode($t_contact));
                 return $response;
@@ -80,27 +86,42 @@ class ProjectController extends Controller
     /**
      * Creates a new project entity.
      *
+     * @param Request $request
+     * @return null|JsonResponse
+     *
      * @Route("/new", name="projet_new")
      * @Method({"GET", "POST"})
      */
+
     public function newAction(Request $request)
     {
-        $project = new Project();
-        $form = $this->createForm('ProjectBundle\Form\ProjectType', $project);
-        $form->handleRequest($request);
+        if($request->isXmlHttpRequest()) {
+            if ($request->getMethod() === 'POST') {
+                $project = new Project();
+                $form = $this->createForm('ProjectBundle\Form\ProjectType', $project);
+                $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($project);
-            $em->flush();
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($project);
+                    $em->flush();
 
-            return $this->redirectToRoute('projet_show', array('id' => $project->getId()));
+                    return new JsonResponse(array('message' => 'Success!'), 200);
+                }
+
+                return new JsonResponse(
+                    array(
+                        'message' => 'Success !',
+                        'form' => $this->renderView('ProjectBundle:Contact:Contact_Form.html.twig',
+                            array(
+                                'project' => $project,
+                                'form' => $form->createView(),
+                            ))), 200);
+            }else{
+                throw new AccessDeniedException('Access denied');
+            }
         }
-
-        return $this->render('project/new.html.twig', array(
-            'project' => $project,
-            'form' => $form->createView(),
-        ));
+        throw new AccessDeniedException('Access denied');
     }
 
     /**
@@ -122,26 +143,35 @@ class ProjectController extends Controller
     /**
      * Displays a form to edit an existing project entity.
      *
-     * @Route("/{id}/edit", name="projet_edit")
+     * @Route("/{id}/edit", name="projet_edit", options={"expose"=true})
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Project $project)
     {
-        $deleteForm = $this->createDeleteForm($project);
-        $editForm = $this->createForm('ProjectBundle\Form\ProjectType', $project);
-        $editForm->handleRequest($request);
+        if($request->isXmlHttpRequest()) {
+            if ($request->getMethod() === 'POST') {
+                $editForm = $this->createForm('ProjectBundle\Form\ProjectType', $project);
+                $editForm->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+                if ($editForm->isSubmitted() && $editForm->isValid()) {
+                    $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('projet_edit', array('id' => $project->getId()));
+                    return new JsonResponse(array('message' => 'Success!'), 200);
+                }
+
+                return new JsonResponse(
+                    array(
+                        'message' => 'Success !',
+                        'form' => $this->renderView('ProjectBundle:Project:Project_edit_form.html.twig',
+                            array(
+                                'project' => $project,
+                                'form' => $editForm->createView(),
+                            ))), 200);
+            }else{
+                throw new AccessDeniedException('Access denied');
+            }
         }
-
-        return $this->render('project/edit.html.twig', array(
-            'project' => $project,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        throw new AccessDeniedException('Access denied');
     }
 
     /**

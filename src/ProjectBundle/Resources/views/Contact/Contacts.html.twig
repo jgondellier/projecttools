@@ -4,7 +4,11 @@
 
 {% block project_content %}
     <div class="container">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addContact">Ajouter un contact</button>
+        <nav class="navbar navbar-light bg-light">
+            <form class="form-inline">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addContact">Ajouter un contact</button>
+            </form>
+        </nav>
         <div class="modal fade" id="addContact" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">

@@ -29,16 +29,16 @@ class Project
     private $id;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="jtrac_id", type="smallint", unique=true, nullable=true)
+     * @ORM\Column(name="jtrac_id", type="string", length=50, nullable=true)
      */
     private $jtracId;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="jira_id", type="smallint", unique=true, nullable=true)
+     * @ORM\Column(name="jira_id", type="string", length=50, nullable=true)
      */
     private $jiraId;
 

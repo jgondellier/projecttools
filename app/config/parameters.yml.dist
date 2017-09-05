@@ -17,232 +17,232 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
-    jtrac_url: http://jtrac-fr-realestate.is.echonet/jtrac/app/item/
-        contrat:
-            nbsupano: 415
-            delai_priorite:
-                support:
-                    1: 4
-                    2: 24
-                    3: 72
-                anomalie:
-                    1: 4
-                    2: 24
-                    3: 72
-                evolution:
-                    1: 48
-                    2: 120
-                    3: 240
-        list_project:
-            60:
-                name: HIPARK
-                prefix: HIPARKWEB
-                priority:
-                    1: p1
-                    2: p2
-                    3: p3
-                    4: p4
-                type:
-                    1: bug
-                    2: 'evolution mineur'
-                    3: support
-                    5: 'evolution majeur'
-                    6: devis
-                status:
-                    1: Open
-                    2: Open-Qualified
-                    3: Accepted-In-Progress
-                    4: More-Information-Request
-                    5: Recette-Refusee-Moa-Depreciated
-                    6: Recette-Validee-Moa-Depreciated
-                    7: Dsi-Livre-En-Attente-Recette-Moe-Depreciated
-                    8: Refused
-                    9: Validated
-                    99: Closed
-            93:
-                name: iREIM
-                prefix: IREIM
-                priority:
-                    1: p1
-                    2: p2
-                    3: p3
-                    4: p4
-                    5: mineur-deprecated
-                type:
-                    1: bug
-                    3: 'evolution mineur'
-                    4: support
-                    5: 'evolution majeur'
-                    6: devis
-                status:
-                    1: Open
-                    2: Open-Qualified
-                    3: Assigned-Depreciated
-                    4: Corrected-To-Be-Tested
-                    5: Corrected-Depreciated
-                    6: Refused
-                    7: Open-Validated-Depreciated
-                    8: En-Cours-Qualif-Depreciated
-                    9: Accepted-In-Progress
-                    10: Al-Livrer-Depreciated
-                    11: Keep-Open-Bug-Pdt-Depreciated
-                    12: Open-Qualified-Depreciated
-                    13: More-Information-Request
-                    14: Validated
-                    99: Closed
-            123:
-                name: REIMIT
-                prefix: REIMIT
-                priority:
-                    1: p1
-                    2: p2
-                    3: p3
-                    4: p4
-                    5: mineur-deprecated
-                type:
-                    1: bug
-                    3: 'evolution mineur'
-                    4: support
-                    5: 'evolution majeur'
-                    6: devis
-            114:
-                name: Studelites
-                prefix: STUDELITES
-                priority:
-                    1: p1
-                    2: p2
-                    3: p3
-                    4: p4
-                type:
-                    1: bug
-                    2: 'evolution mineur'
-                    3: support
-                    4: 'arbitrage deprecated'
-                    5: 'evolution majeur'
-                    6: devis
-                status:
-                    1: Open
-                    2: Open-Qualified
-                    3: Open-Validated-Depreciated
-                    4: Accepted-In-Progress
-                    5: Corrected-To-Be-Tested
-                    6: Validated
-                    7: Refused
-                    9: More-Information-Request
-                    10: Drupal-Laisser-Open-Depreciated
-                    11: To-Be-Tested-Depreciated
-                    99: Closed
-            94:
-                name: CFO
-                prefix: CFORUN
-                priority:
-                    1: p2
-                    2: p3
-                    3: p4
-                type:
-                    1: bug
-                    2: 'evolution mineur'
-                    3: support
-                    4: 'evolution majeur'
-                    5: Devis
-                status:
-                    1: Open
-                    2: Open-Qualified
-                    3: Open-Validated-Depreciated
-                    4: Accepted-In-Progress
-                    5: Corrected-To-Be-Tested
-                    6: Validated
-                    7: Refused
-                    9: More-Information-Request
-                    10: Planned-Depreciated
-                    99: Closed
-            55:
-                name: Logement
-                prefix: LGM
-                priority:
-                    1: p2
-                    2: p3
-                    3: p4
-                    4: p1
-                type:
-                    1: bug
-                    2: 'evolution mineur'
-                    3: support
-                    4: contribution-Depreciated
-                    5: 'evolution majeur'
-                    6: devis
-                status:
-                    1: Open
-                    2: Accepted-In-Progress
-                    3: Open-Qualified
-                    4: Corrected
-                    5: Open-Validated-Depreciated
-                    6: Validated
-                    7: Refused
-                    8: More-Information-Request
-                    9: Planned-Depreciated
-                    10: Corrected-To-Be-Tested
-                    99: Closed
-            58:
-                name: Webzine
-                prefix: WEBRUN
-                priority:
-                    1: p1
-                    2: p2
-                    3: p3
-                type:
-                    1: bug
-                    2: 'evolution mineur'
-                    3: support
-                    4: 'evolution majeur'
-                    5: devis
-                status:
-                    1: Open
-                    2: Open-Qualified
-                    3: Accepted-In-Progress
-                    4: More-Information-Request
-                    5: Recette-Refusee-Moa-Depreciated
-                    6: Recette-Validee-Moa-Depreciated
-                    7: Corrected-To-Be-Tested
-                    8: Refused
-                    9: Validated
-                    99: Closed
-        list_trsb_user:
-            601: 'Stephane Richard'
-            618: 'Fabienne Guriec'
-            705: 'Batiste Herisson'
-            707: 'Matthieu Rambaud'
-            745: 'Jonathan Gondellier'
-        status:
-            corrected:
-                60: 7
-                93: 4
-                123: 4
-                114: 5
-                94: 5
-                55: 10
-                58: 7
-            validated:
-                94: 6
-                60: 6
-                123: 14
-                55: 6
-                114: 6
-                58: 6
-                93: 14
-            refused:
-                94: 7
-                60: 8
-                123: 6
-                55: 7
-                114: 7
-                58: 8
-                93: 6
-            closed:
-                60: 99
-                93: 99
-                123: 99
-                114: 99
-                94: 99
-                55: 99
-                58: 99
+    jtrac_url: "http://jtrac-fr-realestate.is.echonet/jtrac/app/item/"
+    contrat:
+        nbsupano: 415
+        delai_priorite:
+            support:
+                1: 4
+                2: 24
+                3: 72
+            anomalie:
+                1: 4
+                2: 24
+                3: 72
+            evolution:
+                1: 48
+                2: 120
+                3: 240
+    list_project:
+        60:
+            name: HIPARK
+            prefix: HIPARKWEB
+            priority:
+                1: p1
+                2: p2
+                3: p3
+                4: p4
+            type:
+                1: bug
+                2: 'evolution mineur'
+                3: support
+                5: 'evolution majeur'
+                6: devis
+            status:
+                1: Open
+                2: Open-Qualified
+                3: Accepted-In-Progress
+                4: More-Information-Request
+                5: Recette-Refusee-Moa-Depreciated
+                6: Recette-Validee-Moa-Depreciated
+                7: Dsi-Livre-En-Attente-Recette-Moe-Depreciated
+                8: Refused
+                9: Validated
+                99: Closed
+        93:
+            name: iREIM
+            prefix: IREIM
+            priority:
+                1: p1
+                2: p2
+                3: p3
+                4: p4
+                5: mineur-deprecated
+            type:
+                1: bug
+                3: 'evolution mineur'
+                4: support
+                5: 'evolution majeur'
+                6: devis
+            status:
+                1: Open
+                2: Open-Qualified
+                3: Assigned-Depreciated
+                4: Corrected-To-Be-Tested
+                5: Corrected-Depreciated
+                6: Refused
+                7: Open-Validated-Depreciated
+                8: En-Cours-Qualif-Depreciated
+                9: Accepted-In-Progress
+                10: Al-Livrer-Depreciated
+                11: Keep-Open-Bug-Pdt-Depreciated
+                12: Open-Qualified-Depreciated
+                13: More-Information-Request
+                14: Validated
+                99: Closed
+        123:
+            name: REIMIT
+            prefix: REIMIT
+            priority:
+                1: p1
+                2: p2
+                3: p3
+                4: p4
+                5: mineur-deprecated
+            type:
+                1: bug
+                3: 'evolution mineur'
+                4: support
+                5: 'evolution majeur'
+                6: devis
+        114:
+            name: Studelites
+            prefix: STUDELITES
+            priority:
+                1: p1
+                2: p2
+                3: p3
+                4: p4
+            type:
+                1: bug
+                2: 'evolution mineur'
+                3: support
+                4: 'arbitrage deprecated'
+                5: 'evolution majeur'
+                6: devis
+            status:
+                1: Open
+                2: Open-Qualified
+                3: Open-Validated-Depreciated
+                4: Accepted-In-Progress
+                5: Corrected-To-Be-Tested
+                6: Validated
+                7: Refused
+                9: More-Information-Request
+                10: Drupal-Laisser-Open-Depreciated
+                11: To-Be-Tested-Depreciated
+                99: Closed
+        94:
+            name: CFO
+            prefix: CFORUN
+            priority:
+                1: p2
+                2: p3
+                3: p4
+            type:
+                1: bug
+                2: 'evolution mineur'
+                3: support
+                4: 'evolution majeur'
+                5: Devis
+            status:
+                1: Open
+                2: Open-Qualified
+                3: Open-Validated-Depreciated
+                4: Accepted-In-Progress
+                5: Corrected-To-Be-Tested
+                6: Validated
+                7: Refused
+                9: More-Information-Request
+                10: Planned-Depreciated
+                99: Closed
+        55:
+            name: Logement
+            prefix: LGM
+            priority:
+                1: p2
+                2: p3
+                3: p4
+                4: p1
+            type:
+                1: bug
+                2: 'evolution mineur'
+                3: support
+                4: contribution-Depreciated
+                5: 'evolution majeur'
+                6: devis
+            status:
+                1: Open
+                2: Accepted-In-Progress
+                3: Open-Qualified
+                4: Corrected
+                5: Open-Validated-Depreciated
+                6: Validated
+                7: Refused
+                8: More-Information-Request
+                9: Planned-Depreciated
+                10: Corrected-To-Be-Tested
+                99: Closed
+        58:
+            name: Webzine
+            prefix: WEBRUN
+            priority:
+                1: p1
+                2: p2
+                3: p3
+            type:
+                1: bug
+                2: 'evolution mineur'
+                3: support
+                4: 'evolution majeur'
+                5: devis
+            status:
+                1: Open
+                2: Open-Qualified
+                3: Accepted-In-Progress
+                4: More-Information-Request
+                5: Recette-Refusee-Moa-Depreciated
+                6: Recette-Validee-Moa-Depreciated
+                7: Corrected-To-Be-Tested
+                8: Refused
+                9: Validated
+                99: Closed
+    list_trsb_user:
+        601: 'Stephane Richard'
+        618: 'Fabienne Guriec'
+        705: 'Batiste Herisson'
+        707: 'Matthieu Rambaud'
+        745: 'Jonathan Gondellier'
+    status:
+        corrected:
+            60: 7
+            93: 4
+            123: 4
+            114: 5
+            94: 5
+            55: 10
+            58: 7
+        validated:
+            94: 6
+            60: 6
+            123: 14
+            55: 6
+            114: 6
+            58: 6
+            93: 14
+        refused:
+            94: 7
+            60: 8
+            123: 6
+            55: 7
+            114: 7
+            58: 8
+            93: 6
+        closed:
+            60: 99
+            93: 99
+            123: 99
+            114: 99
+            94: 99
+            55: 99
+            58: 99

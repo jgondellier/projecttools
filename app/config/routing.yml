@@ -1,6 +1,5 @@
-project_project:
-    resource: "@ProjectBundle/Controller/ProjectController.php"
-    type:     annotation
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
 project_environnement:
     resource: "@ProjectBundle/Controller/EnvironnementController.php"

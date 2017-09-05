@@ -1,0 +1,31 @@
+<form method="POST" action="{{ path('projet_edit',{ 'project':project.id }) }}"  {{ form_enctype(form) }} id="addProjectForm">
+    <div class="modal-body">
+        <div class="form-group has-feedback {% if (form_errors(form.name) |length > 4) %}has-error{% endif %}">
+            {{ form_label(form.name) }} :
+            {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.name) }}
+        </div>
+        <div class="form-group has-feedback {% if (form_errors(form.sourcecodeUrl) |length > 4) %}has-error{% endif %}">
+            {{ form_label(form.sourcecodeUrl) }} :
+            {{ form_widget(form.sourcecodeUrl, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.sourcecodeUrl) }}
+        </div>
+        <div class="form-group has-feedback {% if (form_errors(form.jtracId) |length > 4) %}has-error{% endif %}">
+            {{ form_label(form.jtracId) }} :
+            {{ form_widget(form.jtracId, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.jtracId) }}
+        </div>
+        <div class="form-group has-feedback {% if (form_errors(form.jiraId) |length > 4) %}has-error{% endif %}">
+            {{ form_label(form.jiraId) }} :
+            {{ form_widget(form.jiraId, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.jiraId) }}
+        </div>
+        <div class="form-group">
+            {{ form_rest(form) }}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        <button type="submit" class="btn btn-primary" id="submitProject">Valider</button>
+    </div>
+</form>
