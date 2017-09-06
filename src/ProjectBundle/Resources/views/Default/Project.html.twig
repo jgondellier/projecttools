@@ -34,7 +34,7 @@
 {% block javascripts %}
     {% block project_javascript %}
     {% endblock %}
-    {% javascripts output='js/compiled/main.indic.js'
+    {% javascripts output='js/compiled/main.project.js'
         '@IndicateursBundle/Resources/public/js/datatables.min.js'
         '@IndicateursBundle/Resources/public/js/dataTables.bootstrap.min.js'
         '@IndicateursBundle/Resources/public/js/jquery.dataTables.min.js'
@@ -50,7 +50,9 @@
         '@IndicateursBundle/Resources/public/js/moment-with-locales.min.js'
         '@IndicateursBundle/Resources/public/js/datetime-moment.js'
         '@IndicateursBundle/Resources/public/js/highcharts.js'
-        '@IndicateursBundle/Resources/public/js/modules/exporting.js'%}
+        '@IndicateursBundle/Resources/public/js/modules/exporting.js'
+        '@ProjectBundle/Resources/public/js/manage_form.js'
+        '@FOSJsRoutingBundle/Resources/js/router.js'%}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'ProjectBundle:Default:Project.html.twig' %}
+
+{% block project_title %}Liste des contacts {% endblock %}
+
+{% block project_content %}
+    <div class="container">
+        <nav class="navbar navbar-light bg-light">
+            <form class="form-inline">
+                <button type="button" class="btn btn-primary" id="addProject"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter un contact</button>
+            </form>
+        </nav>
+        <div class="modal fade" id="addProjectModal" tabindex="-1" role="dialog" aria-labelledby="addProjectLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>
+        {{ table_HTML| raw }}
+    </div>
+{% endblock %}
+
+{% block project_javascript %}
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    {{ table_JS| raw }}
+    <script type="text/javascript">
+        $(document).on('click','.edit-row',function(){
+            var that = this;
+            var url = Routing.generate('contact_edit', {'id': that.parentNode.parentNode.id});
+            $(that).find("span").addClass("slideInLeft");
+            createProjectForm(url,"GET");
+        });
+        $(document).on('click','.del-row',function(){
+            var that = this;
+            var url = Routing.generate('contact_delete', {'id': that.parentNode.parentNode.id});
+            $(that).find("span").addClass("rotate");
+            createProjectForm(url,"DELETE");
+        });
+        $(document).on('click','#addProject',function(){
+            var url = Routing.generate('contact_new');
+            createProjectForm(url,"GET");
+        });
+        $(document).on('click','#submitProject',function(){
+            $('#projectForm').submit();
+        });
+
+    </script>
+{% endblock %}
