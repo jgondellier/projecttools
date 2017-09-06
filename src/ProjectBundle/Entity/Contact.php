@@ -18,6 +18,13 @@ class Contact
     }
 
     /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate()
+    {
+        $this->dateModification = new \Datetime();
+    }
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -64,7 +71,7 @@ class Contact
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
@@ -84,7 +91,7 @@ class Contact
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_modification", type="datetime")
+     * @ORM\Column(name="date_modification", type="datetime", nullable=true)
      */
     private $dateModification;
 
@@ -146,12 +153,12 @@ class Contact
     }
 
     /**
-     * Set nom
+     * Set name
      *
      * @param string $name
      * @return Contact
      */
-    public function setNom($name)
+    public function setName($name)
     {
         $this->name = $name;
 

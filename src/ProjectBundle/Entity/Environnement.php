@@ -12,6 +12,19 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Environnement
 {
+    public function __construct()
+    {
+        $this->dateCreation = new \Datetime();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate()
+    {
+        $this->dateModification = new \Datetime();
+    }
+
     /**
      * @var int
      *
@@ -51,7 +64,7 @@ class Environnement
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_modification", type="datetime")
+     * @ORM\Column(name="date_modification", type="datetime", nullable=true)
      */
     private $dateModification;
 

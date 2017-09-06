@@ -1,0 +1,11 @@
+{% extends 'ProjectBundle:Default:Project.html.twig' %}
+
+{% block project_title %}Liste des environnements {% endblock %}
+
+{% block project_content %}
+    {{ include('ProjectBundle:global:Content_HTML.html.twig', {'addBtn': 'Ajouter un environnement'}) }}
+{% endblock %}
+
+{% block project_javascript %}
+    {{ include('ProjectBundle:global:Content_JS.html.twig', {'cat': 'environnement'}) }}
+{% endblock %}

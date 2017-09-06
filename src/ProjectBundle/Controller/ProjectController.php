@@ -20,18 +20,14 @@ class ProjectController extends Controller
     /**
      * Lists all project entities.
      *
-     * @Route("/", name="projet_index")
+     * @Route("/", name="project_index")
      * @Method("GET")
      */
     public function indexAction()
     {
-        /*Formulaire de nouveau projet*/
-        $project = new Project();
-        $form = $this->createForm('ProjectBundle\Form\ProjectType', $project);
-
         /*Rendu du tableau */
         $table['ajax']['url']           = $this->generateUrl('project_table');
-        $table['id']                    = 'projectTable';
+        $table['id']                    = 'dataTable';
         $table['cols'][]                = array('filter'=>0,'name'=>'Name','data'=>'name');
         $table['cols'][]                = array('filter'=>0,'name'=>'Code Source','data'=>'sourcecodeUrl');
         $table['cols'][]                = array('filter'=>0,'name'=>'jtracId','data'=>'jtracId');
@@ -45,7 +41,6 @@ class ProjectController extends Controller
             'activeMenu' => 'project',
             'table_HTML'=>$table_HTML,
             'table_JS'=>$table_JS,
-            'form' => $form->createView(),
         ));
     }
 
@@ -89,7 +84,7 @@ class ProjectController extends Controller
      * @param Request $request
      * @return null|JsonResponse
      *
-     * @Route("/new", name="projet_new", options={"expose"=true})
+     * @Route("/new", name="project_new", options={"expose"=true})
      * @Method({"GET", "POST"})
      */
 
@@ -114,7 +109,7 @@ class ProjectController extends Controller
                     'type' => 'new',
                     'form' => $this->renderView('ProjectBundle:Project:Project_form.html.twig',
                         array(
-                            'url' => $this->generateUrl('projet_new'),
+                            'url' => $this->generateUrl('project_new'),
                             'form' => $form->createView(),
                         ))), 200);
         }
@@ -124,8 +119,11 @@ class ProjectController extends Controller
     /**
      * Finds and displays a project entity.
      *
-     * @Route("/{id}", name="projet_show")
+     * @Route("/{id}", name="project_show")
      * @Method("GET")
+     *
+     * @param Project $project
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showAction(Project $project)
     {
@@ -140,8 +138,12 @@ class ProjectController extends Controller
     /**
      * Displays a form to edit an existing project entity.
      *
-     * @Route("/{id}/edit", name="projet_edit", options={"expose"=true})
+     * @Route("/{id}/edit", name="project_edit", options={"expose"=true})
      * @Method({"GET", "POST"})
+     *
+     * @param Request $request
+     * @param Project $project
+     * @return JsonResponse
      */
     public function editAction(Request $request, Project $project)
     {
@@ -162,7 +164,7 @@ class ProjectController extends Controller
                     'form' => $this->renderView(
                         '@Project/Project/Project_form.html.twig',
                         array(
-                            'url' => $this->generateUrl('projet_edit',array('id' => $project->getId())),
+                            'url' => $this->generateUrl('project_edit',array('id' => $project->getId())),
                             'form' => $editForm->createView(),
                         ))), 200);
         }
@@ -172,8 +174,12 @@ class ProjectController extends Controller
     /**
      * Deletes a project entity.
      *
-     * @Route("/{id}/delete", name="projet_delete", options={"expose"=true})
+     * @Route("/{id}/delete", name="project_delete", options={"expose"=true})
      * @Method("DELETE")
+     *
+     * @param Request $request
+     * @param Project $project
+     * @return JsonResponse
      */
     public function deleteAction(Request $request, Project $project)
     {
@@ -194,9 +200,9 @@ class ProjectController extends Controller
                 'message' => 'Success !',
                 'type' => 'delete',
                 'form' => $this->renderView(
-                    '@Project/Project/Project_form_delete.html.twig',
+                    '@Project/global/Content_form_delete.html.twig',
                     array(
-                        'url' => $this->generateUrl('projet_delete',array('id' => $project->getId())),
+                        'url' => $this->generateUrl('project_delete',array('id' => $project->getId())),
                         'form' => $form->createView(),
                     ))), 200);
     }
@@ -211,7 +217,7 @@ class ProjectController extends Controller
     private function createDeleteForm(Project $project)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('projet_delete', array('id' => $project->getId())))
+            ->setAction($this->generateUrl('project_delete', array('id' => $project->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;

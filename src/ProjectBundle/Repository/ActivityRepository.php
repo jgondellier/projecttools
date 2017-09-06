@@ -12,4 +12,39 @@ use Doctrine\ORM\EntityRepository;
  */
 class ActivityRepository extends EntityRepository
 {
+    /**
+     * REtourne la liste des atcivités
+     *
+     * @param $libelle
+     * @param $cadreContractuel
+     * @param $etat
+     * @param $project
+     * @return array
+     */
+    public function getActivitys($libelle,$cadreContractuel,$etat,$project){
+
+        $query      = $this->createQueryBuilder('a');
+        $query->select('p.name project, a.id DT_RowId, a.libelle, a.cadreContractuel, a.etat, a.dateCreation, a.dateModification')
+            ->leftJoin("a.project",'p')
+            ->orderBy('a.dateCreation', 'ASC');
+
+        if($libelle !=-1 && $libelle != 'all' && $libelle != Null){
+            $query->andWhere('a.libelle = :libelle')
+                ->setParameter('libelle',$libelle);
+        }
+        if($cadreContractuel !=-1 && $cadreContractuel != 'all' && $cadreContractuel != Null){
+            $query->andWhere('a.cadreContractuel = :cadreContractuel')
+                ->setParameter('cadreContractuel',$cadreContractuel);
+        }
+        if($etat !=-1 && $etat != 'all' && $etat != Null){
+            $query->andWhere('a.etat = :etat')
+                ->setParameter('etat',$etat);
+        }
+        if($project !=-1 && $project != 'all' && $project != Null){
+            $query->andWhere('a.project = :project')
+                ->setParameter('project',$project);
+        }
+
+        return $query->getQuery()->getArrayResult();
+    }
 }

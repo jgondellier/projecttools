@@ -5,20 +5,35 @@
             {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
             {{ form_errors(form.name) }}
         </div>
-        <div class="form-group has-feedback {% if (form_errors(form.sourcecodeUrl) |length > 4) %}has-error{% endif %}">
-            {{ form_label(form.sourcecodeUrl) }} :
-            {{ form_widget(form.sourcecodeUrl, { 'attr': {'class': 'form-control'} }) }}
-            {{ form_errors(form.sourcecodeUrl) }}
+        <div class="form-group has-feedback {% if (form_errors(form.prenom) |length > 4) %}has-error{% endif %}">
+            {{ form_label(form.prenom) }} :
+            {{ form_widget(form.prenom, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.prenom) }}
         </div>
-        <div class="form-group has-feedback {% if (form_errors(form.jtracId) |length > 4) %}has-error{% endif %}">
-            {{ form_label(form.jtracId) }} :
-            {{ form_widget(form.jtracId, { 'attr': {'class': 'form-control'} }) }}
-            {{ form_errors(form.jtracId) }}
+        <div class="form-group has-feedback {% if (form_errors(form.mail) |length > 4) %}has-error{% endif %}">
+            {{ form_label(form.mail) }} :
+            {{ form_widget(form.mail, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.mail) }}
         </div>
-        <div class="form-group has-feedback {% if (form_errors(form.jiraId) |length > 4) %}has-error{% endif %}">
-            {{ form_label(form.jiraId) }} :
-            {{ form_widget(form.jiraId, { 'attr': {'class': 'form-control'} }) }}
-            {{ form_errors(form.jiraId) }}
+        <div class="form-group has-feedback {% if (form_errors(form.idJtrac) |length > 4) %}has-error{% endif %}">
+            {{ form_label(form.idJtrac) }} :
+            {{ form_widget(form.idJtrac, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.idJtrac) }}
+        </div>
+        <div class="form-group has-feedback {% if (form_errors(form.idBnp) |length > 4) %}has-error{% endif %}">
+            {{ form_label(form.idBnp) }} :
+            {{ form_widget(form.idBnp, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.idBnp) }}
+        </div>
+        <div class="form-group has-feedback {% if (form_errors(form.project) |length > 4) %}has-error{% endif %}">
+            {{ form_label(form.project) }} :
+            {{ form_widget(form.project, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.project) }}
+        </div>
+        <div class="form-group has-feedback {% if (form_errors(form.description) |length > 4) %}has-error{% endif %}">
+            {{ form_label(form.description) }} :
+            {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.description) }}
         </div>
         <div class="form-group">
             {{ form_rest(form) }}

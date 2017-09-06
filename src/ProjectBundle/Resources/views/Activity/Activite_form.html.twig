@@ -1,0 +1,31 @@
+<form method="POST" action="{{ url }}"  {{ form_enctype(form) }} id="projectForm">
+    <div class="modal-body">
+        <div class="form-group has-feedback {% if (form_errors(form.libelle) |length > 4) %}has-error{% endif %}">
+            {{ form_label(form.libelle) }} :
+            {{ form_widget(form.libelle, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.libelle) }}
+        </div>
+        <div class="form-group has-feedback {% if (form_errors(form.cadreContractuel) |length > 4) %}has-error{% endif %}">
+            {{ form_label(form.cadreContractuel) }} :
+            {{ form_widget(form.cadreContractuel, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.cadreContractuel) }}
+        </div>
+        <div class="form-group has-feedback {% if (form_errors(form.etat) |length > 4) %}has-error{% endif %}">
+            {{ form_label(form.etat) }} :
+            {{ form_widget(form.etat, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.etat) }}
+        </div>
+        <div class="form-group has-feedback {% if (form_errors(form.project) |length > 4) %}has-error{% endif %}">
+            {{ form_label(form.project) }} :
+            {{ form_widget(form.project, { 'attr': {'class': 'form-control'} }) }}
+            {{ form_errors(form.project) }}
+        </div>
+        <div class="form-group">
+            {{ form_rest(form) }}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        <a type="submit" class="btn btn-primary" id="submitProject"><div class="ajaxScrollLoader" style="display:none"><div></div></div>Valider</a>
+    </div>
+</form>

@@ -12,6 +12,19 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Activity
 {
+    public function __construct()
+    {
+        $this->dateCreation = new \Datetime();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate()
+    {
+        $this->dateModification = new \Datetime();
+    }
+
     /**
      * @var int
      *
@@ -64,10 +77,10 @@ class Activity
     private $etat;
 
     /**
-     * @ORM\OneToOne(targetEntity="ProjectBundle\Entity\Project")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="ProjectBundle\Entity\Project", inversedBy="activitys")
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
      */
-    private $Project;
+    private $project;
 
     /**
      * Get id

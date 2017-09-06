@@ -12,4 +12,34 @@ use Doctrine\ORM\EntityRepository;
  */
 class EnvironnementRepository extends EntityRepository
 {
+    /**
+     * Permet de selectionner les environnements.
+     *
+     * @param $name
+     * @param $url
+     * @param $project
+     * @return array
+     */
+    public function getEnvironnements($name,$url,$project){
+
+        $query      = $this->createQueryBuilder('e');
+        $query->select('p.name project, e.id DT_RowId, e.name, e.url')
+            ->leftJoin("e.project",'p')
+            ->orderBy('e.name', 'ASC');
+
+        if($name !=-1 && $name != 'all' && $name != Null){
+            $query->andWhere('e.name = :name')
+                ->setParameter('name',$name);
+        }
+        if($url !=-1 && $url != 'all' && $url != Null){
+            $query->andWhere('e.url = :url')
+                ->setParameter('url',$url);
+        }
+        if($project !=-1 && $project != 'all' && $project != Null){
+            $query->andWhere('e.project = :project')
+                ->setParameter('project',$project);
+        }
+
+        return $query->getQuery()->getArrayResult();
+    }
 }

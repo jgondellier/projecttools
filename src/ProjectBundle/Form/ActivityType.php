@@ -13,7 +13,7 @@ class ActivityType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('dateCreation')->add('dateModification')->add('dateResolution')->add('cadreContractuel')->add('libelle')->add('etat')->add('Project');
+        $builder->add('cadreContractuel')->add('libelle')->add('etat')->add('Project');
     }
     
     /**

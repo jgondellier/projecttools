@@ -9,15 +9,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ActivityCommentType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * @param FormBuilderInterface $builder
+     * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('dateCreation')->add('libelle')->add('auteur')->add('Activity');
+        $builder
+            ->add('dateCreation', 'datetime')
+            ->add('libelle')
+            ->add('auteur')
+            ->add('Activity')
+        ;
     }
     
     /**
-     * {@inheritdoc}
+     * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -25,14 +31,4 @@ class ActivityCommentType extends AbstractType
             'data_class' => 'ProjectBundle\Entity\ActivityComment'
         ));
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'projectbundle_activitycomment';
-    }
-
-
 }

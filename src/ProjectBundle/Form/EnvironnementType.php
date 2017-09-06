@@ -13,7 +13,7 @@ class EnvironnementType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name')->add('url')->add('dateCreation')->add('dateModification')->add('project');
+        $builder->add('name')->add('url')->add('project');
     }
     
     /**

@@ -69,6 +69,11 @@ class Project
      */
     private $contacts;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ProjectBundle\Entity\Activity", mappedBy="project")
+     */
+    private $activitys;
+
 
     /**
      * Get id
@@ -236,5 +241,38 @@ class Project
     public function getContacts()
     {
         return $this->contacts;
+    }
+
+    /**
+     * Add activitys
+     *
+     * @param \ProjectBundle\Entity\Activity $activitys
+     * @return Project
+     */
+    public function addActivity(\ProjectBundle\Entity\Activity $activitys)
+    {
+        $this->activitys[] = $activitys;
+
+        return $this;
+    }
+
+    /**
+     * Remove activitys
+     *
+     * @param \ProjectBundle\Entity\Activity $activitys
+     */
+    public function removeActivity(\ProjectBundle\Entity\Activity $activitys)
+    {
+        $this->activitys->removeElement($activitys);
+    }
+
+    /**
+     * Get activitys
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getActivitys()
+    {
+        return $this->activitys;
     }
 }

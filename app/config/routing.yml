@@ -1,3 +1,11 @@
+project_activity_comment:
+    resource: "@ProjectBundle/Controller/ActivityCommentController.php"
+    type:     annotation
+
+project_activity:
+    resource: "@ProjectBundle/Controller/ActivityController.php"
+    type:     annotation
+
 project_contact:
     resource: "@ProjectBundle/Controller/ContactController.php"
     type:     annotation

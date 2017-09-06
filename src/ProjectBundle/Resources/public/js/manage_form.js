@@ -1,28 +1,28 @@
-function createProjectForm(url,type){
-    $(".slideInLeft").removeClass("slideInLeft");
+function createForm(url,type){
     $.ajax({
         type: type,
         url: url
     })
         .done(function (data) {
+            $(".slideInLeft").removeClass("slideInLeft");
+            $(".flash").removeClass("flash");
             if (typeof data.message !== 'undefined') {
                 $('.modal-content').html(data.form);
                 submitProjectForm();
-                $('#addProjectModal').modal('show');
+                $('#addModal').modal('show');
             }
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
+            $(".slideInLeft").removeClass("slideInLeft");
+            $(".flash").removeClass("flash");
             if (typeof jqXHR.responseJSON !== 'undefined') {
                 if (jqXHR.responseJSON.hasOwnProperty('form')) {
                     $('#form_body').html(jqXHR.responseJSON.form);
                 }
-
                 $('.form_error').html(jqXHR.responseJSON.message);
-
             } else {
                 alert(errorThrown);
             }
-
         });
 }
 
@@ -38,17 +38,17 @@ function submitProjectForm(){
         })
             .done(function (data) {
                 if (typeof data.message !== 'undefined') {
-                    var projectTable = $('#projectTable').DataTable();
+                    var dataTable = $('#dataTable').DataTable();
                     if(data.type === 'edit'){
-                        projectTable.ajax.reload();
-                        $('#addProjectModal').modal('hide');
+                        dataTable.ajax.reload();
+                        $('#addModal').modal('hide');
                         $(".ajaxScrollLoader").hide()
                     }else if(data.type === 'delete'){
-                        projectTable.ajax.reload();
-                        $('#addProjectModal').modal('hide');
+                        dataTable.ajax.reload();
+                        $('#addModal').modal('hide');
                     }else{
-                        projectTable.ajax.reload();
-                        $('#addProjectModal').modal('hide');
+                        dataTable.ajax.reload();
+                        $('#addModal').modal('hide');
                         $('#projectForm')[0].reset();
                         $(".ajaxScrollLoader").hide()
                     }

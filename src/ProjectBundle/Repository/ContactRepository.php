@@ -16,16 +16,17 @@ class ContactRepository extends EntityRepository
      * Permet de selectionner les contacts.
      *
      * @param $idBnp
-     * @param $nom
+     * @param $name
      * @param $prenom
      * @param $mail
+     * @param $idJtrac
      * @param $project
      * @return array
      */
-    public function getContacts($idBnp,$nom,$prenom,$mail,$project){
+    public function getContacts($name,$prenom,$mail,$idJtrac,$idBnp,$project){
 
         $query      = $this->createQueryBuilder('c');
-        $query->select('p.name projectName, c.id, c.nom, c.prenom, c.description, c.idBnp, c.mail ')
+        $query->select('p.name project, c.id DT_RowId, c.name, c.prenom, c.description, c.idBnp, c.idJtrac, c.mail')
             ->leftJoin("c.project",'p')
             ->orderBy('c.nom', 'ASC')
             ->orderBy('c.prenom', 'ASC');
@@ -34,9 +35,9 @@ class ContactRepository extends EntityRepository
             $query->andWhere('c.idBnp = :idBnp')
                 ->setParameter('idBnp',$idBnp);
         }
-        if($nom !=-1 && $nom != 'all' && $nom != Null){
-            $query->andWhere('c.nom = :nom')
-                ->setParameter('nom',$nom);
+        if($name !=-1 && $name != 'all' && $name != Null){
+            $query->andWhere('c.name = :name')
+                ->setParameter('name',$name);
         }
         if($prenom !=-1 && $prenom != 'all' && $prenom != Null){
             $query->andWhere('c.prenom = :prenom')
@@ -45,6 +46,10 @@ class ContactRepository extends EntityRepository
         if($mail !=-1 && $mail != 'all' && $mail != Null){
             $query->andWhere('c.mail = :mail')
                 ->setParameter('mail',$mail);
+        }
+        if($idJtrac !=-1 && $idJtrac != 'all' && $idJtrac != Null){
+            $query->andWhere('p.idJtrac = :idJtrac')
+                ->setParameter('idJtrac',$idJtrac);
         }
         if($project !=-1 && $project != 'all' && $project != Null){
             $query->andWhere('p.projectId = :project')

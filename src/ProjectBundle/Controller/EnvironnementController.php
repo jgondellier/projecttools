@@ -5,56 +5,113 @@ namespace ProjectBundle\Controller;
 use ProjectBundle\Entity\Environnement;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Environnement controller.
  *
- * @Route("environnement")
+ * @Route("projet/environnement")
  */
 class EnvironnementController extends Controller
 {
     /**
-     * Lists all environnement entities.
+     * Lists all environnements entities.
      *
      * @Route("/", name="environnement_index")
      * @Method("GET")
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        /*Rendu du tableau */
+        $table['ajax']['url']           = $this->generateUrl('environnement_table');
+        $table['id']                    = 'dataTable';
+        $table['cols'][]                = array('filter'=>0,'name'=>'Name','data'=>'name');
+        $table['cols'][]                = array('filter'=>0,'name'=>'url','data'=>'url');
+        $table['cols'][]                = array('filter'=>0,'name'=>'project','data'=>'project');
+        $table['cols'][]                = array('filter'=>0,'name'=>'modifier','data'=>'null','edit'=>1);
+        $table['cols'][]                = array('filter'=>0,'name'=>'supprimer','data'=>'null','del'=>1);
+        $table_HTML                     = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
+        $table_JS                       = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 
-        $environnements = $em->getRepository('ProjectBundle:Environnement')->findAll();
-
-        return $this->render('environnement/index.html.twig', array(
-            'environnements' => $environnements,
+        return $this->render('ProjectBundle:Environnement:Environnement.html.twig',array(
+            'activeMenu' => 'environnement',
+            'table_HTML'=>$table_HTML,
+            'table_JS'=>$table_JS,
         ));
+    }
+
+    /**
+     * Retourne les environnements pour les afficher dans un tableau
+     *
+     * @param Request $request
+     * @return null|JsonResponse
+     *
+     * @Route("/table", name="environnement_table")
+     * @Method("GET")
+     */
+    public function TableAction(Request $request)
+    {
+        if($request->isXmlHttpRequest()) {
+            if ($request->getMethod() === 'GET') {
+                $entityManager  = $this->getDoctrine()->getManager();
+
+                $name           = $request->get('name');
+                $url            = $request->get('url');
+                $project        = $request->get('project');
+
+                $response       = new JsonResponse();
+
+                /*Recuperation des environnements en base*/
+                $t_environnement['data']      = $entityManager->getRepository("ProjectBundle:Environnement")->getEnvironnements($name,$url,$project);
+
+                $response->setContent(json_encode($t_environnement));
+                return $response;
+            }
+        }else{
+            throw new AccessDeniedException('Access denied');
+        }
+        return NULL;
     }
 
     /**
      * Creates a new environnement entity.
      *
-     * @Route("/new", name="environnement_new")
+     * @param Request $request
+     * @return null|JsonResponse
+     *
+     * @Route("/new", name="environnement_new", options={"expose"=true})
      * @Method({"GET", "POST"})
      */
+
     public function newAction(Request $request)
     {
-        $environnement = new Environnement();
-        $form = $this->createForm('ProjectBundle\Form\EnvironnementType', $environnement);
-        $form->handleRequest($request);
+        if($request->isXmlHttpRequest()) {
+            $environnement = new Environnement();
+            $form = $this->createForm('ProjectBundle\Form\EnvironnementType', $environnement);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($environnement);
-            $em->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($environnement);
+                $em->flush();
 
-            return $this->redirectToRoute('environnement_show', array('id' => $environnement->getId()));
+                return new JsonResponse(array('message' => 'Success!','type' => 'new'), 200);
+            }
+
+            return new JsonResponse(
+                array(
+                    'message' => 'Success !',
+                    'type' => 'new',
+                    'form' => $this->renderView('ProjectBundle:Environnement:Environnement_form.html.twig',
+                        array(
+                            'url' => $this->generateUrl('environnement_new'),
+                            'form' => $form->createView(),
+                        ))), 200);
         }
-
-        return $this->render('environnement/new.html.twig', array(
-            'environnement' => $environnement,
-            'form' => $form->createView(),
-        ));
+        throw new AccessDeniedException('Access denied');
     }
 
     /**
@@ -62,6 +119,9 @@ class EnvironnementController extends Controller
      *
      * @Route("/{id}", name="environnement_show")
      * @Method("GET")
+     *
+     * @param environnement $environnement
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showAction(Environnement $environnement)
     {
@@ -76,46 +136,73 @@ class EnvironnementController extends Controller
     /**
      * Displays a form to edit an existing environnement entity.
      *
-     * @Route("/{id}/edit", name="environnement_edit")
+     * @Route("/{id}/edit", name="environnement_edit", options={"expose"=true})
      * @Method({"GET", "POST"})
+     *
+     * @param Request $request
+     * @param Environnement $environnement
+     * @return JsonResponse
      */
     public function editAction(Request $request, Environnement $environnement)
     {
-        $deleteForm = $this->createDeleteForm($environnement);
-        $editForm = $this->createForm('ProjectBundle\Form\EnvironnementType', $environnement);
-        $editForm->handleRequest($request);
+        if($request->isXmlHttpRequest()) {
+            $editForm = $this->createForm('ProjectBundle\Form\EnvironnementType', $environnement);
+            $editForm->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            if ($editForm->isSubmitted() && $editForm->isValid()) {
+                $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('environnement_edit', array('id' => $environnement->getId()));
+                return new JsonResponse(array('message' => 'Success !','type' => 'edit','id' => $environnement->getId()), 200);
+            }
+
+            return new JsonResponse(
+                array(
+                    'message' => 'Success !',
+                    'type' => 'edit',
+                    'form' => $this->renderView(
+                        '@Project/Environnement/Environnement_form.html.twig',
+                        array(
+                            'url' => $this->generateUrl('environnement_edit',array('id' => $environnement->getId())),
+                            'form' => $editForm->createView(),
+                        ))), 200);
         }
-
-        return $this->render('environnement/edit.html.twig', array(
-            'environnement' => $environnement,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        throw new AccessDeniedException('Access denied');
     }
 
     /**
      * Deletes a environnement entity.
      *
-     * @Route("/{id}", name="environnement_delete")
+     * @Route("/{id}/delete", name="environnement_delete", options={"expose"=true})
      * @Method("DELETE")
+     *
+     * @param Request $request
+     * @param Environnement $environnement
+     * @return JsonResponse
      */
     public function deleteAction(Request $request, Environnement $environnement)
     {
         $form = $this->createDeleteForm($environnement);
         $form->handleRequest($request);
+        $id = $environnement->getId();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($environnement);
             $em->flush();
+
+            return new JsonResponse(array('message' => 'Success !','type' => 'delete','id' => $id), 200);
         }
 
-        return $this->redirectToRoute('environnement_index');
+        return new JsonResponse(
+            array(
+                'message' => 'Success !',
+                'type' => 'delete',
+                'form' => $this->renderView(
+                    '@Project/global/Content_form_delete.html.twig',
+                    array(
+                        'url' => $this->generateUrl('environnement_delete',array('id' => $environnement->getId())),
+                        'form' => $form->createView(),
+                    ))), 200);
     }
 
     /**
@@ -131,6 +218,6 @@ class EnvironnementController extends Controller
             ->setAction($this->generateUrl('environnement_delete', array('id' => $environnement->getId())))
             ->setMethod('DELETE')
             ->getForm()
-        ;
+            ;
     }
 }
