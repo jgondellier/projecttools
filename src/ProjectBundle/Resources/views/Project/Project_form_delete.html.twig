@@ -1,0 +1,18 @@
+<form method="POST" action="{{ url }}"  {{ form_enctype(form) }} id="projectForm">
+    <div class="modal-body">
+        <div class="form-group has-feedback">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    Etes vouss sûr de vouloir supprimer ?
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form_rest(form) }}
+        </div>
+    </div>
+    <div class="modal-footer text-center">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        <input type="submit" value="Delete" class="btn btn-danger">
+    </div>
+</form>

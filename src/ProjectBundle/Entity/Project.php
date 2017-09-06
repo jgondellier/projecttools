@@ -18,6 +18,9 @@ class Project
         $this->environnements   = new ArrayCollection();
         $this->contacts         = new ArrayCollection();
     }
+    public function __toString() {
+        return $this->name;
+    }
 
     /**
      * @var int
@@ -57,7 +60,7 @@ class Project
     private $sourcecodeUrl;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProjectBundle\Entity\Environnement", mappedBy="project")
+     * @ORM\OneToMany(targetEntity="ProjectBundle\Entity\Environnement", mappedBy="project", cascade={"remove"})
      */
     private $environnements;
 

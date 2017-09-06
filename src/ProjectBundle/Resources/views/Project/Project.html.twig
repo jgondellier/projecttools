@@ -6,43 +6,12 @@
     <div class="container">
         <nav class="navbar navbar-light bg-light">
             <form class="form-inline">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProject"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter un projet</button>
+                <button type="button" class="btn btn-primary" id="addProject"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter un projet</button>
             </form>
         </nav>
-        <div class="modal fade" id="addProject" tabindex="-1" role="dialog" aria-labelledby="addProjectLabel" aria-hidden="true">
+        <div class="modal fade" id="addProjectModal" tabindex="-1" role="dialog" aria-labelledby="addProjectLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <form method="POST" action="{{ path('projet_new')}}"  {{ form_enctype(form) }} id="addProjectForm">
-                        <div class="modal-body">
-                            <div class="form-group has-feedback {% if (form_errors(form.name) |length > 4) %}has-error{% endif %}">
-                                {{ form_label(form.name) }} :
-                                {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
-                                {{ form_errors(form.name) }}
-                            </div>
-                            <div class="form-group has-feedback {% if (form_errors(form.sourcecodeUrl) |length > 4) %}has-error{% endif %}">
-                                {{ form_label(form.sourcecodeUrl) }} :
-                                {{ form_widget(form.sourcecodeUrl, { 'attr': {'class': 'form-control'} }) }}
-                                {{ form_errors(form.sourcecodeUrl) }}
-                            </div>
-                            <div class="form-group has-feedback {% if (form_errors(form.jtracId) |length > 4) %}has-error{% endif %}">
-                                {{ form_label(form.jtracId) }} :
-                                {{ form_widget(form.jtracId, { 'attr': {'class': 'form-control'} }) }}
-                                {{ form_errors(form.jtracId) }}
-                            </div>
-                            <div class="form-group has-feedback {% if (form_errors(form.jiraId) |length > 4) %}has-error{% endif %}">
-                                {{ form_label(form.jiraId) }} :
-                                {{ form_widget(form.jiraId, { 'attr': {'class': 'form-control'} }) }}
-                                {{ form_errors(form.jiraId) }}
-                            </div>
-                            <div class="form-group">
-                                {{ form_rest(form) }}
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                            <button type="submit" class="btn btn-primary" id="submitProject">Valider</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -57,33 +26,36 @@
     <script type="text/javascript">
         $(document).on('click','.edit-row',function(){
             var that = this;
-            var baseurl = Routing.generate('projet_edit', {'id': this.parentNode.parentNode.id});;
-            alert(baseurl);
-
-
-
+            var url = Routing.generate('projet_edit', {'id': that.parentNode.parentNode.id});
+            $(that).find("span").addClass("slideInLeft");
+            createProjectForm(url,"GET");
+        });
+        $(document).on('click','.del-row',function(){
+            var that = this;
+            var url = Routing.generate('projet_delete', {'id': that.parentNode.parentNode.id});
+            $(that).find("span").addClass("rotate");
+            createProjectForm(url,"DELETE");
+        });
+        $(document).on('click','#addProject',function(){
+            var url = Routing.generate('projet_new');
+            createProjectForm(url,"GET");
+        });
+        $(document).on('click','#submitProject',function(){
+            $('#projectForm').submit();
         });
 
-        $('#addProjectForm').submit(function (e) {
-            e.preventDefault();
 
+        function createProjectForm(url,type){
+            $(".slideInLeft").removeClass("slideInLeft");
             $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr('action'),
-                data: $(this).serialize()
+                type: type,
+                url: url
             })
                 .done(function (data) {
                     if (typeof data.message !== 'undefined') {
-                        alert(data.message);
-                        var projectTable = $('#projectTable').DataTable();
-                        projectTable.row.add( {
-                            "name": $('#projectbundle_project_name').val(),
-                            "sourcecodeUrl": $('#projectbundle_project_sourcecodeUrl').val(),
-                            "jtracId": $('#projectbundle_project_jtracId').val(),
-                            "jiraId": $('#projectbundle_project_jiraId').val()
-                        } ).draw( false );
-                        $('#addProjectForm')[0].reset();
-                        $('#addProject').modal('toggle');
+                        $('.modal-content').html(data.form);
+                        submitProjectForm();
+                        $('#addProjectModal').modal('show');
                     }
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
@@ -99,6 +71,56 @@
                     }
 
                 });
-        });
+        }
+
+        function submitProjectForm(){
+            $('#projectForm').submit(function (e) {
+                e.preventDefault();
+
+                $('.ajaxScrollLoader').show();
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: $(this).serialize()
+                })
+                    .done(function (data) {
+                        if (typeof data.message !== 'undefined') {
+                            var projectTable = $('#projectTable').DataTable();
+                            if(data.type === 'edit'){
+                                projectTable.ajax.reload();
+                                $('#addProjectModal').modal('hide');
+                                $(".ajaxScrollLoader").hide()
+                            }else if(data.type === 'delete'){
+                                projectTable.ajax.reload();
+                                $('#addProjectModal').modal('hide');
+                            }else{
+                                projectTable.row.add( {
+                                    "name": $('#projectbundle_project_name').val(),
+                                    "sourcecodeUrl": $('#projectbundle_project_sourcecodeUrl').val(),
+                                    "jtracId": $('#projectbundle_project_jtracId').val(),
+                                    "jiraId": $('#projectbundle_project_jiraId').val()
+                                } ).draw( false );
+                                $('#addProjectModal').modal('hide');
+                                $('#projectForm')[0].reset();
+                                $(".ajaxScrollLoader").hide()
+                            }
+                        }
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        $(".ajaxScrollLoader").hide()
+                        if (typeof jqXHR.responseJSON !== 'undefined') {
+                            if (jqXHR.responseJSON.hasOwnProperty('form')) {
+                                $('#form_body').html(jqXHR.responseJSON.form);
+                            }
+
+                            $('.form_error').html(jqXHR.responseJSON.message);
+
+                        } else {
+                            alert(errorThrown);
+                        }
+
+                    });
+                });
+        }
     </script>
 {% endblock %}
