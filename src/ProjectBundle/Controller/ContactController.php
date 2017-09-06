@@ -5,7 +5,10 @@ namespace ProjectBundle\Controller;
 use ProjectBundle\Entity\Contact;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Contact controller.
@@ -23,8 +26,8 @@ class ContactController extends Controller
     public function indexAction()
     {
         /*Formulaire de nouveau projet*/
-        $project = new Contact();
-        $form = $this->createForm('ProjectBundle\Form\ContactType', $project);
+        $contact = new Contact();
+        $form = $this->createForm('ProjectBundle\Form\ContactType', $contact);
 
         /*Rendu du tableau */
         $table['ajax']['url']           = $this->generateUrl('contact_table');
@@ -52,7 +55,7 @@ class ContactController extends Controller
      * @param Request $request
      * @return null|JsonResponse
      *
-     * @Route("/table", name="project_table")
+     * @Route("/table", name="contact_table")
      * @Method("GET")
      */
     public function TableAction(Request $request)
@@ -62,14 +65,15 @@ class ContactController extends Controller
                 $entityManager  = $this->getDoctrine()->getManager();
 
                 $name           = $request->get('name');
-                $sourcecodeUrl  = $request->get('sourcecodeUrl');
+                $prenom         = $request->get('prenom');
+                $mail           = $request->get('mail');
                 $jtracId        = $request->get('jtracId');
-                $jiraId         = $request->get('jiraId');
+                $idBnp          = $request->get('idBnp');
 
                 $response       = new JsonResponse();
 
                 /*Recuperation des contacts en base*/
-                $t_contact['data']      = $entityManager->getRepository("ProjectBundle:Project")->getProjects($name,$sourcecodeUrl,$jtracId,$jiraId);
+                $t_contact['data']      = $entityManager->getRepository("ProjectBundle:Contact")->getContacts($name,$prenom,$mail,$jtracId,$idBnp);
 
                 $response->setContent(json_encode($t_contact));
                 return $response;
@@ -81,7 +85,7 @@ class ContactController extends Controller
     }
 
     /**
-     * Creates a new project entity.
+     * Creates a new contact entity.
      *
      * @param Request $request
      * @return null|JsonResponse
@@ -93,13 +97,13 @@ class ContactController extends Controller
     public function newAction(Request $request)
     {
         if($request->isXmlHttpRequest()) {
-            $project = new Project();
-            $form = $this->createForm('ProjectBundle\Form\ProjectType', $project);
+            $contact = new Contact();
+            $form = $this->createForm('ProjectBundle\Form\ContactType', $contact);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($project);
+                $em->persist($contact);
                 $em->flush();
 
                 return new JsonResponse(array('message' => 'Success!','type' => 'new'), 200);
@@ -109,9 +113,9 @@ class ContactController extends Controller
                 array(
                     'message' => 'Success !',
                     'type' => 'new',
-                    'form' => $this->renderView('ProjectBundle:Project:Project_form.html.twig',
+                    'form' => $this->renderView('ProjectBundle:Contact:Contact_form.html.twig',
                         array(
-                            'url' => $this->generateUrl('projet_new'),
+                            'url' => $this->generateUrl('contact_new'),
                             'form' => $form->createView(),
                         ))), 200);
         }
@@ -119,37 +123,37 @@ class ContactController extends Controller
     }
 
     /**
-     * Finds and displays a project entity.
+     * Finds and displays a contact entity.
      *
-     * @Route("/{id}", name="projet_show")
+     * @Route("/{id}", name="contact_show")
      * @Method("GET")
      */
-    public function showAction(Project $project)
+    public function showAction(Contact $contact)
     {
-        $deleteForm = $this->createDeleteForm($project);
+        $deleteForm = $this->createDeleteForm($contact);
 
-        return $this->render('project/show.html.twig', array(
-            'project' => $project,
+        return $this->render('contact/show.html.twig', array(
+            'contact' => $contact,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing project entity.
+     * Displays a form to edit an existing contact entity.
      *
-     * @Route("/{id}/edit", name="projet_edit", options={"expose"=true})
+     * @Route("/{id}/edit", name="contact_edit", options={"expose"=true})
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Project $project)
+    public function editAction(Request $request, Contact $contact)
     {
         if($request->isXmlHttpRequest()) {
-            $editForm = $this->createForm('ProjectBundle\Form\ProjectType', $project);
+            $editForm = $this->createForm('ProjectBundle\Form\ContactType', $contact);
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
                 $this->getDoctrine()->getManager()->flush();
 
-                return new JsonResponse(array('message' => 'Success !','type' => 'edit','id' => $project->getId()), 200);
+                return new JsonResponse(array('message' => 'Success !','type' => 'edit','id' => $contact->getId()), 200);
             }
 
             return new JsonResponse(
@@ -157,9 +161,9 @@ class ContactController extends Controller
                     'message' => 'Success !',
                     'type' => 'edit',
                     'form' => $this->renderView(
-                        '@Project/Project/Project_form.html.twig',
+                        '@Project/Contact/Contact_form.html.twig',
                         array(
-                            'url' => $this->generateUrl('projet_edit',array('id' => $project->getId())),
+                            'url' => $this->generateUrl('contact_edit',array('id' => $contact->getId())),
                             'form' => $editForm->createView(),
                         ))), 200);
         }
@@ -167,20 +171,20 @@ class ContactController extends Controller
     }
 
     /**
-     * Deletes a project entity.
+     * Deletes a contact entity.
      *
-     * @Route("/{id}/delete", name="projet_delete", options={"expose"=true})
+     * @Route("/{id}/delete", name="contact_delete", options={"expose"=true})
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Project $project)
+    public function deleteAction(Request $request, Contact $contact)
     {
-        $form = $this->createDeleteForm($project);
+        $form = $this->createDeleteForm($contact);
         $form->handleRequest($request);
-        $id = $project->getId();
+        $id = $contact->getId();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($project);
+            $em->remove($contact);
             $em->flush();
 
             return new JsonResponse(array('message' => 'Success !','type' => 'delete','id' => $id), 200);
@@ -191,24 +195,24 @@ class ContactController extends Controller
                 'message' => 'Success !',
                 'type' => 'delete',
                 'form' => $this->renderView(
-                    '@Project/Project/Project_form_delete.html.twig',
+                    '@Project/Contact/Contact_form_delete.html.twig',
                     array(
-                        'url' => $this->generateUrl('projet_delete',array('id' => $project->getId())),
+                        'url' => $this->generateUrl('contact_delete',array('id' => $contact->getId())),
                         'form' => $form->createView(),
                     ))), 200);
     }
 
     /**
-     * Creates a form to delete a project entity.
+     * Creates a form to delete a contact entity.
      *
-     * @param Project $project The project entity
+     * @param Contact $contact The contact entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Project $project)
+    private function createDeleteForm(Contact $contact)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('projet_delete', array('id' => $project->getId())))
+            ->setAction($this->generateUrl('projet_delete', array('id' => $contact->getId())))
             ->setMethod('DELETE')
             ->getForm()
             ;

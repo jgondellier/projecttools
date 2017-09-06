@@ -43,9 +43,9 @@ class Contact
     /**
      * @var string
      *
-     * @ORM\Column(name="nom", type="string", length=100)
+     * @ORM\Column(name="name", type="string", length=100)
      */
-    private $nom;
+    private $name;
 
     /**
      * @var string
@@ -148,24 +148,24 @@ class Contact
     /**
      * Set nom
      *
-     * @param string $nom
+     * @param string $name
      * @return Contact
      */
-    public function setNom($nom)
+    public function setNom($name)
     {
-        $this->nom = $nom;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Get nom
+     * Get name
      *
      * @return string 
      */
-    public function getNom()
+    public function getName()
     {
-        return $this->nom;
+        return $this->name;
     }
 
     /**
