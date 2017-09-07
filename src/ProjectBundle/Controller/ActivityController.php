@@ -28,14 +28,15 @@ class ActivityController extends Controller
         /*Rendu du tableau */
         $table['ajax']['url']           = $this->generateUrl('activity_table');
         $table['id']                    = 'dataTable';
-        $table['cols'][]                = array('filter'=>0,'name'=>'Date Creation','data'=>'dateCreation');
-        $table['cols'][]                = array('filter'=>0,'name'=>'Date Modification','data'=>'dateModification');
+        $table['cols'][]                = array('filter'=>0,'name'=>'Date Creation','data'=>'dateCreation','width'=>'80px');
+        $table['cols'][]                = array('filter'=>0,'name'=>'Date Modification','data'=>'dateModification','width'=>'80px');
+        $table['cols'][]                = array('filter'=>0,'name'=>'Cadre Contractuel','data'=>'cadreContractuel','width'=>'80px');
         $table['cols'][]                = array('filter'=>0,'name'=>'Libelle','data'=>'libelle');
-        $table['cols'][]                = array('filter'=>0,'name'=>'Cadre Contractuel','data'=>'cadreContractuel');
-        $table['cols'][]                = array('filter'=>0,'name'=>'Etat','data'=>'etat');
+        $table['cols'][]                = array('filter'=>0,'name'=>'Etat','data'=>'etat','width'=>'80px');
         $table['cols'][]                = array('filter'=>0,'name'=>'Project','data'=>'project');
-        $table['cols'][]                = array('filter'=>0,'name'=>'modifier','data'=>'null','edit'=>1);
-        $table['cols'][]                = array('filter'=>0,'name'=>'supprimer','data'=>'null','del'=>1);
+        $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','com'=>1,'width'=>'35px','center'=>1,"searchable"=>1,"orderable"=>1);
+        $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','edit'=>1,'width'=>'35px','center'=>1,"searchable"=>1,"orderable"=>1);
+        $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','del'=>1,'width'=>'35px','center'=>1,"searchable"=>1,"orderable"=>1);
         $table_HTML                     = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_JS                       = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 
