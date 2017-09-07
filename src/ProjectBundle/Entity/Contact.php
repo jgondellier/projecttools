@@ -109,7 +109,7 @@ class Contact
     /**
      * Set idBnp
      *
-     * @param integer $idBnp
+     * @param string $idBnp
      * @return Contact
      */
     public function setIdBnp($idBnp)
@@ -122,7 +122,7 @@ class Contact
     /**
      * Get idBnp
      *
-     * @return integer 
+     * @return string 
      */
     public function getIdBnp()
     {
@@ -132,7 +132,7 @@ class Contact
     /**
      * Set idJtrac
      *
-     * @param integer $idJtrac
+     * @param string $idJtrac
      * @return Contact
      */
     public function setIdJtrac($idJtrac)
@@ -145,7 +145,7 @@ class Contact
     /**
      * Get idJtrac
      *
-     * @return integer 
+     * @return string 
      */
     public function getIdJtrac()
     {
@@ -245,52 +245,6 @@ class Contact
     }
 
     /**
-     * Set Activity
-     *
-     * @param \ProjectBundle\Entity\Project $activity
-     * @return Contact
-     */
-    public function setActivity(\ProjectBundle\Entity\Project $activity = null)
-    {
-        $this->Activity = $activity;
-
-        return $this;
-    }
-
-    /**
-     * Get Activity
-     *
-     * @return \ProjectBundle\Entity\Project
-     */
-    public function getActivity()
-    {
-        return $this->Activity;
-    }
-
-    /**
-     * Set project
-     *
-     * @param \ProjectBundle\Entity\Project $project
-     * @return Contact
-     */
-    public function setProject(\ProjectBundle\Entity\Project $project = null)
-    {
-        $this->project = $project;
-
-        return $this;
-    }
-
-    /**
-     * Get project
-     *
-     * @return \ProjectBundle\Entity\Project 
-     */
-    public function getProject()
-    {
-        return $this->project;
-    }
-
-    /**
      * Set dateCreation
      *
      * @param \DateTime $dateCreation
@@ -334,5 +288,28 @@ class Contact
     public function getDateModification()
     {
         return $this->dateModification;
+    }
+
+    /**
+     * Set project
+     *
+     * @param \ProjectBundle\Entity\Project $project
+     * @return Contact
+     */
+    public function setProject(\ProjectBundle\Entity\Project $project = null)
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    /**
+     * Get project
+     *
+     * @return \ProjectBundle\Entity\Project 
+     */
+    public function getProject()
+    {
+        return $this->project;
     }
 }

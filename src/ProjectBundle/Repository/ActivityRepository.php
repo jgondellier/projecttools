@@ -24,7 +24,7 @@ class ActivityRepository extends EntityRepository
     public function getActivitys($libelle,$cadreContractuel,$etat,$project){
 
         $query      = $this->createQueryBuilder('a');
-        $query->select('p.name project, a.id DT_RowId, a.libelle, a.cadreContractuel, a.etat, a.dateCreation, a.dateModification')
+        $query->select('p.name project, a.id DT_RowId, a.libelle, a.cadreContractuel, a.etat, DATE_FORMAT(a.dateCreation,\'%d/%m/%Y\') as dateCreation, DATE_FORMAT(a.dateModification,\'%d/%m/%Y\') as dateModification')
             ->leftJoin("a.project",'p')
             ->orderBy('a.dateCreation', 'ASC');
 

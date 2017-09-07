@@ -17,6 +17,7 @@ class Project
     {
         $this->environnements   = new ArrayCollection();
         $this->contacts         = new ArrayCollection();
+        $this->activitys        = new ArrayCollection();
     }
     public function __toString() {
         return $this->name;

@@ -13,7 +13,12 @@ class ActivityType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('cadreContractuel')->add('libelle')->add('etat')->add('Project');
+        $builder
+            ->add('cadreContractuel', 'choice', array('choices' => array('MCO' => 'MCO', 'Recette' => 'Recette', 'VSR' => 'VSR', 'Garantie' => 'Garantie'), 'required' => true, 'label' => 'Cadre contractuel', 'empty_value' => ' ', 'data' => 'MCO'))
+            ->add('libelle')
+            ->add('etat', 'choice', array('choices' => array('En cours' => 'En cours', 'En attente' => 'En attente', 'Terminé' => 'Terminé'), 'required' => true, 'label' => 'Etat', 'data' => 'En cours'))
+            ->add('project')
+        ;
     }
     
     /**

@@ -82,6 +82,7 @@ class Activity
      */
     private $project;
 
+
     /**
      * Get id
      *
@@ -231,25 +232,25 @@ class Activity
     }
 
     /**
-     * Set Project
+     * Set project
      *
      * @param \ProjectBundle\Entity\Project $project
      * @return Activity
      */
-    public function setProject(\ProjectBundle\Entity\Project $project)
+    public function setProject(\ProjectBundle\Entity\Project $project = null)
     {
-        $this->Project = $project;
+        $this->project = $project;
 
         return $this;
     }
 
     /**
-     * Get Project
+     * Get project
      *
      * @return \ProjectBundle\Entity\Project 
      */
     public function getProject()
     {
-        return $this->Project;
+        return $this->project;
     }
 }

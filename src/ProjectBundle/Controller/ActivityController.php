@@ -109,7 +109,8 @@ class ActivityController extends Controller
                 array(
                     'message' => 'Success !',
                     'type' => 'new',
-                    'form' => $this->renderView('ProjectBundle:Activity:Activite_form.html.twig',
+                    'form' => $this->renderView(
+                        'ProjectBundle:Activity:Activity_form.html.twig',
                         array(
                             'url' => $this->generateUrl('activity_new'),
                             'form' => $form->createView(),
@@ -164,7 +165,7 @@ class ActivityController extends Controller
                     'message' => 'Success !',
                     'type' => 'edit',
                     'form' => $this->renderView(
-                        '@Project/Activity/Activite_form.html.twig',
+                        'ProjectBundle:Activity:Activity_form.html.twig',
                         array(
                             'url' => $this->generateUrl('activity_edit',array('id' => $activity->getId())),
                             'form' => $editForm->createView(),
