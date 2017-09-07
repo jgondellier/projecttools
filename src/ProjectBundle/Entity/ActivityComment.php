@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ActivityComment
 {
+    public function __construct()
+    {
+        $this->auteur = "Jonathan Gondellier";
+        $this->dateCreation = new \Datetime();
+    }
     /**
      * @var int
      *
@@ -43,11 +48,10 @@ class ActivityComment
     private $auteur;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ProjectBundle\Entity\Activity")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="ProjectBundle\Entity\Activity", inversedBy="activityComments")
+     * @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
      */
-    private $Activity;
-
+    private $activity;
 
     /**
      * Get id
@@ -129,25 +133,25 @@ class ActivityComment
     }
 
     /**
-     * Set Activity
+     * Set activity
      *
      * @param \ProjectBundle\Entity\Activity $activity
      * @return ActivityComment
      */
-    public function setActivity(\ProjectBundle\Entity\Activity $activity)
+    public function setActivity(\ProjectBundle\Entity\Activity $activity = null)
     {
-        $this->Activity = $activity;
+        $this->activity = $activity;
 
         return $this;
     }
 
     /**
-     * Get Activity
+     * Get activity
      *
      * @return \ProjectBundle\Entity\Activity 
      */
     public function getActivity()
     {
-        return $this->Activity;
+        return $this->activity;
     }
 }

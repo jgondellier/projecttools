@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class ActivityRepository extends EntityRepository
 {
     /**
-     * REtourne la liste des atcivités
+     * Retourne la liste des activités
      *
      * @param $libelle
      * @param $cadreContractuel

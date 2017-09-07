@@ -5,6 +5,7 @@ namespace ProjectBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class ActivityCommentType extends AbstractType
 {
@@ -15,10 +16,12 @@ class ActivityCommentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('dateCreation', 'datetime')
             ->add('libelle')
             ->add('auteur')
-            ->add('Activity')
+            ->add('dateCreation',DateTimeType::class, array(
+                'widget' => 'single_text',
+                'format' => 'dd/MM/yyyy',
+            ))
         ;
     }
     
@@ -30,5 +33,13 @@ class ActivityCommentType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'ProjectBundle\Entity\ActivityComment'
         ));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'projectbundle_activitycomment';
     }
 }

@@ -7,7 +7,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use ProjectBundle\Entity\ActivityComment;
+use ProjectBundle\Entity\Activity;
 use ProjectBundle\Form\ActivityCommentType;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * ActivityComment controller.
@@ -17,124 +20,69 @@ use ProjectBundle\Form\ActivityCommentType;
 class ActivityCommentController extends Controller
 {
     /**
-     * Lists all ActivityComment entities.
+     * Creates a new activity comment.
      *
-     * @Route("/", name="projet_activitycomment_index")
-     * @Method("GET")
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $activityComments = $em->getRepository('ProjectBundle:ActivityComment')->findAll();
-
-        return $this->render('activitycomment/index.html.twig', array(
-            'activityComments' => $activityComments,
-        ));
-    }
-
-    /**
-     * Creates a new ActivityComment entity.
-     *
-     * @Route("/new", name="projet_activitycomment_new")
+     * @Route("/{id}/new", name="activitycomment_new", options={"expose"=true})
      * @Method({"GET", "POST"})
+     *
+     * @param Activity $activity
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function newAction(Request $request)
+    public function newAction(Activity $activity, Request $request)
     {
-        $activityComment = new ActivityComment();
-        $form = $this->createForm('ProjectBundle\Form\ActivityCommentType', $activityComment);
-        $form->handleRequest($request);
+        if($request->isXmlHttpRequest()) {
+            $activityComment        = new ActivityComment();
+            $form                   = $this->createForm('ProjectBundle\Form\ActivityCommentType', $activityComment);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($activityComment);
-            $em->flush();
+            $form->handleRequest($request);
 
-            return $this->redirectToRoute('projet_activitycomment_show', array('id' => $activityComment->getId()));
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $activityComment->setActivity($activity);
+                $em->persist($activityComment);
+                $em->flush();
+
+                return new JsonResponse(array('message' => 'Success!','type' => 'new'), 200);
+            }
+
+            return new JsonResponse(
+                array(
+                    'message' => 'Success !',
+                    'type' => 'new',
+                    'form' => $this->renderView(
+                        'ProjectBundle:ActivityComment:ActivityComment_form.html.twig',
+                        array(
+                            'url' => $this->generateUrl('activitycomment_new',array('id' => $activity->getId())),
+                            'form' => $form->createView(),
+                        ))), 200);
         }
-
-        return $this->render('activitycomment/new.html.twig', array(
-            'activityComment' => $activityComment,
-            'form' => $form->createView(),
-        ));
+        throw new AccessDeniedException('Access denied');
     }
-
     /**
-     * Finds and displays a ActivityComment entity.
+     * Creates a new activity comment.
      *
-     * @Route("/{id}", name="projet_activitycomment_show")
-     * @Method("GET")
-     */
-    public function showAction(ActivityComment $activityComment)
-    {
-        $deleteForm = $this->createDeleteForm($activityComment);
-
-        return $this->render('activitycomment/show.html.twig', array(
-            'activityComment' => $activityComment,
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
-     * Displays a form to edit an existing ActivityComment entity.
-     *
-     * @Route("/{id}/edit", name="projet_activitycomment_edit")
+     * @Route("/{id}/list", name="activitycomment_list", options={"expose"=true})
      * @Method({"GET", "POST"})
+     *
+     * @param Activity $activity
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function editAction(Request $request, ActivityComment $activityComment)
+    public function listAction(Activity $activity, Request $request)
     {
-        $deleteForm = $this->createDeleteForm($activityComment);
-        $editForm = $this->createForm('ProjectBundle\Form\ActivityCommentType', $activityComment);
-        $editForm->handleRequest($request);
+        if ($request->isXmlHttpRequest()) {
+            if ($request->getMethod() === 'GET') {
+                $entityManager  = $this->getDoctrine()->getManager();
+                $response       = new JsonResponse();
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($activityComment);
-            $em->flush();
+                /*Recuperation des activitys en base*/
+                $t_activity     = $entityManager->getRepository("ProjectBundle:ActivityComment")->getActivityComments($activity->getid());
 
-            return $this->redirectToRoute('projet_activitycomment_edit', array('id' => $activityComment->getId()));
+                $response->setContent(json_encode($this->renderView("ProjectBundle:ActivityComment:ActivityComment_list.html.twig",array("t_activity" => $t_activity))));
+                return $response;
+            }
         }
-
-        return $this->render('activitycomment/edit.html.twig', array(
-            'activityComment' => $activityComment,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
     }
 
-    /**
-     * Deletes a ActivityComment entity.
-     *
-     * @Route("/{id}", name="projet_activitycomment_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, ActivityComment $activityComment)
-    {
-        $form = $this->createDeleteForm($activityComment);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($activityComment);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('projet_activitycomment_index');
-    }
-
-    /**
-     * Creates a form to delete a ActivityComment entity.
-     *
-     * @param ActivityComment $activityComment The ActivityComment entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(ActivityComment $activityComment)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('projet_activitycomment_delete', array('id' => $activityComment->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
 }

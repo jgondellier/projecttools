@@ -10,6 +10,7 @@ function createForm(url,type){
                 $('.modal-content').html(data.form);
                 submitProjectForm();
                 $('#addModal').modal('show');
+                $('.js-datepicker').datepicker();
             }
         })
         .fail(function (jqXHR, textStatus, errorThrown) {

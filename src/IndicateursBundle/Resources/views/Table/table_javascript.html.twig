@@ -29,6 +29,7 @@
                     {% elseif ((col.del is defined)) %},
                     "defaultContent": "<button type=\"button\" class=\"btn btn-danger btn-sm del-row\" ><span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\"></span></button>"
                     {% endif %}
+                    {% if(col.detail is defined) %},"className": "details-control","defaultContent": ''{% endif %}
                     {% if(col.width is defined) %},"width": "{{ col.width }}"{% endif %}
                     {% if(col.visible is defined) %},"visible": "{{ col.visible }}"{% endif %}
                     {% if(col.center is defined) %},"className":"dt-center"{% endif %}
@@ -37,7 +38,9 @@
                 },
                 {% endfor %}
             ],
-
+            {% if(table.order is defined) %}
+            "order": [[{{ table.order }}, 'asc']],
+            {% endif %}
             "scrollY":        "350px",
             "scrollCollapse": true,
             "paging":         false,

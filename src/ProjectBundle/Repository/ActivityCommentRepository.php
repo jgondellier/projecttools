@@ -12,4 +12,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class ActivityCommentRepository extends EntityRepository
 {
+    /**
+     * Retourne la liste des commentaires des activités
+     *
+     * @param $id_activity
+     * @return array
+     */
+    public function getActivityComments($id_activity){
+
+        $query      = $this->createQueryBuilder('ac');
+        $query->select('ac.id DT_RowId, ac.libelle, ac.auteur, DATE_FORMAT(a.dateCreation,\'%d/%m/%Y\') as dateCreation')
+            ->leftJoin("ac.activity",'a')
+            ->where('a.id = id_activity' )
+            ->orderBy('a.dateCreation', 'ASC')
+            ->setParameter('id_activity',$id_activity);
+
+        return $query->getQuery()->getArrayResult();
+    }
 }

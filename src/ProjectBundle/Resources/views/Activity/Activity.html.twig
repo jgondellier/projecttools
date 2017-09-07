@@ -8,4 +8,12 @@
 
 {% block project_javascript %}
     {{ include('ProjectBundle:global:Content_JS.html.twig', {'cat': 'activity'}) }}
+    <script type="text/javascript">
+        $(document).on('click','.com-row',function(){
+            var that = this;
+            var url = Routing.generate('activitycomment_new', {'id': that.parentNode.parentNode.id});
+            $(that).find("span").addClass("slideInLeft");
+            createForm(url,"GET");
+        });
+    </script>
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace ProjectBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Activity
@@ -16,6 +17,7 @@ class Activity
     public function __construct()
     {
         $this->dateCreation = new \Datetime();
+        $this->activityComments        = new ArrayCollection();
     }
 
     /**
@@ -24,6 +26,10 @@ class Activity
     public function updateDate()
     {
         $this->dateModification = new \Datetime();
+    }
+
+    public function __toString() {
+        return $this->libelle;
     }
 
     /**
@@ -83,6 +89,10 @@ class Activity
      */
     private $project;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ProjectBundle\Entity\ActivityComment", mappedBy="activity")
+     */
+    private $activityComments;
 
     /**
      * Get id
