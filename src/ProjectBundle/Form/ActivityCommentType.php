@@ -20,7 +20,8 @@ class ActivityCommentType extends AbstractType
             ->add('auteur')
             ->add('dateCreation',DateTimeType::class, array(
                 'widget' => 'single_text',
-                'format' => 'dd/MM/yyyy',
+                'format' => 'dd/MM/yyyy H:mm',
+                'read_only' => true
             ))
         ;
     }

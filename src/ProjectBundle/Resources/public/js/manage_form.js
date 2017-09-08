@@ -11,6 +11,7 @@ function createForm(url,type){
                 submitProjectForm();
                 $('#addModal').modal('show');
                 $('.js-datepicker').datepicker();
+                $(".form_datetime").datetimepicker({format: 'dd/mm/yyyy hh:ii'});
             }
         })
         .fail(function (jqXHR, textStatus, errorThrown) {

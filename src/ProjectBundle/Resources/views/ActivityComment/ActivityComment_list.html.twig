@@ -1,8 +1,15 @@
-<table>
-    {% for activity in t_activity %}
-    <tr>
-        <td>activity.dateCreation</td>
-        <td>activity.libelle</td>
-    </tr>
-    {% endfor %}
+<table class="detailled-table">
+    {% if (activityComment_list|length > 0) %}
+        {% for activityComment in activityComment_list %}
+        <tr id="detailled-row-{{ activityComment.id }}">
+            <td class="ac-row"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></td>
+            <td class="ac-row-date">{{ activityComment.dateCreation }} - </td>
+            <td class="ac-row-comment">{{ activityComment.libelle|capitalize }}</td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td>Aucun commentaires pour l'instant !</td>
+        </tr>
+    {% endif %}
 </table>

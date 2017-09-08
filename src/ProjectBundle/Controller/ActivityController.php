@@ -29,16 +29,16 @@ class ActivityController extends Controller
         $table['order']                = 1;
         $table['ajax']['url']           = $this->generateUrl('activity_table');
         $table['id']                    = 'dataTable';
-        $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','width'=>'10px','detail'=>'',"searchable"=>1,"orderable"=>1);
+        $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','width'=>'10px','detail'=>'','class'=>"dt-center detail-row","searchable"=>1,"orderable"=>1);
         $table['cols'][]                = array('filter'=>0,'name'=>'Date Creation','data'=>'dateCreation','width'=>'80px');
         $table['cols'][]                = array('filter'=>0,'name'=>'Date Modification','data'=>'dateModification','width'=>'80px');
         $table['cols'][]                = array('filter'=>0,'name'=>'Cadre Contractuel','data'=>'cadreContractuel','width'=>'80px');
         $table['cols'][]                = array('filter'=>0,'name'=>'Libelle','data'=>'libelle');
         $table['cols'][]                = array('filter'=>0,'name'=>'Etat','data'=>'etat','width'=>'80px');
         $table['cols'][]                = array('filter'=>0,'name'=>'Project','data'=>'project','width'=>'100px');
-        $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','com'=>1,'width'=>'35px','center'=>1,"searchable"=>1,"orderable"=>1);
-        $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','edit'=>1,'width'=>'35px','center'=>1,"searchable"=>1,"orderable"=>1);
-        $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','del'=>1,'width'=>'35px','center'=>1,"searchable"=>1,"orderable"=>1);
+        $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','com'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>1,"orderable"=>1);
+        $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','edit'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>1,"orderable"=>1);
+        $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','del'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>1,"orderable"=>1);
         $table_HTML                     = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_JS                       = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 

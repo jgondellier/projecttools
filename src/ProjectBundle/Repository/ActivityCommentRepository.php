@@ -21,11 +21,11 @@ class ActivityCommentRepository extends EntityRepository
     public function getActivityComments($id_activity){
 
         $query      = $this->createQueryBuilder('ac');
-        $query->select('ac.id DT_RowId, ac.libelle, ac.auteur, DATE_FORMAT(a.dateCreation,\'%d/%m/%Y\') as dateCreation')
+        $query->select('ac.id id, ac.libelle, ac.auteur, DATE_FORMAT(ac.dateCreation,\'%d/%m/%Y %H:%i\') as dateCreation')
             ->leftJoin("ac.activity",'a')
-            ->where('a.id = id_activity' )
-            ->orderBy('a.dateCreation', 'ASC')
-            ->setParameter('id_activity',$id_activity);
+            ->where('a.id = :idactivity' )
+            ->orderBy('ac.dateCreation', 'DESC')
+            ->setParameter('idactivity',$id_activity);
 
         return $query->getQuery()->getArrayResult();
     }

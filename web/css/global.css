@@ -8,3 +8,14 @@ body { padding-top: 70px; }
     from { -webkit-transform: rotate(0deg);}
     to { -webkit-transform: rotate(360deg);}
 }
+.detailled-table{
+    color: #337ab7;
+    width:100%;
+}
+.detailled-table .ac-row{
+    width: 50px;
+    text-align: right;
+}
+.detailled-table .ac-row-date{
+    width: 140px
+}
