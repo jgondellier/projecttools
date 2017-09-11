@@ -15,9 +15,9 @@
             $(that).find("span").addClass("slideInLeft");
             createForm(url,"GET");
         });
-        $(document).on('click','.ac-row',function(){
+        $(document).on('click','.ac-edit',function(){
             var that = this;
-            var id = that.parentNode.id.replace('detailled-row-','');
+            var id = that.parentNode.parentNode.id.replace('detailled-row-','');
             var url = Routing.generate('activitycomment_edit', {'id': id});
             $(that).find("span").addClass("slideInLeft");
             createForm(url,"GET");

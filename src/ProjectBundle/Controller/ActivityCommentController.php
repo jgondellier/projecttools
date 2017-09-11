@@ -123,4 +123,56 @@ class ActivityCommentController extends Controller
         }
         throw new AccessDeniedException('Access denied');
     }
+
+    /**
+     * Deletes a activitycomment entity.
+     *
+     * @Route("/{id}/delete", name="activitycomment_delete", options={"expose"=true})
+     * @Method("DELETE")
+     *
+     * @param Request $request
+     * @param ActivityComment $activitycomment
+     * @return JsonResponse
+     */
+    public function deleteAction(Request $request, ActivityComment $activitycomment)
+    {
+        $form = $this->createDeleteForm($activitycomment);
+        $form->handleRequest($request);
+        $id = $activitycomment->getId();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($activitycomment);
+            $em->flush();
+
+            return new JsonResponse(array('message' => 'Success !','type' => 'delete','id' => $id), 200);
+        }
+
+        return new JsonResponse(
+            array(
+                'message' => 'Success !',
+                'type' => 'delete',
+                'form' => $this->renderView(
+                    '@Project/global/Content_form_delete.html.twig',
+                    array(
+                        'url' => $this->generateUrl('activitycomment_delete',array('id' => $activitycomment->getId())),
+                        'form' => $form->createView(),
+                    ))), 200);
+    }
+
+    /**
+     * Creates a form to delete a activity entity.
+     *
+     * @param ActivityComment $activitycomment The activity entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm(ActivityComment $activitycomment)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('activitycomment_delete', array('id' => $activitycomment->getId())))
+            ->setMethod('DELETE')
+            ->getForm()
+            ;
+    }
 }

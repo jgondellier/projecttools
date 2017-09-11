@@ -1,10 +1,15 @@
 <table class="detailled-table">
     {% if (activityComment_list|length > 0) %}
         {% for activityComment in activityComment_list %}
-        <tr id="detailled-row-{{ activityComment.id }}">
+            {% if (activityComment_list|first == activityComment) %}
+                {% set fisrtRow = 'fisrt-row' %}
+            {% else %}
+                {% set fisrtRow = '' %}
+            {% endif %}
+        <tr id="detailled-row-{{ activityComment.id }}" class="{% if (fisrtRow is defined)%}{{  fisrtRow }}{% endif %}">
             <td class="ac-row"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></td>
             <td class="ac-row-date">{{ activityComment.dateCreation }} - </td>
-            <td class="ac-row-comment">{{ activityComment.libelle|capitalize }}</td>
+            <td class="ac-row-comment">{{ activityComment.libelle|capitalize }}   ...<span class="glyphicon glyphicon-pencil ac-edit"></span></td>
         </tr>
         {% endfor %}
     {% else %}
