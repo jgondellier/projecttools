@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        {% if ('edit' in url)%}<button type="button" class="btn btn-danger" id="deleteEntry" data-url="{{ path('activitycomment_delete') }}">Supprimer</button>{% endif %}
+        {% if urldelete is defined %}<button type="button" class="btn btn-danger ac-del-row" id="deleteEntry" data-url="urldelete">Supprimer</button>{% endif %}
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
         <a type="submit" class="btn btn-primary" id="submitProject"><div class="ajaxScrollLoader" style="display:none"><div></div></div>Valider</a>
     </div>

@@ -18,6 +18,9 @@ body { padding-top: 70px; }
     width: 50px;
     text-align: right;
 }
+.detailled-table .ac-edit{
+    cursor: pointer;
+}
 .detailled-table .ac-row-date{
     width: 120px
 }

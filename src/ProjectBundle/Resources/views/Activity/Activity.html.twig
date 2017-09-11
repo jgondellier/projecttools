@@ -22,5 +22,11 @@
             $(that).find("span").addClass("slideInLeft");
             createForm(url,"GET");
         });
+        $(document).on('click','.ac-del-row',function(){
+            var that = this;
+            var url = Routing.generate('activitycomment_delete', {'id': that.parentNode.parentNode.id});
+            $(that).find("span").addClass("rotate");
+            createForm(url,"DELETE");
+        });
     </script>
 {% endblock %}

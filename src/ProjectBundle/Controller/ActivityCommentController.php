@@ -118,6 +118,7 @@ class ActivityCommentController extends Controller
                         'ProjectBundle:ActivityComment:ActivityComment_form.html.twig',
                         array(
                             'url' => $this->generateUrl('activitycomment_edit',array('id' => $activitycomment->getId())),
+                            'urldelete' => $this->generateUrl('activitycomment_delete',array('id' => $activitycomment->getId())),
                             'form' => $editForm->createView(),
                         ))), 200);
         }
