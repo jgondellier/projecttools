@@ -31,7 +31,7 @@ class ActivityController extends Controller
         $table['id']                    = 'dataTable';
         $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','width'=>'10px','detail'=>'','class'=>"dt-center detail-row","searchable"=>0,"orderable"=>0);
         $table['cols'][]                = array('filter'=>0,'name'=>'Date Creation','data'=>'dateCreation','width'=>'80px');
-        $table['cols'][]                = array('filter'=>0,'name'=>'Cadre Contractuel','data'=>'cadreContractuel','width'=>'80px');
+        $table['cols'][]                = array('filter'=>1,'name'=>'Cadre Contractuel','data'=>'cadreContractuel','width'=>'80px');
         $table['cols'][]                = array('filter'=>0,'name'=>'Libelle','data'=>'libelle');
         $table['cols'][]                = array('filter'=>1,'name'=>'Etat','data'=>'etat','width'=>'80px');
         $table['cols'][]                = array('filter'=>1,'name'=>'Project','data'=>'project','width'=>'100px');
@@ -157,6 +157,9 @@ class ActivityController extends Controller
             $editForm->handleRequest($request);
 
             if ($editForm->isSubmitted() && $editForm->isValid()) {
+                if($activity->getEtat() =="Clos"){
+                    $activity->setDateResolution(new \Datetime());
+                }
                 $this->getDoctrine()->getManager()->flush();
 
                 return new JsonResponse(array('message' => 'Success !','type' => 'edit','id' => $activity->getId()), 200);
