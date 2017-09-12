@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        {% if urldelete is defined %}<button type="button" class="btn btn-danger ac-del-row" id="deleteEntry" data-url="urldelete">Supprimer</button>{% endif %}
+        {% if urldelete is defined %}<a type="button" class="btn btn-danger ac-del-row" id="deleteEntry" data-url="{{ urldelete }}"><div class="ajaxScrollLoader" style="display:none"><div></div></div>Supprimer</a>{% endif %}
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
         <a type="submit" class="btn btn-primary" id="submitProject"><div class="ajaxScrollLoader" style="display:none"><div></div></div>Valider</a>
     </div>

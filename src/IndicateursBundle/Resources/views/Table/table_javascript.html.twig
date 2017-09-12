@@ -16,7 +16,11 @@
                 {% for col in table.cols %}
                 { "data": "{{ col.data }}"{% if(col.href is defined) %},
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                        $(nTd).html("<a href='{{ col.href }}"+oData.{{ col.data }}+"' target='_blank'>"+oData.{{ col.data }}+"</a>");
+                        {% if(col.href is empty) %}
+                            $(nTd).html("<a href='"+oData.{{ col.data }}+"' target='_blank'>"+oData.{{ col.data }}+"</a>");
+                        {% else %}
+                            $(nTd).html("<a href='{{ col.href }}"+oData.{{ col.data }}+"' target='_blank'>"+oData.{{ col.data }}+"</a>");
+                        {% endif %}
                     }
                     {% elseif ((col.convert is defined)) %},
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {

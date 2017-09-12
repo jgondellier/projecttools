@@ -6,6 +6,8 @@ function createForm(url,type){
         .done(function (data) {
             $(".slideInLeft").removeClass("slideInLeft");
             $(".flash").removeClass("flash");
+            $(".rotate").removeClass("rotate");
+            $(".ajaxScrollLoader").hide();
             if (typeof data.message !== 'undefined') {
                 $('.modal-content').html(data.form);
                 submitProjectForm();
@@ -15,6 +17,7 @@ function createForm(url,type){
             }
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
+            $(".ajaxScrollLoader").hide();
             $(".slideInLeft").removeClass("slideInLeft");
             $(".flash").removeClass("flash");
             if (typeof jqXHR.responseJSON !== 'undefined') {

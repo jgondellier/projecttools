@@ -28,11 +28,11 @@ class EnvironnementController extends Controller
         /*Rendu du tableau */
         $table['ajax']['url']           = $this->generateUrl('environnement_table');
         $table['id']                    = 'dataTable';
-        $table['cols'][]                = array('filter'=>0,'name'=>'Name','data'=>'name');
-        $table['cols'][]                = array('filter'=>0,'name'=>'url','data'=>'url');
-        $table['cols'][]                = array('filter'=>0,'name'=>'project','data'=>'project');
-        $table['cols'][]                = array('filter'=>0,'name'=>'modifier','data'=>'null','edit'=>1);
-        $table['cols'][]                = array('filter'=>0,'name'=>'supprimer','data'=>'null','del'=>1);
+        $table['cols'][]                = array('filter'=>0,'name'=>'project','data'=>'project','width'=>'125px');
+        $table['cols'][]                = array('filter'=>0,'name'=>'Name','data'=>'name','width'=>'100px');
+        $table['cols'][]                = array('filter'=>0,'name'=>'url','data'=>'url','href'=>'');
+        $table['cols'][]                = array('filter'=>0,'name'=>'modifier','data'=>'null','edit'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>0,"orderable"=>0);
+        $table['cols'][]                = array('filter'=>0,'name'=>'supprimer','data'=>'null','del'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>0,"orderable"=>0);
         $table_HTML                     = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_JS                       = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 

@@ -90,7 +90,7 @@ class Activity
     private $project;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProjectBundle\Entity\ActivityComment", mappedBy="activity")
+     * @ORM\OneToMany(targetEntity="ProjectBundle\Entity\ActivityComment", mappedBy="activity", orphanRemoval=true)
      */
     private $activityComments;
 

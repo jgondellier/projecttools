@@ -28,12 +28,12 @@ class ProjectController extends Controller
         /*Rendu du tableau */
         $table['ajax']['url']           = $this->generateUrl('project_table');
         $table['id']                    = 'dataTable';
-        $table['cols'][]                = array('filter'=>0,'name'=>'Name','data'=>'name');
+        $table['cols'][]                = array('filter'=>0,'name'=>'Name','data'=>'name','width'=>'125px');
         $table['cols'][]                = array('filter'=>0,'name'=>'Code Source','data'=>'sourcecodeUrl');
-        $table['cols'][]                = array('filter'=>0,'name'=>'jtracId','data'=>'jtracId');
-        $table['cols'][]                = array('filter'=>0,'name'=>'jiraId','data'=>'jiraId');
-        $table['cols'][]                = array('filter'=>0,'name'=>'modifier','data'=>'null','edit'=>1);
-        $table['cols'][]                = array('filter'=>0,'name'=>'supprimer','data'=>'null','del'=>1);
+        $table['cols'][]                = array('filter'=>0,'name'=>'jtracId','data'=>'jtracId','width'=>'50px');
+        $table['cols'][]                = array('filter'=>0,'name'=>'jiraId','data'=>'jiraId','width'=>'100px');
+        $table['cols'][]                = array('filter'=>0,'name'=>'modifier','data'=>'null','edit'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>0,"orderable"=>0);
+        $table['cols'][]                = array('filter'=>0,'name'=>'supprimer','data'=>'null','del'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>0,"orderable"=>0);
         $table_HTML                     = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_JS                       = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 

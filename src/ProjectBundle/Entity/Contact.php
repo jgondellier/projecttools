@@ -36,14 +36,14 @@ class Contact
     /**
      * @var int
      *
-     * @ORM\Column(name="id_bnp", type="string", length=50)
+     * @ORM\Column(name="id_bnp", type="string", length=50, nullable=true)
      */
     private $idBnp;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="id_jtrac", type="string", length=50)
+     * @ORM\Column(name="id_jtrac", type="string", length=50, nullable=true)
      */
     private $idJtrac;
 
