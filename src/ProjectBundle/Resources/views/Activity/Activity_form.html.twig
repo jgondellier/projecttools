@@ -20,6 +20,11 @@
             {{ form_widget(form.project, { 'attr': {'class': 'form-control'} }) }}
             {{ form_errors(form.project) }}
         </div>
+        <div class="form-group has-feedback {% if (form_errors(form.dateCreation) |length > 4) %}has-error{% endif %}">
+            {{ form_label(form.dateCreation) }} :
+            {{ form_widget(form.dateCreation, { 'attr': {'class': 'form-control js-datepicker'} }) }}
+            {{ form_errors(form.dateCreation) }}
+        </div>
         <div class="form-group">
             {{ form_rest(form) }}
         </div>

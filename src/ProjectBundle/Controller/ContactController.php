@@ -33,10 +33,10 @@ class ContactController extends Controller
         $table['cols'][]                = array('filter'=>0,'name'=>'Mail','data'=>'mail');
         $table['cols'][]                = array('filter'=>0,'name'=>'Matricule','data'=>'idBnp');
         $table['cols'][]                = array('filter'=>0,'name'=>'jtracId','data'=>'idJtrac');
-        $table['cols'][]                = array('filter'=>0,'name'=>'project','data'=>'project');
+        $table['cols'][]                = array('filter'=>1,'name'=>'project','data'=>'project','width'=>'100px');
         $table['cols'][]                = array('filter'=>0,'name'=>'Description','data'=>'description');
-        $table['cols'][]                = array('filter'=>0,'name'=>'modifier','data'=>'null','edit'=>1);
-        $table['cols'][]                = array('filter'=>0,'name'=>'supprimer','data'=>'null','del'=>1);
+        $table['cols'][]                = array('filter'=>0,'name'=>'modifier','data'=>'null','edit'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>0,"orderable"=>0);
+        $table['cols'][]                = array('filter'=>0,'name'=>'supprimer','data'=>'null','del'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>0,"orderable"=>0);
         $table_HTML                     = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_JS                       = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 

@@ -31,11 +31,10 @@ class ActivityController extends Controller
         $table['id']                    = 'dataTable';
         $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','width'=>'10px','detail'=>'','class'=>"dt-center detail-row","searchable"=>0,"orderable"=>0);
         $table['cols'][]                = array('filter'=>0,'name'=>'Date Creation','data'=>'dateCreation','width'=>'80px');
-        $table['cols'][]                = array('filter'=>0,'name'=>'Date Modification','data'=>'dateModification','width'=>'80px');
         $table['cols'][]                = array('filter'=>0,'name'=>'Cadre Contractuel','data'=>'cadreContractuel','width'=>'80px');
         $table['cols'][]                = array('filter'=>0,'name'=>'Libelle','data'=>'libelle');
-        $table['cols'][]                = array('filter'=>0,'name'=>'Etat','data'=>'etat','width'=>'80px');
-        $table['cols'][]                = array('filter'=>0,'name'=>'Project','data'=>'project','width'=>'100px');
+        $table['cols'][]                = array('filter'=>1,'name'=>'Etat','data'=>'etat','width'=>'80px');
+        $table['cols'][]                = array('filter'=>1,'name'=>'Project','data'=>'project','width'=>'100px');
         $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','com'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>0,"orderable"=>0);
         $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','edit'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>0,"orderable"=>0);
         $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','del'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>0,"orderable"=>0);

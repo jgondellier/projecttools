@@ -5,6 +5,7 @@ namespace ProjectBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class ActivityType extends AbstractType
 {
@@ -18,6 +19,11 @@ class ActivityType extends AbstractType
             ->add('libelle')
             ->add('etat', 'choice', array('choices' => array('En cours' => 'En cours', 'En attente' => 'En attente', 'Terminé' => 'Terminé'), 'required' => true, 'label' => 'Etat', 'data' => 'En cours'))
             ->add('project')
+            ->add('dateCreation',DateType::class, array(
+                'widget' => 'single_text',
+                'format' => 'dd/MM/yyyy',
+                'read_only' => true
+            ))
         ;
     }
     

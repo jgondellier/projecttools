@@ -12,8 +12,8 @@ function createForm(url,type){
                 $('.modal-content').html(data.form);
                 submitProjectForm();
                 $('#addModal').modal('show');
-                $('.js-datepicker').datepicker();
-                $(".form_datetime").datetimepicker({format: 'dd/mm/yyyy hh:ii'});
+                $('.js-datepicker').datepicker({format: 'dd/mm/yyyy',language:'fr'});
+                $(".form_datetime").datetimepicker({format: 'dd/mm/yyyy hh:ii',language:'fr'});
             }
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
@@ -35,7 +35,7 @@ function submitProjectForm(){
     $('#projectForm').submit(function (e) {
         e.preventDefault();
 
-        $('.ajaxScrollLoader').show();
+        $("#submitProject").find(".ajaxScrollLoader").show();
         $.ajax({
             type: $(this).attr('method'),
             url: $(this).attr('action'),
@@ -47,7 +47,7 @@ function submitProjectForm(){
                     if(data.type === 'edit'){
                         dataTable.ajax.reload();
                         $('#addModal').modal('hide');
-                        $(".ajaxScrollLoader").hide()
+                        $("#submitProject").find(".ajaxScrollLoader").hide();
                     }else if(data.type === 'delete'){
                         dataTable.ajax.reload();
                         $('#addModal').modal('hide');
@@ -55,12 +55,12 @@ function submitProjectForm(){
                         dataTable.ajax.reload();
                         $('#addModal').modal('hide');
                         $('#projectForm')[0].reset();
-                        $(".ajaxScrollLoader").hide()
+                        $("#submitProject").find(".ajaxScrollLoader").hide();
                     }
                 }
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                $(".ajaxScrollLoader").hide()
+                $("#submitProject").find(".ajaxScrollLoader").hide();
                 if (typeof jqXHR.responseJSON !== 'undefined') {
                     if (jqXHR.responseJSON.hasOwnProperty('form')) {
                         $('#form_body').html(jqXHR.responseJSON.form);
