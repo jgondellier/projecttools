@@ -22,6 +22,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
             <li class="{% if (activeMenu is defined and activeMenu == 'activity') %} active{% endif %}"><a href="{{ path('activity_index') }}">Activité</a></li>
+            <li class="{% if (activeMenu is defined and activeMenu == 'lot') %} active{% endif %}"><a href="{{ path('lot_index') }}">Lots</a></li>
             <li class="{% if (activeMenu is defined and activeMenu == 'project') %} active{% endif %}"><a href="{{ path('project_index') }}">Projets</a></li>
             <li class="{% if (activeMenu is defined and activeMenu == 'contact') %} active{% endif %}"><a href="{{ path('contact_index') }}">Contacts</a></li>
             <li class="{% if (activeMenu is defined and activeMenu == 'environnement') %} active{% endif %}"><a href="{{ path('environnement_index') }}">Environnements</a></li>

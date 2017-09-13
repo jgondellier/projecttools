@@ -46,7 +46,11 @@
             {% if(table.order is defined) %}
             "order": [[{{ table.order }}, 'asc']],
             {% endif %}
+            {% if(table.height is defined) %}
+            "scrollY":        "{{ table.height }}",
+            {% else %}
             "scrollY":        "350px",
+            {% endif %}
             "scrollCollapse": true,
             "paging":         false,
             "dom": 'Bfrtip',

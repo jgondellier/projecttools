@@ -18,6 +18,7 @@ class Project
         $this->environnements   = new ArrayCollection();
         $this->contacts         = new ArrayCollection();
         $this->activitys        = new ArrayCollection();
+        $this->lots        = new ArrayCollection();
     }
     public function __toString() {
         return $this->name;
@@ -74,6 +75,11 @@ class Project
      * @ORM\OneToMany(targetEntity="ProjectBundle\Entity\Activity", mappedBy="project")
      */
     private $activitys;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ProjectBundle\Entity\Lot", mappedBy="project")
+     */
+    private $lots;
 
 
     /**
@@ -275,5 +281,38 @@ class Project
     public function getActivitys()
     {
         return $this->activitys;
+    }
+
+    /**
+     * Add lots
+     *
+     * @param \ProjectBundle\Entity\Lot $lots
+     * @return Project
+     */
+    public function addLot(\ProjectBundle\Entity\Lot $lots)
+    {
+        $this->lots[] = $lots;
+
+        return $this;
+    }
+
+    /**
+     * Remove lots
+     *
+     * @param \ProjectBundle\Entity\Lot $lots
+     */
+    public function removeLot(\ProjectBundle\Entity\Lot $lots)
+    {
+        $this->lots->removeElement($lots);
+    }
+
+    /**
+     * Get lots
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLots()
+    {
+        return $this->lots;
     }
 }

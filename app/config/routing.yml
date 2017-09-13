@@ -1,3 +1,7 @@
+project_lot:
+    resource: "@ProjectBundle/Controller/LotController.php"
+    type:     annotation
+
 project_activity_comment:
     resource: "@ProjectBundle/Controller/ActivityCommentController.php"
     type:     annotation

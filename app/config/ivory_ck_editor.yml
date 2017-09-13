@@ -1,0 +1,9 @@
+ivory_ck_editor:
+    input_sync: true
+    default_config: base_config
+    configs:
+        base_config:
+            language: fr
+            toolbar:
+                - { name: "basicstyles", items: ['Source', 'Bold', 'Italic', 'Underline', 'Strike', 'BulletedList','Outdent','Indent', 'Link'] }
+                - { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] }

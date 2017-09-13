@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new Ob\HighchartsBundle\ObHighchartsBundle(),
             new ProjectBundle\ProjectBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

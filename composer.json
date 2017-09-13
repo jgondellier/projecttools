@@ -2,13 +2,13 @@
     "name": "symfony/framework-standard-edition",
     "license": "MIT",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "description": "Utilitaire de gestion de projets",
     "autoload": {
         "psr-4": { "": "src/" },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
     "require": {
-        "php": ">=5.3.9",
+        "php": ">=5.6",
         "symfony/symfony": "2.8.*",
         "doctrine/orm": "^2.4.8",
         "doctrine/doctrine-bundle": "~1.4",
@@ -21,7 +21,8 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "beberlei/DoctrineExtensions": "1.0.*",
         "ob/highcharts-bundle": "1.*",
-        "friendsofsymfony/jsrouting-bundle": "1.6.3"
+        "friendsofsymfony/jsrouting-bundle": "1.6.3",
+        "egeloen/ckeditor-bundle": "6.0.*"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
@@ -46,7 +47,7 @@
     "config": {
         "bin-dir": "bin",
         "platform": {
-            "php": "5.3.9"
+            "php": "5.6"
         }
     },
     "extra": {
