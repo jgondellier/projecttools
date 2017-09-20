@@ -28,6 +28,7 @@ class ProjectController extends Controller
         /*Rendu du tableau */
         $table['ajax']['url']           = $this->generateUrl('project_table');
         $table['id']                    = 'dataTable';
+        $table['height']                = '';
         $table['cols'][]                = array('filter'=>0,'name'=>'Name','data'=>'name','width'=>'125px');
         $table['cols'][]                = array('filter'=>0,'name'=>'Code Source','data'=>'sourcecodeUrl');
         $table['cols'][]                = array('filter'=>0,'name'=>'jtracId','data'=>'jtracId','width'=>'50px');
