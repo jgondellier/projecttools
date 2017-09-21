@@ -21,10 +21,10 @@ class ActivityRepository extends EntityRepository
      * @param $project
      * @return array
      */
-    public function getActivitys($libelle,$cadreContractuel,$etat,$project){
+    public function getActivitys($libelle,$cadreContractuel,$priorite,$etat,$project){
 
         $query      = $this->createQueryBuilder('a');
-        $query->select('p.name project, a.id DT_RowId, a.libelle, a.cadreContractuel, a.etat, DATE_FORMAT(a.dateCreation,\'%d/%m/%Y\') as dateCreation, DATE_FORMAT(a.dateModification,\'%d/%m/%Y\') as dateModification')
+        $query->select('p.name project, a.id DT_RowId, a.libelle, a.cadreContractuel, a.priorite, a.etat, DATE_FORMAT(a.dateCreation,\'%d/%m/%Y\') as dateCreation, DATE_FORMAT(a.dateModification,\'%d/%m/%Y\') as dateModification')
             ->leftJoin("a.project",'p')
             ->orderBy('a.dateCreation', 'ASC');
 
@@ -35,6 +35,10 @@ class ActivityRepository extends EntityRepository
         if($cadreContractuel !=-1 && $cadreContractuel != 'all' && $cadreContractuel != Null){
             $query->andWhere('a.cadreContractuel = :cadreContractuel')
                 ->setParameter('cadreContractuel',$cadreContractuel);
+        }
+        if($priorite !=-1 && $priorite != 'all' && $priorite != Null){
+            $query->andWhere('a.etat = :etat')
+                ->setParameter('priorite',$priorite);
         }
         if($etat !=-1 && $etat != 'all' && $etat != Null){
             $query->andWhere('a.etat = :etat')

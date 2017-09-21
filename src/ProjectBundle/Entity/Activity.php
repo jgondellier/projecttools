@@ -84,6 +84,13 @@ class Activity
     private $etat;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="Priorite", type="string", length=1)
+     */
+    private $priorite;
+
+    /**
      * @ORM\ManyToOne(targetEntity="ProjectBundle\Entity\Project", inversedBy="activitys")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
      */
@@ -263,5 +270,63 @@ class Activity
     public function getProject()
     {
         return $this->project;
+    }
+
+    /**
+     * Set priorite
+     *
+     * @param string $priorite
+     *
+     * @return Activity
+     */
+    public function setPriorite($priorite)
+    {
+        $this->priorite = $priorite;
+
+        return $this;
+    }
+
+    /**
+     * Get priorite
+     *
+     * @return string
+     */
+    public function getPriorite()
+    {
+        return $this->priorite;
+    }
+
+    /**
+     * Add activityComment
+     *
+     * @param \ProjectBundle\Entity\ActivityComment $activityComment
+     *
+     * @return Activity
+     */
+    public function addActivityComment(\ProjectBundle\Entity\ActivityComment $activityComment)
+    {
+        $this->activityComments[] = $activityComment;
+
+        return $this;
+    }
+
+    /**
+     * Remove activityComment
+     *
+     * @param \ProjectBundle\Entity\ActivityComment $activityComment
+     */
+    public function removeActivityComment(\ProjectBundle\Entity\ActivityComment $activityComment)
+    {
+        $this->activityComments->removeElement($activityComment);
+    }
+
+    /**
+     * Get activityComments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActivityComments()
+    {
+        return $this->activityComments;
     }
 }

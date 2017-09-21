@@ -33,7 +33,7 @@ class ActivityController extends Controller
         $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','width'=>'10px','detail'=>'','class'=>"dt-center detail-row","searchable"=>0,"orderable"=>0);
         $table['cols'][]                = array('filter'=>0,'name'=>'Date Creation','data'=>'dateCreation','width'=>'80px');
         $table['cols'][]                = array('filter'=>1,'name'=>'Cadre Contractuel','data'=>'cadreContractuel','width'=>'80px');
-        $table['cols'][]                = array('filter'=>0,'name'=>'Libelle','data'=>'libelle');
+        $table['cols'][]                = array('filter'=>0,'name'=>'Libelle','data'=>'libelle','priorite'=> true );
         $table['cols'][]                = array('filter'=>1,'name'=>'Etat','data'=>'etat','width'=>'80px');
         $table['cols'][]                = array('filter'=>1,'name'=>'Project','data'=>'project','width'=>'100px');
         $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','com'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>0,"orderable"=>0);
@@ -66,13 +66,14 @@ class ActivityController extends Controller
 
                 $libelle           = $request->get('libelle');
                 $cadreContractuel  = $request->get('cadreContractuel');
+                $priorite          = $request->get('priorite');
                 $etat              = $request->get('etat');
                 $project           = $request->get('project');
 
                 $response       = new JsonResponse();
 
                 /*Recuperation des activitys en base*/
-                $t_activity['data']      = $entityManager->getRepository("ProjectBundle:Activity")->getactivitys($libelle,$cadreContractuel,$etat,$project);
+                $t_activity['data']      = $entityManager->getRepository("ProjectBundle:Activity")->getactivitys($libelle,$cadreContractuel,$priorite,$etat,$project);
 
                 $response->setContent(json_encode($t_activity));
                 return $response;

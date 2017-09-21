@@ -26,6 +26,10 @@
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html(Math.round(oData.{{ col.data }}/60)+" heures");
                     }
+                    {% elseif (col.priorite is defined) %},
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).html('<span class="priorite'+oData.priorite+'">'+oData.{{ col.data }}+'</span>');
+                    }
                     {% elseif ((col.com is defined)) %},
                     "defaultContent": "<button type=\"button\" class=\"btn btn-primary btn-sm com-row\" ><span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\"></span></button>"
                     {% elseif ((col.edit is defined)) %},
