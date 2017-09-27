@@ -33,9 +33,12 @@ class LotController extends Controller
         $table['cols'][]                = array('filter'=>0,'name'=>'Version','data'=>'version','width'=>'80px');
         $table['cols'][]                = array('filter'=>1,'name'=>'project','data'=>'project','width'=>'100px');
         $table['cols'][]                = array('filter'=>0,'name'=>'Description','data'=>'description');
+        $table['cols'][]                = array('filter'=>1,'name'=>'UAT','data'=>'recette','width'=>'20px',"checkbox"=>true,'class'=>"dt-center");
+        $table['cols'][]                = array('filter'=>1,'name'=>'PPROD','data'=>'preprod','width'=>'20px',"checkbox"=>true,'class'=>"dt-center");
+        $table['cols'][]                = array('filter'=>1,'name'=>'PROD','data'=>'prod','width'=>'20px',"checkbox"=>true,'class'=>"dt-center");
         $table['cols'][]                = array('filter'=>1,'name'=>'Etat','data'=>'etat','width'=>'80px');
-        $table['cols'][]                = array('filter'=>0,'name'=>'modifier','data'=>'null','edit'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>0,"orderable"=>0);
-        $table['cols'][]                = array('filter'=>0,'name'=>'supprimer','data'=>'null','del'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>0,"orderable"=>0);
+        $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','edit'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>0,"orderable"=>0);
+        $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','del'=>1,'width'=>'35px','class'=>"dt-center","searchable"=>0,"orderable"=>0);
         $table_HTML                     = $this->renderView('IndicateursBundle:Table:table.html.twig',array('table'=>$table));
         $table_JS                       = $this->renderView('IndicateursBundle:Table:table_javascript.html.twig',array('table'=>$table));
 
@@ -61,17 +64,13 @@ class LotController extends Controller
             if ($request->getMethod() === 'GET') {
                 $entityManager  = $this->getDoctrine()->getManager();
 
-                $name           = $request->get('name');
-                $prenom         = $request->get('prenom');
-                $mail           = $request->get('mail');
-                $idJtrac        = $request->get('idJtrac');
-                $idBnp          = $request->get('idBnp');
+                $version           = $request->get('version');
                 $project        = $request->get('project');
 
                 $response       = new JsonResponse();
 
                 /*Recuperation des lots en base*/
-                $t_lot['data']      = $entityManager->getRepository("ProjectBundle:Lot")->getLots($name,$prenom,$mail,$idJtrac,$idBnp,$project);
+                $t_lot['data']      = $entityManager->getRepository("ProjectBundle:Lot")->getLots($version,$project);
 
                 $response->setContent(json_encode($t_lot));
                 return $response;

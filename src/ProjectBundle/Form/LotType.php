@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class LotType extends AbstractType
 {
@@ -27,7 +28,26 @@ class LotType extends AbstractType
                 'config' => array(
                     'uiColor' => '#eeeeee'
                 )))
+            ->add('recette', CheckboxType::class)
+            ->add('dateRecette',DateTimeType::class, array(
+                'widget' => 'single_text',
+                'format' => 'dd/MM/yyyy H:mm',
+                'read_only' => true
+            ))
+            ->add('preprod', CheckboxType::class)
+            ->add('datePreprod',DateTimeType::class, array(
+                'widget' => 'single_text',
+                'format' => 'dd/MM/yyyy H:mm',
+                'read_only' => true
+            ))
+            ->add('prod', CheckboxType::class)
+            ->add('dateProd',DateTimeType::class, array(
+                'widget' => 'single_text',
+                'format' => 'dd/MM/yyyy H:mm',
+                'read_only' => true
+            ))
             ->add('project');
+
     }
     
     /**

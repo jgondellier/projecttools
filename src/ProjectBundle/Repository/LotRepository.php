@@ -22,7 +22,7 @@ class LotRepository extends EntityRepository
     public function getLots($version,$project){
 
         $query      = $this->createQueryBuilder('c');
-        $query->select('p.name project, c.id DT_RowId, c.version, c.description, c.etat, DATE_FORMAT(c.dateCreation,\'%d/%m/%Y\') as dateCreation')
+        $query->select('p.name project, c.id DT_RowId, c.version, c.description, c.etat, DATE_FORMAT(c.dateCreation,\'%d/%m/%Y\') as dateCreation, c.recette, c.preprod, c.prod')
             ->leftJoin("c.project",'p')
             ->orderBy('c.dateCreation', 'ASC');
 

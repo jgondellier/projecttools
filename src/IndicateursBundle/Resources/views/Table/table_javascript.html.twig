@@ -30,6 +30,14 @@
                     "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $(nTd).html('<span class="priorite'+oData.priorite+'">'+oData.{{ col.data }}+'</span>');
                     }
+                    {% elseif (col.checkbox is defined) %},
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        if(oData.{{ col.data }} === "" || oData.{{ col.data }} === false){
+                            $(nTd).html('<span class="glyphicon glyphicon-remove" style="color: #ea995d;"></span>');
+                        }else if (oData.{{ col.data }} === true){
+                            $(nTd).html('<span class="glyphicon glyphicon-thumbs-up" style="color: #54c396;"></span>');
+                        }
+                    }
                     {% elseif ((col.com is defined)) %},
                     "defaultContent": "<button type=\"button\" class=\"btn btn-primary btn-sm com-row\" ><span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\"></span></button>"
                     {% elseif ((col.edit is defined)) %},

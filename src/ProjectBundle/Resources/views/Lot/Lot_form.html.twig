@@ -25,6 +25,42 @@
             {{ form_widget(form.dateCreation, { 'attr': {'class': 'form-control form_datetime'} }) }}
             {{ form_errors(form.dateCreation) }}
         </div>
+        <div class="row form-group  has-feedback {% if (form_errors(form.recette) |length > 4) %}has-error{% endif %}">
+            <div class="col-sm-3">
+                {{ form_label(form.recette) }} :
+                {{ form_widget(form.recette, { 'attr': {'class': 'form-control'} }) }}
+                {{ form_errors(form.recette) }}
+            </div>
+            <div class="col-sm-9">
+                {{ form_label(form.dateRecette) }} :
+                {{ form_widget(form.dateRecette, { 'attr': {'class': 'form-control form_datetime'} }) }}
+                {{ form_errors(form.dateRecette) }}
+            </div>
+        </div>
+        <div class="row form-group  has-feedback {% if (form_errors(form.preprod) |length > 4) %}has-error{% endif %}">
+            <div class="col-sm-3">
+                {{ form_label(form.preprod) }} :
+                {{ form_widget(form.preprod, { 'attr': {'class': 'form-control'} }) }}
+                {{ form_errors(form.preprod) }}
+            </div>
+            <div class="col-sm-9">
+                {{ form_label(form.datePreprod) }} :
+                {{ form_widget(form.datePreprod, { 'attr': {'class': 'form-control form_datetime'} }) }}
+                {{ form_errors(form.datePreprod) }}
+            </div>
+        </div>
+        <div class="row form-group  has-feedback {% if (form_errors(form.prod) |length > 4) %}has-error{% endif %}">
+            <div class="col-sm-3">
+                {{ form_label(form.prod) }} :
+                {{ form_widget(form.prod, { 'attr': {'class': 'form-control'} }) }}
+                {{ form_errors(form.prod) }}
+            </div>
+            <div class="col-sm-9">
+                {{ form_label(form.dateProd) }} :
+                {{ form_widget(form.dateProd, { 'attr': {'class': 'form-control form_datetime'} }) }}
+                {{ form_errors(form.dateProd) }}
+            </div>
+        </div>
         <div class="form-group">
             {{ form_rest(form) }}
         </div>
