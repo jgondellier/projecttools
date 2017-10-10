@@ -52,6 +52,7 @@
                     {% if(col.class is defined) %},"className": "{{ col.class }}"{% endif %}
                     {% if(col.searchable is defined) %},"searchable":false{% endif %}
                     {% if(col.orderable is defined) %},"orderable":false{% endif %}
+                    {% if(col.type is defined) %},"type":"{{ col.type }}"{% endif %}
                 },
                 {% endfor %}
             ],
@@ -64,7 +65,25 @@
             "scrollY":        "350px",
             {% endif %}
             "scrollCollapse": true,
+            {% if(table.page is defined) %}
+            "paging":         "{{ table.page }}",
+            {% else %}
             "paging":         false,
+            {% endif %}
+            {% if(table.pageLength is defined) %}
+            "pageLength":         "{{ table.pageLength }}",
+            {% endif %}
+            {% if(table.searchCols is defined) %}
+            "searchCols": [
+                {% for searchColKey,searchColVal in table.searchCols %}
+                    {% if (searchColKey == true and searchColKey == "search" ) %}
+                    { "search": "{{ searchColVal }}" },
+                    {% else %}
+                    {{ searchColVal }},
+                    {% endif %}
+                {% endfor %}
+            ],
+            {% endif %}
             "dom": 'Bfrtip',
             "buttons": [
                 'excel', 'pdf', 'print'

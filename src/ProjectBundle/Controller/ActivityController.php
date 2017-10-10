@@ -30,8 +30,11 @@ class ActivityController extends Controller
         $table['ajax']['url']           = $this->generateUrl('activity_table');
         $table['id']                    = 'dataTable';
         $table['height']                = '';
+        $table['page']                  = 'True';
+        $table['pageLength']            = '15';
+        $table['searchCols']            = array('null','null','null','null','search' => 'En cours','null','null','null','null');
         $table['cols'][]                = array('filter'=>0,'name'=>'','data'=>'null','width'=>'10px','detail'=>'','class'=>"dt-center detail-row","searchable"=>0,"orderable"=>0);
-        $table['cols'][]                = array('filter'=>0,'name'=>'Date Creation','data'=>'dateCreation','width'=>'80px');
+        $table['cols'][]                = array('filter'=>0,'name'=>'Date Creation','data'=>'dateCreation','type'=>'date-uk','width'=>'80px');
         $table['cols'][]                = array('filter'=>1,'name'=>'Cadre Contractuel','data'=>'cadreContractuel','width'=>'80px');
         $table['cols'][]                = array('filter'=>0,'name'=>'Libelle','data'=>'libelle','priorite'=> true );
         $table['cols'][]                = array('filter'=>1,'name'=>'Etat','data'=>'etat','width'=>'80px');

@@ -29,9 +29,12 @@ class LotController extends Controller
         /*Rendu du tableau */
         $table['ajax']['url']           = $this->generateUrl('lot_table');
         $table['id']                    = 'dataTable';
-        $table['cols'][]                = array('filter'=>0,'name'=>'Date Creation','data'=>'dateCreation','width'=>'80px');
-        $table['cols'][]                = array('filter'=>0,'name'=>'Version','data'=>'version','width'=>'80px');
-        $table['cols'][]                = array('filter'=>1,'name'=>'project','data'=>'project','width'=>'100px');
+        $table['height']                = '';
+        $table['page']                  = 'True';
+        $table['pageLength']            = '15';
+        $table['cols'][]                = array('filter'=>0,'name'=>'Date Creation','data'=>'dateCreation','type'=>'date-uk','width'=>'70px');
+        $table['cols'][]                = array('filter'=>0,'name'=>'Version','data'=>'version','width'=>'60px');
+        $table['cols'][]                = array('filter'=>1,'name'=>'project','data'=>'project','width'=>'90px');
         $table['cols'][]                = array('filter'=>0,'name'=>'Description','data'=>'description');
         $table['cols'][]                = array('filter'=>1,'name'=>'UAT','data'=>'recette','width'=>'20px',"checkbox"=>true,'class'=>"dt-center");
         $table['cols'][]                = array('filter'=>1,'name'=>'PPROD','data'=>'preprod','width'=>'20px',"checkbox"=>true,'class'=>"dt-center");
