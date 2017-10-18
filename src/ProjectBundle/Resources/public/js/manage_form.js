@@ -44,15 +44,13 @@ function submitProjectForm(){
             .done(function (data) {
                 if (typeof data.message !== 'undefined') {
                     var dataTable = $('#dataTable').DataTable();
+                    dataTable.ajax.reload();
                     if(data.type === 'edit'){
-                        dataTable.ajax.reload();
                         $('#addModal').modal('hide');
                         $("#submitProject").find(".ajaxScrollLoader").hide();
                     }else if(data.type === 'delete'){
-                        dataTable.ajax.reload();
                         $('#addModal').modal('hide');
                     }else{
-                        dataTable.ajax.reload();
                         $('#addModal').modal('hide');
                         $('#projectForm')[0].reset();
                         $("#submitProject").find(".ajaxScrollLoader").hide();
