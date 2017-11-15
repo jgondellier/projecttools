@@ -1,1 +1,17 @@
-Bienvenue sur projecttool
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Project - Tool
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <a class="btn btn-default" href="{{ path("indicateurs_homepage") }}">Indicateurs</a>
+                <a class="btn btn-default" href="{{ path("activity_index") }}">Projets</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
